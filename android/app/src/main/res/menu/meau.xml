@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_camera"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="达人" />
+    <item
+        android:id="@+id/nav_gallery"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="修改昵称" />
+    <item
+        android:id="@+id/nav_slideshow"
+        android:icon="@drawable/ic_launcher_background"
+        android:title="隐私设置" />
+
+</menu>

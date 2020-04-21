@@ -1,24 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.fragment.app.FragmentTabHost
-    android:id="@android:id/tabhost"
-    android:layout_height="match_parent"
+<androidx.drawerlayout.widget.DrawerLayout
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/da"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="end">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TabWidget
-            android:id="@android:id/tabs"
+    <!--主界面-->
+    <androidx.fragment.app.FragmentTabHost
+        android:id="@android:id/tabhost"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        <include
+            android:id="@+id/header_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
-
-        <FrameLayout
-            android:id="@android:id/tabcontent"
+            android:layout_height="40dp"
+            layout="@layout/title" />
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@android:id/tabs" />
-    </RelativeLayout>
-</androidx.fragment.app.FragmentTabHost>
+            android:layout_height="match_parent">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true" />
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+    </androidx.fragment.app.FragmentTabHost>
+    <!--侧边栏-->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/cebian"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:headerLayout="@layout/header_layout"
+        android:fitsSystemWindows="true"
+        android:background="#F8BFC4"
+        app:menu="@menu/meau"
+        android:layout_gravity="end" />
+
+</androidx.drawerlayout.widget.DrawerLayout>

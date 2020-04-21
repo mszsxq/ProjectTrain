@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_id"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
+    <!-- android:clickable="true"解决主界面事件穿透 -->
+    <FrameLayout
+        android:id="@+id/content_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <!--必须设置layout_gravity属性,表示侧滑方向-->
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+
+        app:headerLayout="@layout/header_layout"
+        android:fitsSystemWindows="true"
+        android:background="#F8BFC4"
+        app:menu="@menu/meau"
+        />
+</androidx.drawerlayout.widget.DrawerLayout>
