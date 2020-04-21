@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/ms_item_relayout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView
+        android:src="@drawable/ic_launcher_background"
+        android:layout_alignParentTop="true"
+        android:id="@+id/ms_item_iv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:id="@+id/ms_item_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ms_item_iv"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:text="#类型+内容“大萨达撒大萨达啊阿萨德”"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25dp" />
+    <RelativeLayout
+        android:layout_below="@id/ms_item_content"
+        android:id="@+id/tn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@mipmap/ic_launcher_round"
+            android:id="@+id/ms_touxiang"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_toRightOf="@id/ms_touxiang"
+            android:id="@+id/ms_item_name"
+            android:text="#我的昵称最长啊啊啊啊啊"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:layout_alignParentRight="true"
+            android:id="@+id/ms_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="石家庄"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dp" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

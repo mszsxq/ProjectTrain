@@ -36,20 +36,21 @@ public class MainActivity extends AppCompatActivity {
         fragmentTabHost.setup(this,
                 getSupportFragmentManager(),
                 android.R.id.tabcontent);
-
-        TabHost.TabSpec tabSpec1 = fragmentTabHost.newTabSpec("社区").setIndicator("社区");
+        TabHost.TabSpec tabSpec1 = fragmentTabHost.newTabSpec("地图").setIndicator("地图");
         fragmentTabHost.addTab(tabSpec1,
-                CommunityFragment.class,
+                MapFragment.class,
                 null);
+
         TabHost.TabSpec tabSpec2 = fragmentTabHost.newTabSpec("add").setIndicator("+");
         fragmentTabHost.addTab(tabSpec2,
                 AddFragment.class,
                 null);
-        TabHost.TabSpec tabSpec3 = fragmentTabHost.newTabSpec("地图").setIndicator("地图");
+        TabHost.TabSpec tabSpec3 = fragmentTabHost.newTabSpec("社区").setIndicator("社区");
         fragmentTabHost.addTab(tabSpec3,
-                MapFragment.class,
+                CommunityFragment.class,
                 null);
-        fragmentTabHost.setCurrentTab(0);
+
+        fragmentTabHost.setCurrentTab(1);
 
         Drawer.closeDrawer(GravityCompat.END);
         navigationView.setItemIconTintList(null);
