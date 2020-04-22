@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:layout_gravity="center">
+    <ImageView
+        android:id="@+id/btn1"
+        android:src="@drawable/left"
+        android:layout_width="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_height="40dp"></ImageView>
+    <ImageView
+        android:id="@+id/img2"
+        android:layout_height="350dp"
+        android:layout_width="match_parent"
+        android:layout_centerVertical="true"
+        ></ImageView>
+    <Button
+        android:id="@+id/btnCamera"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/img2"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_shape"
+        android:textColor="#808000"
+        android:textSize="24sp"
+        android:text="更换头像">
+    </Button>
+</RelativeLayout>
