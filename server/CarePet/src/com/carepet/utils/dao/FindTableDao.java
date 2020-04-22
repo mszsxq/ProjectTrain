@@ -39,12 +39,12 @@ public class FindTableDao {
 	
 	public List<FindTable> findAllFindTable(){
 		Session session=this.sessionFactory.getCurrentSession();
-		Query query=session.createQuery("FindTable");
+		Query query=session.createQuery("from FindTable");
 		return query.list();
 	}
 	public List<FindTable> findSameCity(String city){
 		Session session=this.sessionFactory.getCurrentSession();
-		Query query=session.createQuery("FindTable");
+		Query query=session.createQuery("from FindTable");
 		List<FindTable> findTables=query.list();
 		List<FindTable> findTables2=new ArrayList<FindTable>();
 		for (FindTable findTable : findTables) {

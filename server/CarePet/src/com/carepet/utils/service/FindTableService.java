@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.carepet.ai.animal.AnimalClassify;
 import com.carepet.entity.FindTable;
 import com.carepet.utils.dao.FindTableDao;
 
@@ -17,12 +18,25 @@ public class FindTableService {
 	
 	@Transactional(readOnly = false)
 	public void saveFindTable(FindTable findTable) {
+		String imgjson=findTable.getImgjson();
+		String urlpath="";
+		if (imgjson.contains("++")) {
+			urlpath=imgjson.split("++")[0];
+		}else {
+			urlpath=imgjson;
+		}
+		findTable.setPettype(new AnimalClassify().animal(urlpath));
 		this.findTableDao.saveFindTable(findTable);
 	}
 	
 	@Transactional(readOnly = false)
 	public void updateFindTable(FindTable findTable) {
 		this.findTableDao.uploadFindTable(findTable);
+	}
+	
+	@Transactional(readOnly = false)
+	public void insertFindTable(FindTable findTable) {
+		this.findTableDao.saveFindTable(findTable);
 	}
 	
 	@Transactional(readOnly = false)
