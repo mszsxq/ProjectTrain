@@ -42,6 +42,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MapFindAcitvity" />
+        <activity android:name=".Community.TaskBigImgActivity"/>
     </application>
 
 </manifest>

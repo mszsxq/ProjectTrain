@@ -1,12 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:id="@+id/tablayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:textSize="40dp"
-        android:text="社区页">
-    </TextView>
-</LinearLayout>
+        android:layout_height="60dp"
+        android:background="@android:color/white">
+        <Button
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="80dp"
+            android:id="@+id/button_lookpuppy"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:textColor="#FCD9DD"
+            android:text="晒宠"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            style="?android:attr/borderlessButtonStyle"
+            />
+        <Button
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="80dp"
+            android:id="@+id/button_experience"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:textColor="#B4D1E1"
+            android:text="经验"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            style="?android:attr/borderlessButtonStyle"
+            />
+    </RelativeLayout>
+    <androidx.viewpager.widget.ViewPager
+        android:layout_below="@+id/tablayout"
+        android:id="@+id/tab_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@android:color/white"/>
+
+
+</RelativeLayout>
