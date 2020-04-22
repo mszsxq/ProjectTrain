@@ -6,6 +6,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTabHost;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -93,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
         nick_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"跳转页面",Toast.LENGTH_LONG).show();
+                Intent intent =new Intent(MainActivity.this,LookPicture.class);
+                startActivity(intent);
             }
         });
     }
