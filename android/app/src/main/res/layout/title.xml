@@ -13,7 +13,7 @@
         android:textColor="@color/cardview_light_background"
         android:textSize="20dp" />
 
-    <ImageView
+    <com.example.carepet.CircleImageView
         android:id="@+id/touxiang"
         android:layout_width="40dp"
         android:layout_height="40dp"
