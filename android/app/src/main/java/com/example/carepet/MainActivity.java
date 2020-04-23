@@ -6,9 +6,15 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTabHost;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.io.ByteArrayInputStream;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout Drawer;
@@ -33,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        FragmentTabHost fragmentTabHost = findViewById(android.R.id.tabhost);
+        final FragmentTabHost fragmentTabHost = findViewById(android.R.id.tabhost);
         fragmentTabHost.setup(this,
                 getSupportFragmentManager(),
                 android.R.id.tabcontent);
@@ -84,8 +92,9 @@ public class MainActivity extends AppCompatActivity {
         nick_image=(ImageView)headerLayout.findViewById(R.id.nick_image);
         nick_phone.setText("12345555");
         nick_name.setText("可乐加冰");
-        nick_image.setImageResource(R.drawable.tx);
+//        nick_image.setImageResource(R.drawable.tx);
         //设置图像大小时，必须先有第一句才可以进行设置
+        getBitmapFromSharedPreferences(nick_image);
         nick_image.setAdjustViewBounds(true);
         nick_image.setMaxHeight(160);
         nick_image.setMaxWidth(160);
@@ -95,15 +104,38 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent =new Intent(MainActivity.this,LookPicture.class);
+                int frgTag = fragmentTabHost.getCurrentTab();
+                Log.i("tag",frgTag+"");
+                intent.putExtra("tagId",frgTag);
                 startActivity(intent);
             }
         });
     }
+
+    private void getBitmapFromSharedPreferences(ImageView imageView) {
+        SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
+        //第一步:取出字符串形式的Bitmap
+        String imageString=sharedPreferences.getString("image", "");
+        //第二步:利用Base64将字符串转换为ByteArrayInputStream
+        byte[] byteArray= Base64.decode(imageString, Base64.DEFAULT);
+        if(byteArray.length==0){
+            imageView.setImageResource(R.drawable.tx);
+        }else{
+            ByteArrayInputStream byteArrayInputStream=new ByteArrayInputStream(byteArray);
+
+            //第三步:利用ByteArrayInputStream生成Bitmap
+            Bitmap bitmap= BitmapFactory.decodeStream(byteArrayInputStream);
+            imageView.setImageBitmap(bitmap);
+        }
+
+    }
+
     private void initView() {
         Drawer = findViewById(R.id.da);
         navigationView =findViewById(R.id.cebian);
         layout=findViewById(R.id.header_layout);
         touxiang=findViewById(R.id.touxiang);
+        getBitmapFromSharedPreferences(touxiang);
     }
 
     public void onBackPressed() {

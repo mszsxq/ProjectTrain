@@ -10,13 +10,12 @@
         android:layout_above="@id/btnOne"></View>
     <Button
         android:id="@+id/btnOne"
-        android:layout_width="180dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
         android:text="拍照"
-        android:background="@drawable/button_shape"
+        android:background="@null"
         android:layout_centerHorizontal="true"
         android:layout_above="@id/btnTwo"
-        android:layout_marginBottom="14dp"
         android:textSize="18sp"></Button>
     <View
         android:layout_width="match_parent"
@@ -25,27 +24,27 @@
         android:layout_above="@id/btnTwo"></View>
     <Button
         android:id="@+id/btnTwo"
-        android:layout_width="180dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@drawable/button_shape"
+        android:background="@null"
         android:layout_centerHorizontal="true"
         android:text="相册"
         android:layout_above="@id/btnThree"
-        android:layout_marginBottom="14dp"
-        android:textSize="18sp"></Button>
+        android:textSize="18sp"
+        ></Button>
     <View
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:background="#ccc"
-        android:layout_above="@id/btnThree"></View>
+        android:layout_above="@id/btnThree"
+        ></View>
     <Button
         android:id="@+id/btnThree"
-        android:layout_width="180dp"
+        android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@drawable/button_shape"
+        android:background="@null"
         android:text="取消"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
         android:textSize="18sp"></Button>
 </RelativeLayout>
