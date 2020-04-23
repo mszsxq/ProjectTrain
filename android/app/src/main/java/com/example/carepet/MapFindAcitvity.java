@@ -1,8 +1,10 @@
 package com.example.carepet;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ZoomControls;
 
@@ -25,12 +27,16 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.UiSettings;
 import com.baidu.mapapi.model.LatLng;
+import com.google.android.material.tabs.TabLayout;
+import com.snail.slidenested.SlideNestedPanelLayout;
+import com.snail.slidenested.StateCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 
 public class MapFindAcitvity extends AppCompatActivity {
     private MapView mMapView;
@@ -49,7 +55,7 @@ public class MapFindAcitvity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SDKInitializer.initialize(getApplicationContext());
-        setContentView(R.layout.map_find);
+        setContentView(R.layout.activity_totally);
         // 获取地图控件引用
         mMapView = (MapView)findViewById(R.id.bmapView);
         //初始化Map
@@ -85,6 +91,57 @@ public class MapFindAcitvity extends AppCompatActivity {
                 Postion infoUtil = (Postion) bundle.getSerializable("info");
                 Log.e("皮卡皮卡",infoUtil.getId()+infoUtil.getTitle()+"");
                 return true;
+            }
+        });
+        //总图构成
+        final FrameLayout mFrameLayout = findViewById(R.id.frameLayout);
+        TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        mTabLayout.addTab(mTabLayout.newTab().setText("费用说明"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("预定须知"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("退款政策"));
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        mFrameLayout.setBackgroundColor(Color.parseColor("#ff0000"));
+                        break;
+
+                    case 1:
+                        mFrameLayout.setBackgroundColor(Color.parseColor("#0000ff"));
+                        break;
+
+                    case 2:
+                        mFrameLayout.setBackgroundColor(Color.parseColor("#00ff00"));
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        NestedScrollView mScrollView = findViewById(R.id.nestedScrollView);
+        mScrollView.animate().translationY(-150).alpha(1.0f).setDuration(500);
+
+        SlideNestedPanelLayout mPanelLayout = findViewById(R.id.slideNestedPanelLayout);
+        mPanelLayout.setStateCallback(new StateCallback() {
+            @Override
+            public void onExpandedState() {
+                Log.i("-->","onExpandedState");
+            }
+
+            @Override
+            public void onCollapsedState() {
+                Log.i("-->","onCollapsedState");
             }
         });
     }
