@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/map_relayout"
+<RelativeLayout android:id="@+id/map_relayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:paddingTop="5dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <GridView
-        android:verticalSpacing="5dp"
-        android:horizontalSpacing="5dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.etsy.android.grid.StaggeredGridView
+        app:grid_paddingLeft="2dp"
+        android:paddingRight="2dp"
+        app:grid_paddingBottom="5dp"
         android:id="@+id/gview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:columnWidth="200dp"
-        android:numColumns="2" />
+        app:column_count="2" />
 </RelativeLayout>

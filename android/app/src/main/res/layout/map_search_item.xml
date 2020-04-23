@@ -8,7 +8,7 @@
         android:layout_alignParentTop="true"
         android:id="@+id/ms_item_iv"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="wrap_content"
         app:qmui_corner_radius="10dp"
         />
     <TextView

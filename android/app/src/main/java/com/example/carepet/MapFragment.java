@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
 
+import com.etsy.android.grid.StaggeredGridView;
 import com.example.carepet.adapter.SearchAdapter;
 
 import java.util.ArrayList;
@@ -19,9 +20,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 public class MapFragment extends Fragment {
-    private GridView gridView;
+    private StaggeredGridView gridView ;
     private SearchAdapter adapter;
-    private int [] img ={R.drawable.cat,R.drawable.cat,R.drawable.cat,R.drawable.cat,R.drawable.shu,R.drawable.dancing,R.drawable.cat,R.drawable.cat2,R.drawable.fight};
+    private int [] img ={R.drawable.shu,R.drawable.cat,R.drawable.cat,R.drawable.cat,R.drawable.shu,R.drawable.dancing,R.drawable.cat,R.drawable.cat2,R.drawable.fight};
     private String [] imgname ={"cat2","cat","figth"};
     private List<Map<String, Integer>> dataList = new ArrayList<Map<String, Integer>>();
     @Nullable
