@@ -37,6 +37,12 @@ public class MapFragment extends Fragment {
         gue = new GestureDetector(getContext(), new MyGestureListener());
         adapter=new SearchAdapter(getContext(), R.layout.map_search_item,getData());
         gridView.setAdapter(adapter);
+        gridView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return gue.onTouchEvent(motionEvent);
+            }
+        });
         return  view;
     }
     private List<Map<String, Integer>> getData() {
@@ -56,20 +62,13 @@ public class MapFragment extends Fragment {
             float endX = e2.getX();//通过e2.getX（）获得手指松开位置的横坐标
             float startY = e1.getY();//通过e1.getY（）获得手指按下位置的纵坐标
             float endY = e2.getY();//通过e2.getY（）获得手指松开的纵坐标
-            if ((startX - endX) > 50 && Math.abs(startY - endY) < 200) {
+            if ((endX-startX  ) > 50 && Math.abs(startY - endY) < 200) {
                 //(startX - endX) > 50 是手指从按下到松开的横坐标距离大于50
                 // Math.abs(startY - endY) < 200 是手指从按下到松开的纵坐标的差的绝对值
-
-                //在这里通过Intent实现界面转跳
                 Intent i  = new Intent(getActivity(),MapFindAcitvity.class);
                 startActivity(i);
             }
-
-            if ((endX - startX) > 50 && Math.abs(startY - endY) <200) {
-                Intent i  = new Intent(getActivity(),MapFindAcitvity.class);
-                startActivity(i);
-            }
-//返回值是重点：如果返回值是true则动作可以执行，如果是flase动作将无法执行
+//如果返回值是true则动作可以执行，如果是flase动作将无法执行
             return true;
         }
     }
