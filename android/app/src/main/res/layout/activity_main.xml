@@ -10,10 +10,6 @@
     tools:openDrawer="end">
 
     <!--主界面-->
-    <androidx.fragment.app.FragmentTabHost
-        android:id="@android:id/tabhost"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -24,20 +20,24 @@
                 android:layout_height="40dp"
                 layout="@layout/title"
                 />
-            <TabWidget
-                android:id="@android:id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" />
             <FrameLayout
-                android:id="@android:id/tabcontent"
+                android:id="@+id/content"
                 android:layout_below ="@id/header_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 />
+            <me.majiajie.pagerbottomtabstrip.PageNavigationView
+                android:id="@+id/tab"
+                android:elevation="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_alignParentBottom="true"
+                android:background="#FFF"
+                />
         </RelativeLayout>
+<!--底部栏-->
 
-    </androidx.fragment.app.FragmentTabHost>
+
     <!--侧边栏-->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/cebian"

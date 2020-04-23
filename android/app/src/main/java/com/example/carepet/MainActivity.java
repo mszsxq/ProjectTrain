@@ -1,10 +1,17 @@
 package com.example.carepet;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTabHost;
+import androidx.fragment.app.FragmentTransaction;
+import me.majiajie.pagerbottomtabstrip.NavigationController;
+import me.majiajie.pagerbottomtabstrip.PageNavigationView;
+import me.majiajie.pagerbottomtabstrip.listener.SimpleTabItemSelectedListener;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,31 +42,18 @@ public class MainActivity extends AppCompatActivity {
     private TextView nick_phone;
     private ImageView nick_image;
     private TextView nick_name;
-
+    private AddFragment addFragment;
+    private MapFragment mapFragment;
+    private CommunityFragment communityFragment;
+    NavigationController navigationController;
+    PageNavigationView tab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        final FragmentTabHost fragmentTabHost = findViewById(android.R.id.tabhost);
-        fragmentTabHost.setup(this,
-                getSupportFragmentManager(),
-                android.R.id.tabcontent);
-        TabHost.TabSpec tabSpec1 = fragmentTabHost.newTabSpec("地图").setIndicator("地图");
-        fragmentTabHost.addTab(tabSpec1,
-                MapFragment.class,
-                null);
-
-        TabHost.TabSpec tabSpec2 = fragmentTabHost.newTabSpec("add").setIndicator("+");
-        fragmentTabHost.addTab(tabSpec2,
-                AddFragment.class,
-                null);
-        TabHost.TabSpec tabSpec3 = fragmentTabHost.newTabSpec("社区").setIndicator("社区");
-        fragmentTabHost.addTab(tabSpec3,
-                CommunityFragment.class,
-                null);
-
-        fragmentTabHost.setCurrentTab(1);
+        initFragment(0);
+        initTabBar();
 
         Drawer.closeDrawer(GravityCompat.END);
         navigationView.setItemIconTintList(null);
@@ -104,12 +98,96 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent =new Intent(MainActivity.this,LookPicture.class);
-                int frgTag = fragmentTabHost.getCurrentTab();
+                int frgTag = navigationController.getSelected();
+//                int frgTag = fragmentTabHost.getCurrentTab();
                 Log.i("tag",frgTag+"");
                 intent.putExtra("tagId",frgTag);
                 startActivity(intent);
             }
         });
+    }
+    private void initTabBar(){
+        tab = (PageNavigationView) findViewById(R.id.tab);
+        navigationController = tab.material()
+                .addItem(R.drawable.map, "地图")
+                .addItem(R.drawable.jiahao, "添加")
+                .addItem(R.drawable.shequ, "社区")
+                .build();
+        //    底部栏监听事件
+        navigationController.addSimpleTabItemSelectedListener(new SimpleTabItemSelectedListener() {
+            @Override
+            public void onSelected(int index, int old) {
+                // 选中时触发
+                switch (index){
+                    case 0:
+                        initFragment(0);
+                        Log.e("test","0");
+                        break;
+                    case 1:
+                        initFragment(1);
+                        Log.e("test","1");
+                        break;
+                    case 2:
+                        initFragment(2);
+                        Log.e("test","2");
+                        break;
+                }
+            }
+        });
+    }
+    private void initFragment(@Nullable int i) {
+
+        FragmentManager fragmentManager=getSupportFragmentManager();
+        FragmentTransaction transaction=fragmentManager.beginTransaction();
+        hideFragments(transaction);
+
+        switch (i){
+            case 0:
+                Log.e("test","显示第0个页面");
+                hideFragments(transaction);
+                if (mapFragment==null){
+                    mapFragment=new MapFragment();
+                    transaction.add(R.id.content,mapFragment,"map");
+                }else {
+                    transaction.show(mapFragment);
+                }
+                break;
+            case 1:
+                Log.e("test","显示第1个页面");
+                hideFragments(transaction);
+                if (addFragment==null){
+                   addFragment=new AddFragment();
+                    transaction.add(R.id.content,addFragment,"add");
+                }else {
+                    transaction.show(addFragment);
+                }
+                break;
+            case 2:
+                Log.e("test","显示第2个页面");
+                hideFragments(transaction);
+                if (communityFragment==null){
+                    communityFragment=new CommunityFragment();
+                    transaction.add(R.id.content,communityFragment,"community");
+                }else {
+                    transaction.show(communityFragment);
+                }
+                break;
+            default:
+                break;
+        }
+        //
+        transaction.commit();
+    }
+    private void hideFragments(FragmentTransaction transaction) {
+        if (mapFragment != null) {
+            transaction.hide(mapFragment);
+        }
+        if (communityFragment != null) {
+            transaction.hide(communityFragment);
+        }
+        if (addFragment != null) {
+            transaction.hide(addFragment);
+        }
     }
 
     private void getBitmapFromSharedPreferences(ImageView imageView) {
@@ -131,11 +209,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+
         Drawer = findViewById(R.id.da);
         navigationView =findViewById(R.id.cebian);
         layout=findViewById(R.id.header_layout);
         touxiang=findViewById(R.id.touxiang);
         getBitmapFromSharedPreferences(touxiang);
+
     }
 
     public void onBackPressed() {
