@@ -93,7 +93,7 @@ public class LookPicture extends Activity {
         //第二步:利用Base64将字符串转换为ByteArrayInputStream
         byte[] byteArray= Base64.decode(imageString, Base64.DEFAULT);
         if(byteArray.length==0){
-            ivHead.setImageResource(R.mipmap.ic_launcher);
+            ivHead.setImageResource(R.drawable.tx);
         }else{
             ByteArrayInputStream byteArrayInputStream=new ByteArrayInputStream(byteArray);
 
@@ -145,7 +145,7 @@ public class LookPicture extends Activity {
         mPopWindow.setFocusable(true);
         mPopWindow.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
         int height = getWindowManager().getDefaultDisplay().getHeight();
-        mPopWindow.setHeight(height * 1/3 );
+        mPopWindow.setHeight(height * 1/4 );
         //设置各个控件的点击响应
         Button camera= (contentView).findViewById(R.id.btnOne);
         Button photo=(contentView).findViewById(R.id.btnTwo);

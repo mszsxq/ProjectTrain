@@ -1,10 +1,12 @@
 
 package com.example.carepet;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,6 +17,15 @@ public class AddFragment extends Fragment {
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.add_layout,container,false);
+    TextView t = view.findViewById(R.id.aaa);
+    t.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(),MapFindAcitvity.class);
+        startActivity(intent);
+      }
+    });
     return  view;
   }
 }
