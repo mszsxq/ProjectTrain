@@ -1,11 +1,17 @@
 package com.example.carepet;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import com.baidu.location.BDAbstractLocationListener;
@@ -31,6 +37,9 @@ import com.google.android.material.tabs.TabLayout;
 import com.snail.slidenested.SlideNestedPanelLayout;
 import com.snail.slidenested.StateCallback;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +60,36 @@ public class MapFindAcitvity extends AppCompatActivity {
     private List<Postion> postions = new ArrayList<>();
     private Marker marker;
     private List<Marker> markerList = new ArrayList<>();
+    protected static final int CHANGE_UI = 1;
+    protected static final int ERROR = 2;
+    private Bitmap basebitmap;
+    private String path = null;
+    // 主线程创建消息处理器
+    private Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            Log.e("panduan",msg.what+"");
+            if (msg.what == CHANGE_UI) {
+                Postion postion1 = new Postion();
+                postion1.setId(1);
+                postion1.setTitle("皮卡丘");
+                postion1.setLat(38.02753);
+                postion1.setLng(114.567347);
+                Postion postion2 = new Postion();
+                postion2.setLat(38.029784);
+                postion2.setLng(114.565869);
+                postion2.setTitle("蒜头王八");
+                postion2.setId(2);
+                postions.add(postion1);
+                postions.add(postion2);
+                basebitmap = (Bitmap) msg.obj;
+                basebitmap = getZoomImage(basebitmap,64,64);
+                addOverlay(postions);
+            } else if (msg.what == ERROR) {
+                Toast.makeText(MapFindAcitvity.this, "显示图片错误",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,16 +99,17 @@ public class MapFindAcitvity extends AppCompatActivity {
         mMapView = (MapView)findViewById(R.id.bmapView);
         //初始化Map
         initializeMap();
-        //卫星地图
-        mBaiduMap.setMapType(BaiduMap.MAP_TYPE_SATELLITE);
         //隐藏logo
         hideLogo();
         //比例尺
         zoomLevelOp();
         //定位
         LocationOption();
+        //加载图片缩略图
+        path = "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2155327358,3650797713&fm=15&gp=0.jpg";
+        getPicBitmap();
         //多点定wei
-        Postion postion1 = new Postion();
+        /*Postion postion1 = new Postion();
         postion1.setId(1);
         postion1.setTitle("皮卡丘");
         postion1.setLat(38.02753);
@@ -81,7 +121,7 @@ public class MapFindAcitvity extends AppCompatActivity {
         postion2.setId(2);
         postions.add(postion1);
         postions.add(postion2);
-        addOverlay(postions);
+        addOverlay(postions);*/
 
         //点击事件
         mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
@@ -226,7 +266,7 @@ public class MapFindAcitvity extends AppCompatActivity {
         //清空地图
         mBaiduMap.clear();
         //创建marker的显示图标
-        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.icon_mark);
+        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromBitmap(basebitmap);
         LatLng latLng = null;
         Marker marker;
         OverlayOptions options;
@@ -247,6 +287,85 @@ public class MapFindAcitvity extends AppCompatActivity {
             bundle.putSerializable("info", info);
             marker.setExtraInfo(bundle);
         }
+    }
+    //读取网络图片URL
+    public void getPicBitmap(){
+        new Thread() {
+            private HttpURLConnection conn;
+            private Bitmap bitmap;
+            public void run() {
+                // 连接服务器 get 请求 获取图片
+                try {
+                    //创建URL对象
+                    Log.e("ppppp",path);
+                    URL url = new URL(path);
+                    // 根据url 发送 http的请求
+                    conn = (HttpURLConnection) url.openConnection();
+                    // 设置请求的方式
+                    conn.setRequestMethod("GET");
+                    //设置超时时间
+                    conn.setConnectTimeout(5000);
+                    // 得到服务器返回的响应码
+                    int code = conn.getResponseCode();
+                    //请求网络成功后返回码是200
+                    if (code == 200) {
+                        //获取输入流
+                        InputStream is = conn.getInputStream();
+                        //将流转换成Bitmap对象
+                        bitmap = BitmapFactory.decodeStream(is);
+                        //将更改主界面的消息发送给主线程
+                        Message msg = new Message();
+                        msg.what = CHANGE_UI;
+                        msg.obj = bitmap;
+                        handler.sendMessage(msg);
+                    } else {
+                        //返回码不等于200 请求服务器失败
+                        Message msg = new Message();
+                        msg.what = ERROR;
+                        handler.sendMessage(msg);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Message msg = new Message();
+                    msg.what = ERROR;
+                    handler.sendMessage(msg);
+                }
+                //关闭连接
+                conn.disconnect();
+            }
+        }.start();
+    }
+    /**
+     * 图片的缩放方法
+     *
+     * @param orgBitmap ：源图片资源
+     * @param newWidth  ：缩放后宽度
+     * @param newHeight ：缩放后高度
+     * @return
+     */
+    public static Bitmap getZoomImage(Bitmap orgBitmap, double newWidth, double newHeight) {
+        if (null == orgBitmap) {
+            return null;
+        }
+        if (orgBitmap.isRecycled()) {
+            return null;
+        }
+        if (newWidth <= 0 || newHeight <= 0) {
+            return null;
+        }
+
+        // 获取图片的宽和高
+        float width = orgBitmap.getWidth();
+        float height = orgBitmap.getHeight();
+        // 创建操作图片的matrix对象
+        Matrix matrix = new Matrix();
+        // 计算宽高缩放率
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // 缩放图片动作
+        matrix.postScale(scaleWidth, scaleHeight);
+        Bitmap bitmap = Bitmap.createBitmap(orgBitmap, 0, 0, (int) width, (int) height, matrix, true);
+        return bitmap;
     }
     @Override
     public void onDestroy() {

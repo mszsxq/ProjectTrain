@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:anchorPoint="0.65"
-        app:panelHeight="250dp"
+        app:panelHeight="80dp"
         app:parallaxOffset="50dp"
         app:scrollView="@+id/nestedScrollView"
         tools:layout_editor_absoluteX="16dp"
