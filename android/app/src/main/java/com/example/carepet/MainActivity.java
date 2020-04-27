@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initFragment(0);
         initTabBar();
-
+        initPop();
 
 
         Drawer.closeDrawer(GravityCompat.END);
@@ -112,8 +112,29 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void initAdd(){
-
+    public void initPop(){
+        mPopMenu = new PopMenu.Builder().attachToActivity(MainActivity.this)
+                .addMenuItem(new PopMenuItem("晒宠贴", getResources().getDrawable(R.drawable.shaichong)))
+                .addMenuItem(new PopMenuItem("经验贴", getResources().getDrawable(R.drawable.jingyan)))
+                .addMenuItem(new PopMenuItem("寻找贴", getResources().getDrawable(R.drawable.xunzhao)))
+                .setOnItemClickListener(new PopMenuItemListener() {
+                    @Override
+                    public void onItemClick(PopMenu popMenu, int position) {
+                        switch (position) {
+                            case 0:
+                                Toast.makeText(MainActivity.this, "你点击了第0个位置", Toast.LENGTH_SHORT).show();
+                                break;
+                            case 1:
+                                Toast.makeText(MainActivity.this, "你点击了第1个位置", Toast.LENGTH_SHORT).show();
+                                break;
+                            case 2:
+                                Toast.makeText(MainActivity.this, "你点击了第2个位置", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    }
+                })
+                .build();
+        mPopMenu.setCloseMenuMarginbottom(-30);
     }
     private void initTabBar(){
         tab = (PageNavigationView) findViewById(R.id.tab);
@@ -125,53 +146,32 @@ public class MainActivity extends AppCompatActivity {
         //    底部栏监听事件
         navigationController.addSimpleTabItemSelectedListener(new SimpleTabItemSelectedListener() {
             @Override
-            public void onSelected(int index, int old) {
+            public void onSelected(int index,  int old) {
+                mPopMenu.setOnMenuCloseListener(new PopMenu.OnMenuCloseListener() {
+                    @Override
+                    public void onClose(View v) {
+//                        index =old;
+                    }
+                });
                 // 选中时触发
                 switch (index){
                     case 0:
                         initFragment(0);
                         Log.e("test","0");
-                        mPopMenu.hide();
                         break;
                     case 1:
-                        if(mPopMenu==null) {
-                            mPopMenu = new PopMenu.Builder().attachToActivity(MainActivity.this)
-                                    .addMenuItem(new PopMenuItem("晒宠贴", getResources().getDrawable(R.drawable.shaichong)))
-                                    .addMenuItem(new PopMenuItem("经验贴", getResources().getDrawable(R.drawable.jingyan)))
-                                    .addMenuItem(new PopMenuItem("寻找贴", getResources().getDrawable(R.drawable.xunzhao)))
-                                    .setOnItemClickListener(new PopMenuItemListener() {
-                                        @Override
-                                        public void onItemClick(PopMenu popMenu, int position) {
-                                            switch (position){
-                                                case 0:
-                                                    Toast.makeText(MainActivity.this, "你点击了第0个位置", Toast.LENGTH_SHORT).show();
-                                                    break;
-                                                case 1:
-                                                    Toast.makeText(MainActivity.this, "你点击了第1个位置", Toast.LENGTH_SHORT).show();
-                                                    break;
-                                                case 2:
-                                                    Toast.makeText(MainActivity.this, "你点击了第2个位置", Toast.LENGTH_SHORT).show();
-                                                    break;
-                                            }
 
-                                        }
-                                    })
-                                    .build();
-                            mPopMenu.setCloseMenuMarginbottom(-30);
-                            mPopMenu.show();
-                        }else{
-                            mPopMenu.show();
-                        }
+                        mPopMenu.show();
                         break;
                     case 2:
                         initFragment(2);
-                        mPopMenu.hide();
                         Log.e("test","2");
                         break;
                 }
             }
         });
     }
+
     private void initFragment(@Nullable int i) {
 
         FragmentManager fragmentManager=getSupportFragmentManager();
@@ -263,4 +263,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+}
+class listener implements  SimpleTabItemSelectedListener{
+
+    @Override
+    public void onSelected(int index, int old) {
+
+    }
 }
