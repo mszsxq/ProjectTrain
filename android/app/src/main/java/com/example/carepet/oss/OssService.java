@@ -128,6 +128,7 @@ public class OssService {
 // task.waitUntilFinished(); // 等待任务完成。
     }
 
+    //参数说明 ossfilepath表示下载的图片在oss中的目录  downloadFileName要下载的图片的名称
     public void downLoad(final String ossFileDir,final String downloadFileName){
         //下载文件。
         GetObjectRequest get = new GetObjectRequest("picturer",downloadFileName);

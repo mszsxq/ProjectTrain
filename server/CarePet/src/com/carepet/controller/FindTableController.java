@@ -24,9 +24,9 @@ public class FindTableController {
 	public String list(Model model) {
 		Gson gson=new Gson();
 		List<String> strings=new ArrayList<String>();
-		strings.add("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg");
-		strings.add("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg");
-		System.out.println(gson.toJson(strings));
+//		strings.add("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg");
+//		strings.add("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg");
+//		System.out.println(gson.toJson(strings));
 		List<FindTable> findTables=findTableService.list();
 		String findTablestring=gson.toJson(findTables);
 		model.addAttribute("findTables", findTablestring);
