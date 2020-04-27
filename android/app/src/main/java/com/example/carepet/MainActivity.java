@@ -13,6 +13,8 @@ import lrq.com.addpopmenu.PopMenuItemListener;
 import me.majiajie.pagerbottomtabstrip.NavigationController;
 import me.majiajie.pagerbottomtabstrip.PageNavigationView;
 import me.majiajie.pagerbottomtabstrip.listener.SimpleTabItemSelectedListener;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -160,9 +162,6 @@ public class MainActivity extends AppCompatActivity {
                         }else{
                             mPopMenu.show();
                         }
-                        initFragment(1);
-
-
                         break;
                     case 2:
                         initFragment(2);
