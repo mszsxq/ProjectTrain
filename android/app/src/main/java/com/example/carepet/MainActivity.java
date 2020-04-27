@@ -165,7 +165,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onRepeat(int index) {
-                mPopMenu.show();
+                if (index ==1){
+                   if( mPopMenu.isShowing()){} else{
+                       mPopMenu.show();
+                   }
+                }
             }
         });
     }
