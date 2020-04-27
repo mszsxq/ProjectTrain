@@ -12,6 +12,7 @@ import lrq.com.addpopmenu.PopMenuItem;
 import lrq.com.addpopmenu.PopMenuItemListener;
 import me.majiajie.pagerbottomtabstrip.NavigationController;
 import me.majiajie.pagerbottomtabstrip.PageNavigationView;
+import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectedListener;
 import me.majiajie.pagerbottomtabstrip.listener.SimpleTabItemSelectedListener;
 
 import android.app.Activity;
@@ -144,23 +145,15 @@ public class MainActivity extends AppCompatActivity {
                 .addItem(R.drawable.shequ, "社区")
                 .build();
         //    底部栏监听事件
-        navigationController.addSimpleTabItemSelectedListener(new SimpleTabItemSelectedListener() {
+        navigationController.addTabItemSelectedListener(new OnTabItemSelectedListener() {
             @Override
-            public void onSelected(int index,  int old) {
-                mPopMenu.setOnMenuCloseListener(new PopMenu.OnMenuCloseListener() {
-                    @Override
-                    public void onClose(View v) {
-//                        index =old;
-                    }
-                });
-                // 选中时触发
+            public void onSelected(int index, int old) {
                 switch (index){
                     case 0:
                         initFragment(0);
-                       mPopMenu.hide();
+                        mPopMenu.hide();
                         break;
                     case 1:
-
                         mPopMenu.show();
                         break;
                     case 2:
@@ -168,6 +161,11 @@ public class MainActivity extends AppCompatActivity {
                         mPopMenu.hide();
                         break;
                 }
+            }
+
+            @Override
+            public void onRepeat(int index) {
+                mPopMenu.show();
             }
         });
     }
