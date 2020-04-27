@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (index){
                     case 0:
                         initFragment(0);
-                        Log.e("test","0");
+                       mPopMenu.hide();
                         break;
                     case 1:
 
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 2:
                         initFragment(2);
-                        Log.e("test","2");
+                        mPopMenu.hide();
                         break;
                 }
             }
