@@ -17,15 +17,6 @@ public class AddFragment extends Fragment {
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.add_layout,container,false);
-    TextView t = view.findViewById(R.id.aaa);
-    t.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Intent intent = new Intent();
-        intent.setClass(getActivity(),MapFindAcitvity.class);
-        startActivity(intent);
-      }
-    });
     return  view;
   }
 }
