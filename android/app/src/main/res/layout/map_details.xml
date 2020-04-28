@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:text="猫咪的尾巴和身体不是一个整体"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_toRightOf="@+id/textView"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"
+        android:alpha="0.8"
+        android:drawableStart="@mipmap/icon_tour_location"
+        android:drawablePadding="4dp"
+        android:text="石家庄"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:layout_below="@+id/textView"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
+        android:alpha="0.8"
+        android:drawableStart="@mipmap/icon_tour_map"
+        android:drawablePadding="4dp"
+        android:text="发布人"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:layout_below="@+id/textView"
+        android:layout_toRightOf="@+id/textView1"
+        android:layout_constraintTop_toTopOf="@+id/textView1" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="15dp"
+        android:drawableStart="@mipmap/icon_tour_label"
+        android:drawablePadding="4dp"
+        android:text="英短"
+        android:textColor="@color/gray"
+        android:textSize="10sp"
+        android:layout_below="@+id/textView1" />
+
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:alpha="0.8"
+        android:layout_marginTop="5dp"
+        android:drawableStart="@mipmap/icon_tour_label"
+        android:drawablePadding="4dp"
+        android:text="寻找贴"
+        android:textColor="@color/gray"
+        android:textSize="10sp"
+        android:layout_below="@+id/textView1"
+        android:layout_toRightOf="@+id/textView3"
+        />
+
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:alpha="0.8"
+        android:layout_marginTop="5dp"
+        android:drawableStart="@mipmap/icon_tour_label"
+        android:drawablePadding="4dp"
+        android:text="河北师范大学"
+        android:textColor="@color/gray"
+        android:textSize="10sp"
+        android:layout_below="@+id/textView1"
+        android:layout_toRightOf="@+id/textView4"
+        />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/background"
+        android:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:text="寻找贴详情"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:layout_below="@id/textView3" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="380dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textView6"
+        android:layout_marginTop="10dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/background" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:text="几乎所有人都被小莎养猫这件事儿惊着了。很多朋友劝我：赶紧送人！
+是他们讨厌猫？还是觉得小莎不配养猫？他们眼里的我到底是怎样一个工作狂或者男人婆？
+凡是劝我不要养猫的人肯定不够了解我。
+从小跟猫们一起长大，觉得自己像一只猫多过一个人，我的理想就是做一个猫一样的女人。"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:layout_below="@+id/imageView1"/>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/background"
+        android:layout_constraintTop_toBottomOf="@+id/textView7" />
+</RelativeLayout>
