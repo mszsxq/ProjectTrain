@@ -5,14 +5,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTabHost;
 import androidx.fragment.app.FragmentTransaction;
+import lrq.com.addpopmenu.PopMenu;
+import lrq.com.addpopmenu.PopMenuItem;
+import lrq.com.addpopmenu.PopMenuItemListener;
 import me.majiajie.pagerbottomtabstrip.NavigationController;
 import me.majiajie.pagerbottomtabstrip.PageNavigationView;
+import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectedListener;
 import me.majiajie.pagerbottomtabstrip.listener.SimpleTabItemSelectedListener;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,13 +27,14 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+
 
 import java.io.ByteArrayInputStream;
 
@@ -45,8 +49,9 @@ public class MainActivity extends AppCompatActivity {
     private AddFragment addFragment;
     private MapFragment mapFragment;
     private CommunityFragment communityFragment;
-    NavigationController navigationController;
-    PageNavigationView tab;
+    private NavigationController navigationController;
+    private PageNavigationView tab;
+    private  PopMenu mPopMenu;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initFragment(0);
         initTabBar();
+        initPop();
+
 
         Drawer.closeDrawer(GravityCompat.END);
         navigationView.setItemIconTintList(null);
@@ -106,6 +113,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    public void initPop(){
+        mPopMenu = new PopMenu.Builder().attachToActivity(MainActivity.this)
+                .addMenuItem(new PopMenuItem("晒宠贴", getResources().getDrawable(R.drawable.shaichong)))
+                .addMenuItem(new PopMenuItem("经验贴", getResources().getDrawable(R.drawable.jingyan)))
+                .addMenuItem(new PopMenuItem("寻找贴", getResources().getDrawable(R.drawable.xunzhao)))
+                .setOnItemClickListener(new PopMenuItemListener() {
+                    @Override
+                    public void onItemClick(PopMenu popMenu, int position) {
+                        switch (position) {
+                            case 0:
+                                Toast.makeText(MainActivity.this, "你点击了第0个位置", Toast.LENGTH_SHORT).show();
+                                break;
+                            case 1:
+                                Toast.makeText(MainActivity.this, "你点击了第1个位置", Toast.LENGTH_SHORT).show();
+                                break;
+                            case 2:
+                                Toast.makeText(MainActivity.this, "你点击了第2个位置", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    }
+                })
+                .build();
+        mPopMenu.setCloseMenuMarginbottom(-30);
+    }
     private void initTabBar(){
         tab = (PageNavigationView) findViewById(R.id.tab);
         navigationController = tab.material()
@@ -114,27 +145,35 @@ public class MainActivity extends AppCompatActivity {
                 .addItem(R.drawable.shequ, "社区")
                 .build();
         //    底部栏监听事件
-        navigationController.addSimpleTabItemSelectedListener(new SimpleTabItemSelectedListener() {
+        navigationController.addTabItemSelectedListener(new OnTabItemSelectedListener() {
             @Override
             public void onSelected(int index, int old) {
-                // 选中时触发
                 switch (index){
                     case 0:
                         initFragment(0);
-                        Log.e("test","0");
+                        mPopMenu.hide();
                         break;
                     case 1:
-                        initFragment(1);
-                        Log.e("test","1");
+                        mPopMenu.show();
                         break;
                     case 2:
                         initFragment(2);
-                        Log.e("test","2");
+                        mPopMenu.hide();
                         break;
+                }
+            }
+
+            @Override
+            public void onRepeat(int index) {
+                if (index ==1){
+                   if( mPopMenu.isShowing()){} else{
+                       mPopMenu.show();
+                   }
                 }
             }
         });
     }
+
     private void initFragment(@Nullable int i) {
 
         FragmentManager fragmentManager=getSupportFragmentManager();
@@ -226,4 +265,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+}
+class listener implements  SimpleTabItemSelectedListener{
+
+    @Override
+    public void onSelected(int index, int old) {
+
+    }
 }
