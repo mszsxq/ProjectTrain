@@ -23,6 +23,9 @@ public class ContentUtil {
                         " processor with support for AMD Virtualization™ (AMD-V™)"
 
 
+                ,
+                "linux 测试文件，搜索功能该怎么完成呢？？？？？？？？？？？？？？，搜索标题或者搜索内容或者搜索昵称？？？？？？？？？？？ \n"+
+                        "搜索页面换掉或者继续在这个页面完成？？？若是搜索不到内容，该怎么显示呢？？？？？？"
         };
 
         /**

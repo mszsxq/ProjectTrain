@@ -1,11 +1,15 @@
 
 package com.example.carepet;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,33 +19,36 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.carepet.Community.ExperienceFragment;
 import com.example.carepet.Community.FragmentAdapter;
 import com.example.carepet.Community.LookPuppyFragment;
+import com.example.carepet.Community.search;
 
 import java.util.ArrayList;
 import java.util.List;
-
 public class CommunityFragment extends Fragment implements ViewPager.OnPageChangeListener,View.OnClickListener{
     private List<Fragment> list;
     private View view;
     private ViewPager viewPager;
     private Button button01,button02;
+    private ImageView mImageView;
     // private TabLayout tableLayout;
-
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.community_layout, container, false);
         initView();
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getContext(), search.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
-
-
     private void initView() {
         viewPager=(ViewPager)view.findViewById(R.id.tab_viewpager);
-
         list=new ArrayList<>();
         button01=(Button)view.findViewById(R.id.button_lookpuppy);
         button02=(Button)view.findViewById(R.id.button_experience);
-
-
+        mImageView=(ImageView)view.findViewById(R.id.mimageview);
         button01.setOnClickListener(this);
         button02.setOnClickListener(this);
 

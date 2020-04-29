@@ -3,11 +3,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/et_ss"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/mimageview"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/search" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="借用搜索" />
+    </LinearLayout>
     <RelativeLayout
         android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:layout_below="@id/et_ss"
+        >
         <Button
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"

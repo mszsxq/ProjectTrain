@@ -2,6 +2,7 @@ package com.example.carepet.Community;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,10 +55,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             }
 
         }
-
-
-
-
     public  ListAdapter(List<Community> listDatas,Context context){
         this.context=context;
         mDataList = listDatas;
@@ -83,6 +80,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         holder.viewPager.setAdapter(viewPagerAdapter);
         holder.viewPager.setOnPageChangeListener(new ViewPagerIndicator(context, holder.viewPager, holder.linearLayout, imageViewList.length));
         holder.name.setText(ContentUtil.getName(position));//设置名称
+        Log.e("list",listData.getTitle().toString());
         int state=mTextStateList.get(position,STATE_UNKNOW);
 //        如果该itme是第一次初始化，则取获取文本的行数
         if (state==STATE_UNKNOW){
@@ -127,8 +125,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             }
             holder.content.setText(ContentUtil.getContent(position));
         }
-
-
 //        设置显示和收起的点击事件
         holder.expandOrCollapse.setOnClickListener(new View.OnClickListener() {
             @Override

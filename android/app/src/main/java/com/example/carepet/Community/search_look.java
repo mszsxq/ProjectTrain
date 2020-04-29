@@ -5,22 +5,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
-
 import com.example.carepet.R;
 import com.example.carepet.entity.Community;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LookPuppyFragment extends Fragment {
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-    public static LookPuppyFragment newInstance() {
-        LookPuppyFragment fragment = new LookPuppyFragment();
+public class search_look extends Fragment {
+
+    public static search_look newInstance() {
+        search_look fragment=new search_look();
         return fragment;
     }
 
@@ -38,16 +37,15 @@ public class LookPuppyFragment extends Fragment {
         /******
          * 新增代码
          * ******/
-        c1.setContent("");
+        c1.setContent("ymyyyyyyyyyyyyyyyyyyymmmmmmmmmmmyn");
         c1.setUserId(1);
+        c1.setFlag(0);
         c1.setTime("2018/10/20");
         c1.setPic(R.id.headpic);
         c1.setTitle("windows");
-        c2.setTitle("linux");
         list.add(c1);
-        list.add(c2);
-        ListAdapter listAdapter = new ListAdapter(list,getContext()); //创建适配器，并且导入数据list
-        recyclerView.setAdapter(listAdapter);//布局导入适配器
+        Search_listAdapter search_listAdapter=new Search_listAdapter(list,getContext()); //创建适配器，并且导入数据list
+        recyclerView.setAdapter(search_listAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL,false));
 
         return rootView;
