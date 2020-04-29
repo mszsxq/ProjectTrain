@@ -48,8 +48,7 @@
         android:textColor="@color/black"
         android:textSize="12sp"
         android:layout_below="@+id/textView"
-        android:layout_toRightOf="@+id/textView1"
-        android:layout_constraintTop_toTopOf="@+id/textView1" />
+        android:layout_toRightOf="@+id/textView1" />
 
     <TextView
         android:id="@+id/textView3"
@@ -103,8 +102,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="10dp"
-        android:background="@color/background"
-        android:layout_constraintTop_toBottomOf="@+id/textView3" />
+        android:background="@color/background" />
 
     <TextView
         android:id="@+id/textView6"
@@ -146,6 +144,5 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="8dp"
-        android:background="@color/background"
-        android:layout_constraintTop_toBottomOf="@+id/textView7" />
+        android:background="@color/background" />
 </RelativeLayout>
