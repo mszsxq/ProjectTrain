@@ -46,7 +46,7 @@ public class OssService {
     public OssService(Context context){
         this.context=context;
         String endpoint = "http://oss-cn-beijing.aliyuncs.com";
-        String stsServer = "http://192.168.2.229:7080/sts/getsts";
+        String stsServer = "http://175.24.16.26:7080/sts/getsts";
 //推荐使用OSSAuthCredentialsProvider。token过期可以及时更新
         OSSCredentialProvider credentialProvider = new OSSAuthCredentialsProvider(stsServer);
 
