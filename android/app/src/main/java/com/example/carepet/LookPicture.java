@@ -28,9 +28,12 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.example.carepet.oss.OssService;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -82,7 +85,16 @@ public class LookPicture extends Activity {
 //             *
 //             */
 //        }
-        getBitmapFromSharedPreferences();
+//        getBitmapFromSharedPreferences();
+        FileInputStream fs = null;
+        try {
+            fs = new FileInputStream("/sdcard/myHead/head.jpg");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Bitmap bitmap  = BitmapFactory.decodeStream(fs);
+        ivHead.setImageBitmap(bitmap);
         btnTakephoto=findViewById(R.id.btnCamera);
     }
 
@@ -195,8 +207,15 @@ public class LookPicture extends Activity {
                         /**
                          * 上传服务器代码
                          */
-//                        setPicToView(head);//保存在SD卡中
-                        saveBitmapToSharedPreferences(head);
+                        setPicToView(head);//保存在SD卡中
+                        new Thread(new Runnable(){
+                            @Override
+                            public void run() {
+                                new OssService(getApplicationContext()).uploadImage("myHead/head.jpg","/sdcard/myHead/head.jpg","202.221.010");
+                            }
+                        }).start();
+                        Log.e("sss","成功");
+//                        saveBitmapToSharedPreferences(head);
                         ivHead.setImageBitmap(head);//用ImageView显示出来
                         aBoolean = true;
                     }
@@ -225,31 +244,31 @@ public class LookPicture extends Activity {
 //        setImgByStr(imageString,"");
     }
 
-    //    private void setPicToView(Bitmap head) {
-//        String sdStatus = Environment.getExternalStorageState();
-//        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
-//            return;
-//        }
-//        FileOutputStream b = null;
-//        File file = new File(path);
-//        file.mkdirs();// 创建文件夹
-//        String fileName = path + "head.jpg";//图片名字
-//        try {
-//            b = new FileOutputStream(fileName);
-//            head.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件
-//
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                //关闭流
-//                b.flush();
-//                b.close();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//    }
+        private void setPicToView(Bitmap head) {
+        String sdStatus = Environment.getExternalStorageState();
+        if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
+            return;
+        }
+        FileOutputStream b = null;
+        File file = new File(path);
+        file.mkdirs();// 创建文件夹
+        String fileName = path + "head.jpg";//图片名字
+        try {
+            b = new FileOutputStream(fileName);
+            head.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                //关闭流
+                b.flush();
+                b.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public void cropPhoto(Uri uri) {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
