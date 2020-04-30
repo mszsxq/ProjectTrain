@@ -1,6 +1,9 @@
 package com.example.carepet.Community;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.util.SparseArray;
@@ -15,10 +18,13 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
-
+import com.bumptech.glide.Glide;
 import com.example.carepet.R;
 import com.example.carepet.entity.Community;
+import com.example.carepet.oss.OssService;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
@@ -30,7 +36,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private SparseArray<Integer> mTextStateList;
     private Context context;
     private List<Community> mDataList;
-    private  int[] imageViewList={R.drawable.k1,R.drawable.k2};
+    private ArrayList<String> imgList=new ArrayList<>();
+    //private  int[] imageViewList={R.drawable.k1,R.drawable.k2};
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView name;
         TextView content;
@@ -52,12 +59,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             content = (TextView) itemView.findViewById(R.id.content);
             expandOrCollapse = (TextView) itemView.findViewById(R.id.tv_expand_or_collapse);
 
-            }
-
         }
+
+    }
+
+
+
+
     public  ListAdapter(List<Community> listDatas,Context context){
         this.context=context;
         mDataList = listDatas;
+        Log.e("数据",listDatas.get(0).toString());
         mTextStateList = new SparseArray<>();
     }
 
@@ -72,15 +84,48 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        imgList = new ArrayList<>();
+
         Community listData = mDataList.get(position);
-        holder.imageAvatar.setImageResource(R.drawable.catbefore);
-        holder.nameText.setText("郝轩");
-        holder.timeText.setText("一天前");
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(imageViewList, holder.viewPager,context);
+        Log.e("数据",listData.toString());
+        File file=new File(context.getFilesDir(),"oss"+listData.getPic());
+        if(!file.exists()){
+            OssService ossService = new OssService(context);
+            ossService.downLoad("",listData.getPic());//listData.getPic()
+            Log.e("检测","dd");
+        }
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        holder.imageAvatar.setImageBitmap(bitmap);
+//        Glide.with(context)
+//                .load("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg")//https://picturer.oss-cn-beijing.aliyuncs.com/1588149087234.jpg
+//                .into(holder.imageAvatar);
+        holder.nameText.setText(listData.getId()+"");
+        holder.timeText.setText(listData.getTime());
+        String imgjson=listData.getImgjson();
+        //List<String> imgList = new ArrayList<>();
+        List<String> list = new ArrayList<>();
+        if (imgjson.contains("--")) {
+            String[] s = imgjson.split("--");
+            for(String ss:s){
+                list.add(ss);
+            }
+        }else {
+            list.add(imgjson);
+        }
+        for(int i=0;i<list.size();i++){
+            File pics=new File(context.getFilesDir(),"oss"+list.get(i));
+            Log.e("file",list.get(i)+"");
+            if(!pics.exists()){
+                OssService ossService = new OssService(context);
+                ossService.downLoad("",list.get(i));
+            }
+            imgList.add(context.getFilesDir()+"/oss"+File.separator+list.get(i));//pics.getAbsolutePath()
+        }
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(imgList, holder.viewPager,context);
         holder.viewPager.setAdapter(viewPagerAdapter);
-        holder.viewPager.setOnPageChangeListener(new ViewPagerIndicator(context, holder.viewPager, holder.linearLayout, imageViewList.length));
-        holder.name.setText(ContentUtil.getName(position));//设置名称
-        Log.e("list",listData.getTitle().toString());
+        holder.viewPager.setOnPageChangeListener(new ViewPagerIndicator(context, holder.viewPager, holder.linearLayout, imgList.size()));
+        holder.name.setText(listData.getTitle());//设置名称
         int state=mTextStateList.get(position,STATE_UNKNOW);
 //        如果该itme是第一次初始化，则取获取文本的行数
         if (state==STATE_UNKNOW){
@@ -105,7 +150,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             });
 
             holder.content.setMaxLines(Integer.MAX_VALUE);//设置文本的最大行数，为整数的最大数值
-            holder.content.setText(ContentUtil.getContent(position));//用Util中的getContent方法获取内容
+            holder.content.setText(listData.getContent());//用Util中的getContent方法获取内容
         }else{
 //            如果之前已经初始化过了，则使用保存的状态，无需在获取一次
             switch (state){
@@ -123,8 +168,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                     holder.expandOrCollapse.setText("收起");
                     break;
             }
-            holder.content.setText(ContentUtil.getContent(position));
+            holder.content.setText(listData.getContent());
         }
+
+
 //        设置显示和收起的点击事件
         holder.expandOrCollapse.setOnClickListener(new View.OnClickListener() {
             @Override

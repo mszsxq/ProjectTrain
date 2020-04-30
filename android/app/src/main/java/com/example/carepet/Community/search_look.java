@@ -41,7 +41,7 @@ public class search_look extends Fragment {
         c1.setUserId(1);
         c1.setFlag(0);
         c1.setTime("2018/10/20");
-        c1.setPic(R.id.headpic);
+        //c1.setPic(R.id.headpic);
         c1.setTitle("windows");
         list.add(c1);
         Search_listAdapter search_listAdapter=new Search_listAdapter(list,getContext()); //创建适配器，并且导入数据list

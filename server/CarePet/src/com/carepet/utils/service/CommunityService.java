@@ -21,8 +21,8 @@ public class CommunityService {
 	public void saveCommunity(Community community) {
 		String imgjson=community.getImgjson();
 		String urlpath="";
-		if (imgjson.contains("++")) {
-			urlpath=imgjson.split("++")[0];
+		if (imgjson.contains("--")) {
+			urlpath=imgjson.split("--")[0];
 		}else {
 			urlpath=imgjson;
 		}

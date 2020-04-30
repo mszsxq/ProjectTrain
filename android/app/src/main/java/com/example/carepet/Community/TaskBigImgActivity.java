@@ -1,6 +1,8 @@
 package com.example.carepet.Community;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,7 @@ public class TaskBigImgActivity extends AppCompatActivity {
         //paths = intent.getStringArrayListExtra("paths");
         size=intent.getIntExtra("size",0);
         String title = intent.getStringExtra("title");
+        paths = (ArrayList<String>) intent.getSerializableExtra("paths");
         tv_pos.setText(position + 1 + "/" +size);
         initView();
     }
@@ -58,7 +61,8 @@ public class TaskBigImgActivity extends AppCompatActivity {
                 View adView = LayoutInflater.from(TaskBigImgActivity.this).inflate(R.layout.clickpic_layout, null);
                 PhotoView icon = (PhotoView) adView.findViewById(R.id.flaw_img);
                 icon.setBackgroundColor(getResources().getColor(R.color.design_default_color_background));
-                icon.setImageResource(R.drawable.k1);
+                Bitmap bitmap = BitmapFactory.decodeFile(paths.get(position));
+                icon.setImageBitmap(bitmap);
 //                Glide.with(TaskBigImgActivity.this)
 //                        .load(paths.get(position))
 //                        .into(icon);

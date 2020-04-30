@@ -2,6 +2,8 @@ package com.example.carepet.Community;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,7 +16,7 @@ import java.util.List;
 
 public class ViewPagerAdapter extends PagerAdapter {
     private Context context;
-    private int[] images;
+    private ArrayList<String> images;
     private List<ImageView> imagelist=new ArrayList<>();
     private ViewPager viewPager;
 
@@ -25,12 +27,16 @@ public class ViewPagerAdapter extends PagerAdapter {
      * @param viewPager
      */
 
-    public ViewPagerAdapter(int[] images, ViewPager viewPager,Context context) {
-        this.images = images;
+    public ViewPagerAdapter(ArrayList<String> images, ViewPager viewPager,Context context) {
+        this.images=images;
         this.viewPager = viewPager;
-        for(int i=0;i<images.length;i++){
+        for(int i=0;i<images.size();i++){
             ImageView imageView = new ImageView(viewPager.getContext());
-            imageView.setImageResource(images[i]);
+            Bitmap bitmap = BitmapFactory.decodeFile(images.get(i));
+            imageView.setImageBitmap(bitmap);
+//            Glide.with(context)
+//                    .load("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg")
+//                    .into(imageView);
             imagelist.add(imageView);
         }
         this.context=context;
@@ -67,6 +73,7 @@ public class ViewPagerAdapter extends PagerAdapter {
                 Intent intent = new Intent();
                 intent.putExtra("position",position);
                 intent.putExtra("size",imagelist.size());
+                intent.putExtra("paths",images);
                 intent.setClass(context,TaskBigImgActivity.class);
                 context.startActivity(intent);
             }

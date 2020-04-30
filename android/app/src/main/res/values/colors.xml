@@ -12,4 +12,5 @@
     <color name="background">#F2F2F2</color>
     <color name="bbb">#B4D1E1</color>
     <color name="rrr">#FCD9DD</color>
+    <color name="photopicker_background">#181819</color>
 </resources>

@@ -27,7 +27,7 @@ public class ViewPagerIndicator implements ViewPager.OnPageChangeListener {
         this.viewPager = viewPager;
         this.dotLayout = dotLayout;
         this.size = size;
-
+        dotLayout.removeAllViews();
         for (int i = 0; i < size; i++) {
             ImageView imageView = new ImageView(context);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -47,6 +47,9 @@ public class ViewPagerIndicator implements ViewPager.OnPageChangeListener {
             dotLayout.addView(imageView, params);
             dotViewLists.add(imageView);
         }
+
+
+
 
     }
 
