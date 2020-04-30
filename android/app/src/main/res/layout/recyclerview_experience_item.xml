@@ -6,22 +6,21 @@
         android:id="@+id/head_navigation_bar"
         android:layout_width="match_parent"
         android:layout_height="80dp">
-        <com.example.carepet.CircleImageView
+        <com.example.carepet.Community.CircleImageView
             android:layout_marginLeft="10dp"
             android:layout_centerVertical="true"
             android:id="@+id/headpic"
             android:layout_width="40dp"
             android:layout_height="40dp"/>
-
         <TextView
             android:layout_toRightOf="@+id/headpic"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:id="@+id/user_name"
             android:textSize="20sp"
             android:textStyle="bold"
             android:layout_width="120dp"
-            android:layout_height="40dp"/>
+            android:layout_height="30dp"/>
         <TextView
             android:layout_below="@+id/user_name"
             android:layout_toRightOf="@+id/headpic"
@@ -51,19 +50,19 @@
         android:layout_marginBottom="32dp"
         android:gravity="center"
         android:orientation="horizontal" />
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/util"-->
-<!--        android:layout_below="@+id/dot_horizontal"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="50dp">-->
-<!--        &lt;!&ndash;ImageView-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_marginRight="50dp"-->
-<!--            android:id="@+id/heart"-->
-<!--            android:src="@drawable/catbefore"-->
-<!--            android:layout_width="40dp"-->
-<!--            android:layout_height="40dp"/&ndash;&gt;-->
-<!--    </RelativeLayout>-->
+    <!--    <RelativeLayout-->
+    <!--        android:id="@+id/util"-->
+    <!--        android:layout_below="@+id/dot_horizontal"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content">-->
+    <!--        <ImageView-->
+    <!--            android:layout_alignParentRight="true"-->
+    <!--            android:layout_marginRight="50dp"-->
+    <!--            android:id="@+id/heart"-->
+    <!--            android:src="@drawable/catbefore"-->
+    <!--            android:layout_width="40dp"-->
+    <!--            android:layout_height="40dp"/>-->
+    <!--    </RelativeLayout>-->
     <RelativeLayout
         android:layout_below="@+id/dot_horizontal"
         android:id="@+id/content_layout"
@@ -77,8 +76,9 @@
             android:textSize="20dp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"/>
+            android:layout_height="30dp"/>
         <TextView
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_below="@+id/title"
             android:id="@+id/content"

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+<RelativeLayout
+    android:background="@drawable/background_gradient"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:id="@+id/nagtop">
+    <TextView
+        android:text="取消"
+        android:textSize="20sp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/text_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:textSize="20sp"
+        android:layout_marginRight="10dp"
+        android:text="发布"
+        android:id="@+id/text_release"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</RelativeLayout>
+    <EditText
+        android:layout_marginLeft="10dp"
+        android:hint="标题"
+        android:background="@null"
+        android:layout_below="@id/nagtop"
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"/>
+    <EditText
+        android:layout_marginLeft="10dp"
+        android:background="@null"
+        android:gravity="top"
+        android:paddingTop="20dp"
+        android:hint="说些什么吧..."
+        android:layout_below="@id/title"
+        android:id="@+id/et_message"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/mRec"
+        android:layout_below="@+id/et_message"/>
+
+
+</RelativeLayout>

@@ -45,6 +45,13 @@
         <activity android:name=".Community.TaskBigImgActivity"/>
         <activity android:name=".Community.search"
             android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name="com.foamtrace.photopicker.PhotoPickerActivity"
+            android:theme="@style/PhotoPickerTheme"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name="com.foamtrace.photopicker.PhotoPreviewActivity"
+            android:theme="@style/PhotoPickerTheme"/>
+        <activity android:name=".PostPuppy.ReleaseMessageActivity" />
     </application>
 
 </manifest>

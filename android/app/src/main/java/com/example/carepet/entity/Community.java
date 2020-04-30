@@ -1,23 +1,31 @@
 package com.example.carepet.entity;
 
 public class Community {
-    //id  图片(一张或多张暂定视频)    标题    content  uerId  time(字符串)    位置（城市） 标签(经验，晒宠物)   图片或视频的flag
     private int id;
     private String title;
-    private int pic;
+    //imgjson存储图片的连接 多个图片时 采用++进行间隔
+    private String imgjson;
+    private String pic;
     private String content;
     private int userId;
     private String time;
     private String city;
     private String tag;
     private int flag;
-
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getImgjson() {
+        return imgjson;
+    }
+
+    public void setImgjson(String imgjson) {
+        this.imgjson = imgjson;
     }
 
     public String getTitle() {
@@ -28,11 +36,11 @@ public class Community {
         this.title = title;
     }
 
-    public int getPic() {
+    public String getPic() {
         return pic;
     }
 
-    public void setPic(int pic) {
+    public void setPic(String pic) {
         this.pic = pic;
     }
 
@@ -82,5 +90,21 @@ public class Community {
 
     public void setFlag(int flag) {
         this.flag = flag;
+    }
+
+    @Override
+    public String toString() {
+        return "Community{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", imgjson='" + imgjson + '\'' +
+                ", pic='" + pic + '\'' +
+                ", content='" + content + '\'' +
+                ", userId=" + userId +
+                ", time='" + time + '\'' +
+                ", city='" + city + '\'' +
+                ", tag='" + tag + '\'' +
+                ", flag=" + flag +
+                '}';
     }
 }

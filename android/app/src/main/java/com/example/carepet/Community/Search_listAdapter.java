@@ -77,8 +77,8 @@ public class Search_listAdapter extends RecyclerView.Adapter<Search_listAdapter.
         holder.imageAvatar.setImageResource(R.drawable.catbefore);
         holder.nameText.setText("搜索");
         holder.timeText.setText(listData.getTime());
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(imageViewList, holder.viewPager, context);
-        holder.viewPager.setAdapter(viewPagerAdapter);
+        //ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(imageViewList, holder.viewPager, context);
+       // holder.viewPager.setAdapter(viewPagerAdapter);
         holder.viewPager.setOnPageChangeListener(new ViewPagerIndicator(context, holder.viewPager, holder.linearLayout, imageViewList.length));
         holder.name.setText(listData.getTitle());//设置名称
         Log.e("list", listData.getTitle().toString());

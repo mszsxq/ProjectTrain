@@ -33,6 +33,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.carepet.PostPuppy.CommonUtil;
+import com.example.carepet.PostPuppy.ReleaseMessageActivity;
 import com.google.android.material.navigation.NavigationView;
 
 
@@ -130,6 +132,12 @@ public class MainActivity extends AppCompatActivity {
                     public void onItemClick(PopMenu popMenu, int position) {
                         switch (position) {
                             case 0:
+                                CommonUtil.uploadPictures(MainActivity.this, 9 , 0);
+                                Intent intent = new Intent();
+                                intent.setClass(getApplicationContext(), ReleaseMessageActivity.class);
+                                intent.putExtra("flag",0);
+                                startActivity(intent);
+
                                 Toast.makeText(MainActivity.this, "你点击了第0个位置", Toast.LENGTH_SHORT).show();
                                 break;
                             case 1:
