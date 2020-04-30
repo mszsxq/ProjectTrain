@@ -45,9 +45,10 @@
         android:id="@+id/cebian"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginTop="65dp"
         app:headerLayout="@layout/header_layout"
         android:fitsSystemWindows="true"
-        android:background="#F8BFC4"
+        android:background="@drawable/corners_bg1"
         app:menu="@menu/meau"
         android:layout_gravity="end" />
 

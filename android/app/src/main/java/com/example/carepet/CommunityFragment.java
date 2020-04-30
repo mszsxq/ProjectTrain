@@ -29,6 +29,7 @@ public class CommunityFragment extends Fragment implements ViewPager.OnPageChang
     private ViewPager viewPager;
     private Button button01,button02;
     private ImageView mImageView;
+    private TextView medittext;
     // private TabLayout tableLayout;
     @Nullable
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,6 +42,13 @@ public class CommunityFragment extends Fragment implements ViewPager.OnPageChang
                 startActivity(intent);
             }
         });
+        medittext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1=new Intent(getContext(),search.class);
+                startActivity(intent1);
+            }
+        });
         return view;
     }
     private void initView() {
@@ -49,6 +57,7 @@ public class CommunityFragment extends Fragment implements ViewPager.OnPageChang
         button01=(Button)view.findViewById(R.id.button_lookpuppy);
         button02=(Button)view.findViewById(R.id.button_experience);
         mImageView=(ImageView)view.findViewById(R.id.mimageview);
+        medittext=view.findViewById(R.id.medittext);
         button01.setOnClickListener(this);
         button02.setOnClickListener(this);
 

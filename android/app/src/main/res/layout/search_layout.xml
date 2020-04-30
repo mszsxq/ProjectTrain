@@ -1,32 +1,44 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#FFFFFF"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
         android:id="@+id/et_ss"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="5dp">
         <LinearLayout
             android:layout_width="280dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="35dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/corners_bg"
+            android:layout_marginLeft="10dp"
+
+            >
+            <ImageView
+                android:id="@+id/mimageview"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/search" />
             <EditText
                 android:id="@+id/ymedittext"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:layout_marginBottom="8dp"
                 android:hint="试试输入“搜索”或者其他"
+                android:background="@null"
                 android:maxLength="10"
                 android:paddingLeft="15dp"
                 android:singleLine="true"
-                android:textSize="12sp" />
+                android:textSize="15sp" />
             <ImageView
                 android:id="@+id/ymimageview"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_marginTop="28dp"
+                android:layout_width="17dp"
+                android:layout_height="17dp"
                 android:layout_marginLeft="10dp"
                 android:src="@drawable/delete"
                 android:visibility="gone" />
@@ -35,11 +47,9 @@
             android:id="@+id/ymtextview"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:gravity="center"
             android:text="搜索"
-            android:textColor="#CCFFFF"
-            android:textSize="20sp" />
+            android:textColor="#2c2c2c"
+            android:textSize="15dp" />
     </LinearLayout>
     <RelativeLayout
         android:id="@+id/ymtablayout"

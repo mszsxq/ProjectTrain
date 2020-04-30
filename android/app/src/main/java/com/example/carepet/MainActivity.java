@@ -51,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private CommunityFragment communityFragment;
     private NavigationController navigationController;
     private PageNavigationView tab;
-    private  PopMenu mPopMenu;
+    private PopMenu mPopMenu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +70,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 //为item设置逐个点击事件
-//               switch (menuItem.getItemId()){
-//                  case  R.id.nav_camera:
-//                      Toast.makeText(MainActivity.this,"nav_camera",Toast.LENGTH_SHORT).show();
-//                      break;
-//                }
-                /* Toast.makeText(mysellf.this,menuItem.getTitle().toString(),Toast.LENGTH_SHORT).show();*/
+               switch (menuItem.getItemId()){
+                  case  R.id.daren:
+                      Toast.makeText(MainActivity.this,"暂时还没有被开发出来~",Toast.LENGTH_SHORT).show();
+                      break;
+                   case R.id.xiugai:
+                       Toast.makeText(MainActivity.this,"暂时还没有被开发出来~",Toast.LENGTH_SHORT).show();
+                       break;
+                   case R.id.yinsi:
+                       Toast.makeText(MainActivity.this,"暂时还没有被开发出来~",Toast.LENGTH_SHORT).show();
+                       break;
+                }
                 return false;
             }
         });
@@ -91,14 +97,15 @@ public class MainActivity extends AppCompatActivity {
         nick_phone = (TextView)headerLayout.findViewById(R.id.nick_phone);
         nick_name=(TextView) headerLayout.findViewById(R.id.nick_name);
         nick_image=(ImageView)headerLayout.findViewById(R.id.nick_image);
+
         nick_phone.setText("12345555");
         nick_name.setText("可乐加冰");
 //        nick_image.setImageResource(R.drawable.tx);
         //设置图像大小时，必须先有第一句才可以进行设置
         getBitmapFromSharedPreferences(nick_image);
         nick_image.setAdjustViewBounds(true);
-        nick_image.setMaxHeight(160);
-        nick_image.setMaxWidth(160);
+        nick_image.setMaxHeight(180);
+        nick_image.setMaxWidth(180);
 
         /*点击头像跳转到上传头像界面*/
         nick_image.setOnClickListener(new View.OnClickListener() {

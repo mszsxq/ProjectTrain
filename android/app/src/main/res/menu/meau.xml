@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_camera"
-        android:icon="@drawable/ic_launcher_background"
+        android:id="@+id/daren"
+        android:icon="@drawable/daren"
         android:title="达人" />
     <item
-        android:id="@+id/nav_gallery"
-        android:icon="@drawable/ic_launcher_background"
+        android:id="@+id/xiugai"
+        android:icon="@drawable/update"
         android:title="修改昵称" />
     <item
-        android:id="@+id/nav_slideshow"
-        android:icon="@drawable/ic_launcher_background"
+        android:id="@+id/yinsi"
+        android:icon="@drawable/ccc"
         android:title="隐私设置" />
 
 </menu>
