@@ -197,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
 
         switch (i){
             case 0:
-                Log.e("test","显示第0个页面");
                 hideFragments(transaction);
                 if (mapFragment==null){
                     mapFragment=new MapFragment();
@@ -207,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case 1:
-                Log.e("test","显示第1个页面");
                 hideFragments(transaction);
                 if (addFragment==null){
                    addFragment=new AddFragment();
@@ -217,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case 2:
-                Log.e("test","显示第2个页面");
                 hideFragments(transaction);
                 if (communityFragment==null){
                     communityFragment=new CommunityFragment();

@@ -19,7 +19,7 @@ android {
     defaultConfig {
         applicationId "com.example.carepet"
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

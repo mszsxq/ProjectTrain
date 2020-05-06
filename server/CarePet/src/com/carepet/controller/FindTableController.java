@@ -1,9 +1,13 @@
 package com.carepet.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +25,10 @@ public class FindTableController {
 	private FindTableService findTableService;
 	
 	@RequestMapping("/listall")
-	public String list(Model model) {
+	public String list(Model model,HttpServletRequest req,HttpServletResponse rep,@RequestParam String a) {
+		System.out.println(a);
+		rep.setCharacterEncoding("UTF-8");
+		rep.setContentType("text/html;charset=UTF-8");
 		Gson gson=new Gson();
 		List<String> strings=new ArrayList<String>();
 //		strings.add("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg");
@@ -29,8 +36,20 @@ public class FindTableController {
 //		System.out.println(gson.toJson(strings));
 		List<FindTable> findTables=findTableService.list();
 		String findTablestring=gson.toJson(findTables);
-		model.addAttribute("findTables", findTablestring);
-		return "list";
+		System.out.println(findTablestring);
+		PrintWriter writer;
+		try {
+			writer = rep.getWriter();
+			writer.println(findTablestring+"\n");
+		    writer.flush();
+		    writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	    System.out.println(findTablestring+"");
+		return findTablestring;
 	}
 //	"https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg++https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg" imgjson不同图片之间用++拼接
 
