@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:qmui_corner_radius="10dp"
+        android:src="@drawable/dancing"
         />
     <TextView
         android:layout_marginTop="5dp"

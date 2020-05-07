@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.carepet.R;
+import com.example.carepet.entity.FindTable;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +17,7 @@ import java.util.Map;
 public class SearchAdapter extends BaseAdapter {
     private Context context;
     private int layoutid;
-    private List<Map<String,Integer>> data;
+    private List<FindTable> data;
     public SearchAdapter(Context context ,int id,List list){
         this.context=context;
         this.layoutid=id;
@@ -43,15 +45,21 @@ public class SearchAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(layoutid,null);
             holder = new ViewHolder();
             holder.bimg = (ImageView) convertView.findViewById(R.id.ms_item_iv);
+            holder.city=(TextView) convertView.findViewById(R.id.ms_city);
+            holder.title=(TextView) convertView.findViewById(R.id.ms_item_content);
             convertView.setTag(holder);   //将Holder存储到convertView中
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.bimg.setImageResource(data.get(i).get("img"));
+//        holder.bimg.setImageResource(data.get(i).get("img"));
+        holder.title.setText(data.get(i).getTitle());
+        holder.city.setText(data.get(i).getCity());
         return convertView;
     }
 
     class ViewHolder{
         ImageView bimg;
+        TextView city;
+        TextView title;
     }
 }

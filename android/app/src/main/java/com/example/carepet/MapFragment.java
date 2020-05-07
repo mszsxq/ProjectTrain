@@ -42,16 +42,17 @@ import androidx.fragment.app.Fragment;
 public class MapFragment extends Fragment {
     private GestureDetector gue;
     private int[] img = {R.drawable.shu, R.drawable.cat, R.drawable.cat, R.drawable.cat, R.drawable.shu, R.drawable.dancing, R.drawable.cat, R.drawable.cat2, R.drawable.fight};
-    private String[] imgname = {"cat2", "cat", "figth"};
-    private List<Map<String, Integer>> dataList = new ArrayList<Map<String, Integer>>();
-
+    private List<FindTable> dataList = new ArrayList<>();
+    private List<FindTable> findlist = new ArrayList<>();
+    private  SearchAdapter adapter;
+    private  StaggeredGridView gridView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_layout, container, false);
-        StaggeredGridView gridView = view.findViewById(R.id.gview);
+        gridView = view.findViewById(R.id.gview);
         gue = new GestureDetector(getContext(), new MyGestureListener());
-        SearchAdapter adapter = new SearchAdapter(getContext(), R.layout.map_search_item, getData());
+//        adapter = new SearchAdapter(getContext(), R.layout.map_search_item, findlist);
         gridView.setAdapter(adapter);
         gridView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -61,18 +62,9 @@ public class MapFragment extends Fragment {
         });
         MyAsnycTask myAsnycTask = new MyAsnycTask();
         myAsnycTask.execute();
+
         return view;
     }
-
-    private List<Map<String, Integer>> getData() {
-        for (int value : img) {
-            Map<String, Integer> map = new HashMap<String, Integer>();
-            map.put("img", value);
-            dataList.add(map);
-        }
-        return dataList;
-    }
-
     //滑动显示显示
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         //onFling方法的第一个参数是 手指按下的位置， 第二个参数是 手指松开的位置，第三个参数是手指的速度
@@ -83,8 +75,6 @@ public class MapFragment extends Fragment {
             float startY = e1.getY();//通过e1.getY（）获得手指按下位置的纵坐标
             float endY = e2.getY();//通过e2.getY（）获得手指松开的纵坐标
             if ((endX - startX) > 50 && Math.abs(startY - endY) < 200) {
-                //(startX - endX) > 50 是手指从按下到松开的横坐标距离大于50
-                // Math.abs(startY - endY) < 200 是手指从按下到松开的纵坐标的差的绝对值
                 Intent i = new Intent(getActivity(), MapFindAcitvity.class);
                 startActivity(i);
             }
@@ -93,14 +83,19 @@ public class MapFragment extends Fragment {
     }
 
     class MyAsnycTask extends AsyncTask<Integer, Integer, List<FindTable>> {
+        //用来写等待时的UI（加载中转圈）
+        @Override
+        protected void onPreExecute() {
+
+        }
 
         @Override
         protected List<FindTable> doInBackground(Integer... integers) {
-//            final String ip = "http://192.168.101.16:8080/CarePet/findtable/listall?a=1";
-            final String ip = "http://192.168.43.109:8080/CarePet/findtable/listall?a=1";
+//            final String ip = "http://192.168.101.16:8080/CarePet/findtable/listall";
+            final String ip = "http://192.168.43.109:8080/CarePet/findtable/listall";
             URL url;
             String json = "";
-            List<FindTable> findlist = new ArrayList<>();
+            List<FindTable> findList = new ArrayList<>();
             try {
                 url = new URL(ip);
                 URLConnection conn = url.openConnection();
@@ -113,19 +108,23 @@ public class MapFragment extends Fragment {
             }
             if (!json.equals("")) {
                 Gson gson = new Gson();
-                findlist = gson.fromJson(json, new TypeToken<List<FindTable>>() {
+                findList = gson.fromJson(json, new TypeToken<List<FindTable>>() {
                 }.getType());
             }
-            return findlist;
+            return findList;
         }
 
         @Override
         protected void onPostExecute(List<FindTable> findTables) {
-            String str = "";
-            if (findTables != null) {
-                str = findTables.toString();
+            findlist=findTables;
+            if (findlist != null) {
+                for(FindTable f:findlist){
+                    Log.e("aaaaa", f.toString());
+                }
             }
-            Log.e("aaaaa", str);
+            //findtable 数据 不更新问题
+            SearchAdapter adapter1= new SearchAdapter(getContext(), R.layout.map_search_item, findlist);
+            gridView.setAdapter(adapter1);
 
         }
     }
