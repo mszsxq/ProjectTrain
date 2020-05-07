@@ -52,7 +52,7 @@ public class MapFragment extends Fragment {
         View view = inflater.inflate(R.layout.map_layout, container, false);
         gridView = view.findViewById(R.id.gview);
         gue = new GestureDetector(getContext(), new MyGestureListener());
-//        adapter = new SearchAdapter(getContext(), R.layout.map_search_item, findlist);
+        adapter = new SearchAdapter(getContext(), R.layout.map_search_item, getData());
         gridView.setAdapter(adapter);
         gridView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -64,6 +64,15 @@ public class MapFragment extends Fragment {
         myAsnycTask.execute();
 
         return view;
+    }
+
+    private List<FindTable> getData() {
+        FindTable findTable =new FindTable();
+        findTable.setCity("1");
+        findTable.setContent("1");
+        dataList.add(findTable);
+
+        return dataList;
     }
     //滑动显示显示
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -83,16 +92,12 @@ public class MapFragment extends Fragment {
     }
 
     class MyAsnycTask extends AsyncTask<Integer, Integer, List<FindTable>> {
-        //用来写等待时的UI（加载中转圈）
-        @Override
-        protected void onPreExecute() {
 
-        }
-
+        
         @Override
         protected List<FindTable> doInBackground(Integer... integers) {
-//            final String ip = "http://192.168.101.16:8080/CarePet/findtable/listall";
-            final String ip = "http://192.168.43.109:8080/CarePet/findtable/listall";
+//            final String ip = "http://192.168.101.16:8080/CarePet/findtable/listall?a=1";
+            final String ip = "http://192.168.43.109:8080/CarePet/findtable/listall?a=1";
             URL url;
             String json = "";
             List<FindTable> findList = new ArrayList<>();
@@ -122,7 +127,6 @@ public class MapFragment extends Fragment {
                     Log.e("aaaaa", f.toString());
                 }
             }
-            //findtable 数据 不更新问题
             SearchAdapter adapter1= new SearchAdapter(getContext(), R.layout.map_search_item, findlist);
             gridView.setAdapter(adapter1);
 

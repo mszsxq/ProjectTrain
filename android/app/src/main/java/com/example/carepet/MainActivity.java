@@ -33,7 +33,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.carepet.Community.AddExperience;
 import com.example.carepet.PostPuppy.CommonUtil;
 import com.example.carepet.PostPuppy.ReleaseMessageActivity;
 import com.google.android.material.navigation.NavigationView;
@@ -142,8 +141,6 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "你点击了第0个位置", Toast.LENGTH_SHORT).show();
                                 break;
                             case 1:
-                                Intent intent1=new Intent(MainActivity.this, AddExperience.class);
-                                startActivity(intent1);
                                 Toast.makeText(MainActivity.this, "你点击了第1个位置", Toast.LENGTH_SHORT).show();
                                 break;
                             case 2:
