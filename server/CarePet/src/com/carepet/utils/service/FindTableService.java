@@ -9,22 +9,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.carepet.ai.animal.AnimalClassify;
 import com.carepet.entity.FindTable;
+import com.carepet.entity.User;
 import com.carepet.utils.dao.FindTableDao;
+import com.carepet.utils.dao.UserDao;
 
 @Service
 public class FindTableService {
 	@Resource
 	private FindTableDao findTableDao;
-	
+	@Resource
+	private UserDao userDao;
 	@Transactional(readOnly = false)
 	public void saveFindTable(FindTable findTable) {
 		String imgjson=findTable.getImgjson();
 		String urlpath="";
-		if (imgjson.contains("++")) {
-			urlpath=imgjson.split("++")[0];
+		if (imgjson.contains("--")) {
+			urlpath=imgjson.split("--")[0];
 		}else {
 			urlpath=imgjson;
 		}
+		User user=userDao.findUser(findTable.getUserid());
+		imgjson=user.getUsername()+"--"+user.getTouxiang()+"--"+imgjson;
+		findTable.setImgjson(imgjson);
 		findTable.setPettype(new AnimalClassify().animal(urlpath));
 		this.findTableDao.saveFindTable(findTable);
 	}

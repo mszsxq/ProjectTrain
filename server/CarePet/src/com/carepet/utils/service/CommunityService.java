@@ -10,13 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 import com.carepet.ai.animal.AnimalClassify;
 import com.carepet.entity.Community;
 import com.carepet.entity.FindTable;
+import com.carepet.entity.User;
 import com.carepet.utils.dao.CommunityDao;
+import com.carepet.utils.dao.UserDao;
 
 @Service
 public class CommunityService {
 
 	@Resource
 	private CommunityDao communityDao;
+	@Resource
+	private UserDao userDao;
 	@Transactional(readOnly = false)
 	public void saveCommunity(Community community) {
 		String imgjson=community.getImgjson();
@@ -27,6 +31,9 @@ public class CommunityService {
 			urlpath=imgjson;
 		}
 		String type=new AnimalClassify().animal(urlpath);
+		User user=userDao.findUser(community.getUserId());
+		imgjson=user.getUsername()+"--"+user.getTouxiang()+"--"+imgjson;
+		community.setImgjson(imgjson);
 		community.setContent("#"+type+community.getContent());
 		this.communityDao.saveCommunity(community);
 	}
