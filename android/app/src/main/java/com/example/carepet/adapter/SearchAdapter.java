@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.carepet.R;
 import com.example.carepet.entity.FindTable;
 
@@ -40,7 +43,7 @@ public class SearchAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
-        ViewHolder holder = null;
+        ViewHolder holder;
         if(convertView == null){
             convertView = LayoutInflater.from(context).inflate(layoutid,null);
             holder = new ViewHolder();
@@ -51,9 +54,13 @@ public class SearchAdapter extends BaseAdapter {
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
-//        holder.bimg.setImageResource(data.get(i).get("img"));
-        holder.title.setText(data.get(i).getTitle());
-        holder.city.setText(data.get(i).getCity());
+         holder.title.setText(data.get(i).getTitle());
+         holder.city.setText(data.get(i).getCity());
+        //设置图片圆角角度
+        RoundedCorners roundedCorners= new RoundedCorners(30);
+//通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
+        RequestOptions options=RequestOptions.bitmapTransform(roundedCorners).override(400, 400);
+         Glide.with(context).load(data.get(i).getImgjson()).apply(options).into(holder.bimg);
         return convertView;
     }
 

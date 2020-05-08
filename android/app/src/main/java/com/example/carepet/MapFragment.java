@@ -10,16 +10,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
-import android.widget.SimpleAdapter;
 
+import com.bumptech.glide.Glide;
 import com.etsy.android.grid.StaggeredGridView;
 import com.example.carepet.adapter.SearchAdapter;
 import com.example.carepet.entity.FindTable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,9 +28,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.security.auth.login.LoginException;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,11 +35,10 @@ import androidx.fragment.app.Fragment;
 
 public class MapFragment extends Fragment {
     private GestureDetector gue;
-    private int[] img = {R.drawable.shu, R.drawable.cat, R.drawable.cat, R.drawable.cat, R.drawable.shu, R.drawable.dancing, R.drawable.cat, R.drawable.cat2, R.drawable.fight};
-    private List<FindTable> dataList = new ArrayList<>();
     private List<FindTable> findlist = new ArrayList<>();
-    private  SearchAdapter adapter;
     private  StaggeredGridView gridView;
+    private SearchAdapter adapter;
+    private List<FindTable> dataList = new ArrayList<>();
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,14 +58,12 @@ public class MapFragment extends Fragment {
 
         return view;
     }
-
-    private List<FindTable> getData() {
+    private List<FindTable> getData(){
         FindTable findTable =new FindTable();
-        findTable.setCity("1");
-        findTable.setContent("1");
+        findTable.setCity("石家庄");
+        findTable.setTitle("title");
         dataList.add(findTable);
-
-        return dataList;
+        return  dataList;
     }
     //滑动显示显示
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -92,12 +83,16 @@ public class MapFragment extends Fragment {
     }
 
     class MyAsnycTask extends AsyncTask<Integer, Integer, List<FindTable>> {
+        //用来写等待时的UI（加载中转圈）
+        @Override
+        protected void onPreExecute() {
 
-        
+        }
+
         @Override
         protected List<FindTable> doInBackground(Integer... integers) {
-//            final String ip = "http://192.168.101.16:8080/CarePet/findtable/listall?a=1";
-            final String ip = "http://192.168.43.109:8080/CarePet/findtable/listall?a=1";
+//            final String ip = "http://192.168.101.16:8080/CarePet/findtable/listall";
+            final String ip = "http://192.168.43.109:8080/CarePet/findtable/listall";
             URL url;
             String json = "";
             List<FindTable> findList = new ArrayList<>();
@@ -127,6 +122,7 @@ public class MapFragment extends Fragment {
                     Log.e("aaaaa", f.toString());
                 }
             }
+            //findtable 数据 不更新问题
             SearchAdapter adapter1= new SearchAdapter(getContext(), R.layout.map_search_item, findlist);
             gridView.setAdapter(adapter1);
 
