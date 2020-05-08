@@ -1,8 +1,6 @@
 package com.example.carepet.Community;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,25 +11,36 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.carepet.MainActivity;
 import com.example.carepet.R;
+import com.example.carepet.entity.Community;
+import com.example.carepet.oss.OssService;
+import com.foamtrace.photopicker.SelectModel;
+import com.foamtrace.photopicker.intent.PhotoPickerIntent;
+import com.google.gson.Gson;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import static com.foamtrace.photopicker.PhotoPickerActivity.EXTRA_RESULT;
 
 public class AddExperience extends AppCompatActivity {
     private EditText title;
@@ -39,37 +48,107 @@ public class AddExperience extends AppCompatActivity {
     private GridView gridView;
     private Button finish;
     private Button cancle;
+    private ArrayList<String> listImagePath = new ArrayList<>();
+    private ArrayList<String> mList = new ArrayList<>();
     private List<Map<String, Object>> datas;
     private AddImageAdapter addImageAdapter;
     private final int PHOTO_REQUEST_CAREMA = 1;// 拍照
     private final int PHOTO_REQUEST_GALLERY = 2;// 从相册中选择private static final String PHOTO_FILE_NAME = "temp_photo.jpg";
     private File tempFile;
     private Bitmap bitmap;
-    private final String IMAGE_DIR = Environment.getExternalStorageDirectory() + "/gridview/";
-    //    private final String PHOTO_FILE_NAME = "temp_photo.jpg";
+    private final String IMAGE_DIR = Environment.getExternalStorageDirectory() + "/gridview";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_experience);
         inits();
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (datas.size()>0){
+                    for (int i=0;i<datas.size();i++){
+                        final File file = new File(datas.get(i).get("path").toString());
+                        file.delete();
+                    }
+                    finish();
+                }else
+                    finish();
+            }
+        });
         finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(AddExperience.this,ExperienceFragment.class);
-                intent.putExtra("title",title.getText());
-                intent.putExtra("content",content.getText());
+                StringBuffer stringBuffer = new StringBuffer();
+                for(int i=0;i<listImagePath.size();i++){
+                    int filenameLocal=listImagePath.get(i).split("/").length;
+                    OssService ossService = new OssService(getApplicationContext());
+                    String fileName=listImagePath.get(i).split("/")[filenameLocal-1];
+                    ossService.uploadImage("",listImagePath.get(i),"");
+                    Log.e("检测file",listImagePath.get(i));
+                    if(i==0){
+                        stringBuffer.append(fileName);
+                    }else{
+                        stringBuffer.append("--"+fileName);
+                    }
+                }
+                String imgs = stringBuffer.toString();
+                Log.e("Buffer",imgs);
+                Log.e("图片",imgs);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss");// HH:mm:ss
+                //获取当前时间
+                Date date = new Date(System.currentTimeMillis());
+                String time=simpleDateFormat.format(date);
+                Community community=new Community();
+                community.setId(2);
+                community.setContent(content.toString());
+                community.setImgjson(imgs);
+                community.setTime(time);
+                community.setTag("experience");
+                community.setTitle(title.toString());
+                community.setFlag(1);
+                sendToServer(community);
+                Intent intent = new Intent(AddExperience.this, MainActivity.class);
+                intent.putExtra("title", title.getText());
+                intent.putExtra("content", content.getText());
                 startActivity(intent);
+                finish();
             }
         });
 
     }
-
+    private void sendToServer(final Community community) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Gson gson = new Gson();
+                    String jsonObject = gson.toJson(community);
+                    URL url = new URL("http://192.168.137.1:8080/CarePet/community/insertcommunity?community="+jsonObject);
+                    URLConnection conn = url.openConnection();
+                    InputStream in = conn.getInputStream();
+                    OutputStream out=conn.getOutputStream();
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+//                String info = reader.readLine();
+//                Log.i("检测","得到"+info);
+                } catch (
+                        MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (
+                        UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (
+                        IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
     private void inits() {
         title = findViewById(R.id.title);
-        content=findViewById(R.id.content);
-        gridView=findViewById(R.id.gridView);
-        cancle=findViewById(R.id.btn_cancel);
-        finish=findViewById(R.id.btn_finish);
+        content = findViewById(R.id.content);
+        gridView = findViewById(R.id.gridView);
+        cancle = findViewById(R.id.btn_cancel);
+        finish = findViewById(R.id.btn_finish);
         datas = new ArrayList<>();
         addImageAdapter = new AddImageAdapter(datas, this);
         gridView.setAdapter(addImageAdapter);
@@ -94,9 +173,13 @@ public class AddExperience extends AppCompatActivity {
      * 从相册获取2
      */
     public void gallery() {
-        Intent intent = new Intent(
-                Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        Intent intent = new Intent(
+//                Intent.ACTION_PICK,
+//                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        PhotoPickerIntent intent = new PhotoPickerIntent(AddExperience.this);
+        intent.setSelectModel(SelectModel.MULTI);//多选
+        intent.setShowCarema(true); // 是否显示拍照
+        intent.setMaxTotal(9); // 最多选择照片数量，默认为9
         startActivityForResult(intent, PHOTO_REQUEST_GALLERY);
 //        Intent intent1 = new Intent(Intent.ACTION_PICK, null);
 //        intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
@@ -112,41 +195,15 @@ public class AddExperience extends AppCompatActivity {
                 // 从相册返回的数据
                 if (data != null) {
                     // 得到图片的全路径
-                    Uri uri = data.getData();
-                    String[] proj = {MediaStore.Images.Media.DATA};
-                    //好像是android多媒体数据库的封装接口，具体的看Android文档
-                    Cursor cursor = managedQuery(uri, proj, null, null, null);
-                    //按我个人理解 这个是获得用户选择的图片的索引值
-                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    //将光标移至开头 ，这个很重要，不小心很容易引起越界
-                    cursor.moveToFirst();
-                    //最后根据索引值获取图片路径
-                    String path = cursor.getString(column_index);
-
-
-                    uploadImage(path);
-                }
-
-            } else if (requestCode == PHOTO_REQUEST_CAREMA) {
-                if (resultCode != RESULT_CANCELED) {
-                    // 从相机返回的数据
-                    if (hasSdcard()) {
-                        if (tempFile != null) {
-                            uploadImage(tempFile.getPath());
-                        } else {
-                            Toast.makeText(this, "相机异常请稍后再试！", Toast.LENGTH_SHORT).show();
-                        }
-
-                        Log.i("images", "拿到照片path=" + tempFile.getPath());
-                    } else {
-                        Toast.makeText(this, "未找到存储卡，无法存储照片！", Toast.LENGTH_SHORT).show();
+                    for (int i = 0; i < data.getStringArrayListExtra(EXTRA_RESULT).size(); i++) {
+                        String path = data.getStringArrayListExtra(EXTRA_RESULT).get(i);
+                        uploadImage(path);
                     }
                 }
-            }
 
+            }
         }
     }
-
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -154,7 +211,6 @@ public class AddExperience extends AppCompatActivity {
             if (msg.what == 0xAAAAAAAA) {
                 photoPath(msg.obj.toString());
             }
-
         }
     };
 
@@ -163,6 +219,16 @@ public class AddExperience extends AppCompatActivity {
      *
      * @param path
      */
+
+    private void photoPath(String path) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("path", path);
+        datas.add(map);
+        listImagePath.add(path);
+        Log.e("title", title.getText().toString());
+        Log.e("content", content.getText().toString());
+        addImageAdapter.notifyDataSetChanged();
+    }
     private void uploadImage(final String path) {
         new Thread() {
             @Override
@@ -192,17 +258,5 @@ public class AddExperience extends AppCompatActivity {
             }
         }.start();
 
-    }
-
-    public void photoPath(String path) {
-        Map<String,Object> map=new HashMap<>();
-        map.put("path",path);
-        datas.add(map);
-        for (int i=0;i<datas.size();i++){
-            Log.e("path",(String) datas.get(i).get("path"));
-        }
-        Log.e("title",title.getText().toString());
-        Log.e("content",content.getText().toString());
-        addImageAdapter.notifyDataSetChanged();
     }
 }
