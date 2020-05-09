@@ -25,9 +25,11 @@ import com.foamtrace.photopicker.SelectModel;
 import com.foamtrace.photopicker.intent.PhotoPickerIntent;
 import com.google.gson.Gson;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -98,14 +100,15 @@ public class AddExperience extends AppCompatActivity {
                 //获取当前时间
                 Date date = new Date(System.currentTimeMillis());
                 String time=simpleDateFormat.format(date);
-                Community community=new Community();
-                community.setId(2);
-                community.setContent(content.toString());
-                community.setImgjson(imgs);
-                community.setTime(time);
-                community.setTag("experience");
-                community.setTitle(title.toString());
-                community.setFlag(1);
+//                Community community=new Community();
+//                community.setId(2);
+//                community.setContent(content.toString());
+//                community.setImgjson(imgs);
+//                community.setTime(time);
+//                community.setTag("experience");
+//                community.setTitle(title.toString());
+//                community.setFlag(1);
+                Community community = PackCommunity(content.getText().toString(),2,imgs,time,title.getText().toString());
                 sendToServer(community);
                 Intent intent = new Intent(AddExperience.this, MainActivity.class);
                 intent.putExtra("title", title.getText());
@@ -116,6 +119,19 @@ public class AddExperience extends AppCompatActivity {
         });
 
     }
+
+    private Community PackCommunity(String toString, int i, String imgs, String time, String toString1) {
+        Community community = new Community();
+        community.setUserId(i);
+        community.setContent(toString);
+        community.setImgjson(imgs);
+        community.setTime(time);
+        community.setFlag(2);
+        community.setTag("exep");
+        community.setTitle(toString1);
+        return community;
+    }
+
     private void sendToServer(final Community community) {
         new Thread(new Runnable() {
             @Override
@@ -123,13 +139,12 @@ public class AddExperience extends AppCompatActivity {
                 try {
                     Gson gson = new Gson();
                     String jsonObject = gson.toJson(community);
-                    URL url = new URL("http://192.168.137.1:8080/CarePet/community/insertcommunity?community="+jsonObject);
+                    URL url = new URL("http://192.168.137.1:8080/CarePet/experience/insertcommunity?community="+jsonObject+"");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
-                    OutputStream out=conn.getOutputStream();
-//                BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
-//                String info = reader.readLine();
-//                Log.i("检测","得到"+info);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+                String info = reader.readLine();
+                Log.i("检测","得到"+info);
                 } catch (
                         MalformedURLException e) {
                     e.printStackTrace();

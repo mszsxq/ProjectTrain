@@ -78,7 +78,7 @@ public class ExperienceFragment extends Fragment {
 //        list.add(community);
 //        ListAdapter listAdapter = new ListAdapter(list,getContext()); //创建适配器，并且导入数据list
 //        recyclerView.setAdapter(listAdapter);//布局导入适配器
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
         ToServer();
         return rootView;
     }
@@ -88,7 +88,7 @@ public class ExperienceFragment extends Fragment {
             public void run() {
                 try {
                     Gson gson = new Gson();
-                    URL url = new URL("http://192.168.5.7:8080/CarePet/community/listall");
+                    URL url = new URL("http://192.168.137.1:8080/CarePet/experience/listall");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
