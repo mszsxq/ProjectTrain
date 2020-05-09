@@ -1,6 +1,9 @@
 package com.example.carepet.entity;
 
-public class FindTable {
+import java.io.Serializable;
+
+public class FindTable implements Serializable {
+    private static final long serialVersionUID = 8633299996744734593L;
     private int id;
     private int userid;
     private double longitude;

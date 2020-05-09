@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
@@ -33,13 +34,23 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.UiSettings;
 import com.baidu.mapapi.model.LatLng;
+import com.example.carepet.entity.FindTable;
 import com.google.android.material.tabs.TabLayout;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.snail.slidenested.SlideNestedPanelLayout;
 import com.snail.slidenested.StateCallback;
-
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,37 +68,72 @@ public class MapFindAcitvity extends AppCompatActivity {
     private int span = 5000;
     private List<OverlayOptions> overlayOptionses=new ArrayList<OverlayOptions>();
     private MarkerOptions options;
-    private List<Postion> postions = new ArrayList<>();
+    private List<FindTable> postions = new ArrayList<>();
     private Marker marker;
     private List<Marker> markerList = new ArrayList<>();
     protected static final int CHANGE_UI = 1;
     protected static final int ERROR = 2;
     private Bitmap basebitmap;
     private String path = null;
+
+    private ImageView imageView1;
+    private TextView textView;
+    private TextView textView1;
+    private TextView textView2;
+    private TextView textView3;
+    private TextView textView7;
+
+    private List<Bitmap> bitmaps = new ArrayList<>();
     // 主线程创建消息处理器
     private Handler handler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             Log.e("panduan",msg.what+"");
+            if(msg.what == 26){
+                super.handleMessage(msg);
+                String info = (String)msg.obj;
+                Log.e("zz",info);
+                Type type=new TypeToken<List<FindTable>>(){}.getType();
+                Gson gson=new Gson();
+                List<FindTable> list = gson.fromJson(info,type);
+                Log.e("error",list.toString());
+                for(int i=0;i<list.size();i++){
+                    postions.add(list.get(i));//my
+                    path = postions.get(i).getImgjson();
+                    Log.e("pikaqiu",path);
+//                    getPicBitmap();
+                }
+            }
+            getPicBitmap(postions);
             if (msg.what == CHANGE_UI) {
-                Postion postion1 = new Postion();
-                postion1.setId(1);
-                postion1.setTitle("皮卡丘");
-                postion1.setLat(38.02753);
-                postion1.setLng(114.567347);
-                Postion postion2 = new Postion();
-                postion2.setLat(38.029784);
-                postion2.setLng(114.565869);
-                postion2.setTitle("蒜头王八");
-                postion2.setId(2);
-                postions.add(postion1);
-                postions.add(postion2);
-                basebitmap = (Bitmap) msg.obj;
-                basebitmap = getZoomImage(basebitmap,64,64);
+                bitmaps = (List<Bitmap>) msg.obj;
+//                basebitmap = (Bitmap) msg.obj;
+                bitmaps = getZoomImage(bitmaps,64,64);
                 addOverlay(postions);
-            } else if (msg.what == ERROR) {
+            }else if(msg.what == 62){
+                basebitmap = (Bitmap)msg.obj;
+                imageView1.setImageBitmap(basebitmap);
+            }else if (msg.what == ERROR) {
                 Toast.makeText(MapFindAcitvity.this, "显示图片错误",
                         Toast.LENGTH_SHORT).show();
             }
+            //点击事件
+            mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    Bundle bundle = marker.getExtraInfo();
+                    FindTable infoUtil = (FindTable) bundle.getSerializable("info");
+                    Log.e("皮卡皮卡",infoUtil.getId()+infoUtil.getTitle()+"");
+                    path = infoUtil.getImgjson();
+                    getPicBitmap1();
+
+                    textView.setText(infoUtil.getTitle());
+                    textView1.setText(infoUtil.getCity());
+                    textView2.setText("小鲤鱼泡泡");
+                    textView3.setText(infoUtil.getPettype());
+                    textView7.setText(infoUtil.getContent());
+                    return true;
+                }
+            });
         }
     };
     @Override
@@ -97,6 +143,12 @@ public class MapFindAcitvity extends AppCompatActivity {
         setContentView(R.layout.activity_totally);
         // 获取地图控件引用
         mMapView = (MapView)findViewById(R.id.bmapView);
+        imageView1 = findViewById(R.id.imageView1);
+        textView = findViewById(R.id.textView);
+        textView1 = findViewById(R.id.textView1);
+        textView2 = findViewById(R.id.textView2);
+        textView3 = findViewById(R.id.textView3);
+        textView7 = findViewById(R.id.textView7);
         //初始化Map
         initializeMap();
         //隐藏logo
@@ -105,34 +157,8 @@ public class MapFindAcitvity extends AppCompatActivity {
         zoomLevelOp();
         //定位
         LocationOption();
-        //加载图片缩略图
-        path = "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2155327358,3650797713&fm=15&gp=0.jpg";
-        getPicBitmap();
-        //多点定wei
-        /*Postion postion1 = new Postion();
-        postion1.setId(1);
-        postion1.setTitle("皮卡丘");
-        postion1.setLat(38.02753);
-        postion1.setLng(114.567347);
-        Postion postion2 = new Postion();
-        postion2.setLat(38.029784);
-        postion2.setLng(114.565869);
-        postion2.setTitle("蒜头王八");
-        postion2.setId(2);
-        postions.add(postion1);
-        postions.add(postion2);
-        addOverlay(postions);*/
-
-        //点击事件
-        mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                Bundle bundle = marker.getExtraInfo();
-                Postion infoUtil = (Postion) bundle.getSerializable("info");
-                Log.e("皮卡皮卡",infoUtil.getId()+infoUtil.getTitle()+"");
-                return true;
-            }
-        });
+        //获取数据
+        checkedShopper();
         //总图构成
         final FrameLayout mFrameLayout = findViewById(R.id.frameLayout);
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -195,13 +221,6 @@ public class MapFindAcitvity extends AppCompatActivity {
         locationClientOption.setIsNeedAddress(true);
         locationClientOption.setIsNeedLocationDescribe(true);
         locationClientOption.setIsNeedLocationPoiList(true);
-        //多自定义标记
-        /*locationClientOption.setScanSpan(span);
-        locationClientOption.setLocationNotify(true);// 可选，默认false，设置是否当GPS有效时按照1S/1次频率输出GPS结果
-        locationClientOption.setIgnoreKillProcess(false);// 可选，默认为true不杀死，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程
-        locationClientOption.SetIgnoreCacheException(false);// 可选，默认false，设置是否收集CRASH信息，默认收集
-        locationClientOption.setEnableSimulateGps(false);// 可选，默认false，设置是否需要过滤GPS仿真结果，默认需要*/
-
         locationClient.setLocOption(locationClientOption);
         locationClient.start();
         locationClient.registerLocationListener(new BDAbstractLocationListener() {
@@ -262,17 +281,19 @@ public class MapFindAcitvity extends AppCompatActivity {
     }
 
     //显示marker
-    private void addOverlay(List<Postion> postions) {
+    private void addOverlay(List<FindTable> postions) {
         //清空地图
         mBaiduMap.clear();
         //创建marker的显示图标
-        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromBitmap(basebitmap);
+//        BitmapDescriptor bitmap = BitmapDescriptorFactory.fromBitmap(basebitmap);
         LatLng latLng = null;
         Marker marker;
         OverlayOptions options;
-        for(Postion info:postions){
+        for(int i = 0;i<postions.size();i++){
+            BitmapDescriptor bitmap = BitmapDescriptorFactory.fromBitmap(bitmaps.get(i));
+            FindTable info = postions.get(i);
             //获取经纬度
-            latLng = new LatLng(info.getLat(),info.getLng());
+            latLng = new LatLng(info.getLatitude(),info.getLongitude());
             //设置marker
             options = new MarkerOptions()
                     .position(latLng)//设置位置
@@ -289,7 +310,69 @@ public class MapFindAcitvity extends AppCompatActivity {
         }
     }
     //读取网络图片URL
-    public void getPicBitmap(){
+    public void getPicBitmap(final List<FindTable> poss){
+        new Thread() {
+            private List<Bitmap> bitmaps = new ArrayList<>();
+            private HttpURLConnection conn;
+            private Bitmap bitmap;
+            public void run() {
+                // 连接服务器 get 请求 获取图片
+                try {
+                    //创建URL对象
+                    Log.e("ppppp",path);
+                    for(int i = 0;i<poss.size();i++){
+                        URL url = new URL(poss.get(i).getImgjson());
+                        // 根据url 发送 http的请求
+                        conn = (HttpURLConnection) url.openConnection();
+                        // 设置请求的方式
+                        conn.setRequestMethod("GET");
+                        //设置超时时间
+                        conn.setConnectTimeout(5000);
+                        // 得到服务器返回的响应码
+                        int code = conn.getResponseCode();
+                        if (code != 200) {
+                            //返回码不等于200 请求服务器失败
+                            Message msg = new Message();
+                            msg.what = ERROR;
+                            handler.sendMessage(msg);
+//                          byte[] data = getBytes(is);
+//                          bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+                        }
+                        //请求网络成功后返回码是200
+                        InputStream is = conn.getInputStream();
+                        bitmap = BitmapFactory.decodeStream(is);
+                        bitmaps.add(bitmap);
+                    }
+                        //将更改主界面的消息发送给主线程
+                        Message msg = new Message();
+                        msg.what = CHANGE_UI;
+                        msg.obj = bitmaps;
+                        handler.sendMessage(msg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Message msg = new Message();
+                    msg.what = ERROR;
+                    handler.sendMessage(msg);
+                }
+                //关闭连接
+                conn.disconnect();
+            }
+        }.start();
+    }
+    //定义一个根据图片url获取InputStream的方法
+    public static byte[] getBytes(InputStream is) throws IOException {
+        ByteArrayOutputStream outstream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024]; // 用数据装
+        int len = -1;
+        while ((len = is.read(buffer)) != -1) {
+            outstream.write(buffer, 0, len);
+        }
+        outstream.close();
+        // 关闭流一定要记得。
+        return outstream.toByteArray();
+    }
+    //读取网络图片URL
+    public void getPicBitmap1(){
         new Thread() {
             private HttpURLConnection conn;
             private Bitmap bitmap;
@@ -315,7 +398,7 @@ public class MapFindAcitvity extends AppCompatActivity {
                         bitmap = BitmapFactory.decodeStream(is);
                         //将更改主界面的消息发送给主线程
                         Message msg = new Message();
-                        msg.what = CHANGE_UI;
+                        msg.what = 62;
                         msg.obj = bitmap;
                         handler.sendMessage(msg);
                     } else {
@@ -343,29 +426,64 @@ public class MapFindAcitvity extends AppCompatActivity {
      * @param newHeight ：缩放后高度
      * @return
      */
-    public static Bitmap getZoomImage(Bitmap orgBitmap, double newWidth, double newHeight) {
+    public static List<Bitmap> getZoomImage(List<Bitmap> orgBitmap, double newWidth, double newHeight) {
         if (null == orgBitmap) {
             return null;
         }
-        if (orgBitmap.isRecycled()) {
+        /*if (orgBitmap.isRecycled()) {
             return null;
-        }
+        }*/
         if (newWidth <= 0 || newHeight <= 0) {
             return null;
         }
+        List<Bitmap> bs = new ArrayList<>();
+        for(int i = 0;i<orgBitmap.size();i++){
+            // 获取图片的宽和高
+            float width = orgBitmap.get(i).getWidth();
+            float height = orgBitmap.get(i).getHeight();
+            // 创建操作图片的matrix对象
+            Matrix matrix = new Matrix();
+            // 计算宽高缩放率
+            float scaleWidth = ((float) newWidth) / width;
+            float scaleHeight = ((float) newHeight) / height;
+            // 缩放图片动作
+            matrix.postScale(scaleWidth, scaleHeight);
+            Bitmap bitmap = Bitmap.createBitmap(orgBitmap.get(i), 0, 0, (int) width, (int) height, matrix, true);
+            bs.add(bitmap);
+        }
 
-        // 获取图片的宽和高
-        float width = orgBitmap.getWidth();
-        float height = orgBitmap.getHeight();
-        // 创建操作图片的matrix对象
-        Matrix matrix = new Matrix();
-        // 计算宽高缩放率
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // 缩放图片动作
-        matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap bitmap = Bitmap.createBitmap(orgBitmap, 0, 0, (int) width, (int) height, matrix, true);
-        return bitmap;
+        return bs;
+    }
+    //传输数据gson
+    private void checkedShopper() {
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    Log.e("pikaqiu","你说一二三，打碎了过往！");
+                    URL url = new URL("http://192.168.43.169:8080/CarePet/findtable/listall?a=1");
+                    URLConnection conn = url.openConnection();
+                    InputStream in = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+                    String info = reader.readLine();
+                    Log.e("pikaqiu","我想，左肩有你，右肩微笑！");
+                    Log.e("ww",info);
+                    wrapperMessage(info);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+    private void wrapperMessage(String info) {
+        Message msg = Message.obtain();
+        msg.obj = info;
+        msg.what = 26;
+        handler.sendMessage(msg);
     }
     @Override
     public void onDestroy() {
