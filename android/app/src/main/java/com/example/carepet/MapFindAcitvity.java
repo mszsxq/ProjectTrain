@@ -35,6 +35,7 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.UiSettings;
 import com.baidu.mapapi.model.LatLng;
 import com.example.carepet.entity.FindTable;
+import com.example.carepet.entity.User;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -75,7 +76,9 @@ public class MapFindAcitvity extends AppCompatActivity {
     protected static final int ERROR = 2;
     private Bitmap basebitmap;
     private String path = null;
+    private String purl = null;
 
+    private ImageView avatar;
     private ImageView imageView1;
     private TextView textView;
     private TextView textView1;
@@ -112,6 +115,19 @@ public class MapFindAcitvity extends AppCompatActivity {
             }else if(msg.what == 62){
                 basebitmap = (Bitmap)msg.obj;
                 imageView1.setImageBitmap(basebitmap);
+            }else if(msg.what == 66){
+                Log.e("皮卡what",msg.what+"");
+                String info = (String)msg.obj;
+                Log.e("kb",info);
+                Type type=new TypeToken<User>(){}.getType();
+                Gson gson=new Gson();
+                User user = gson.fromJson(info,type);
+                purl = user.getTouxiang();
+                getPicBitmap2();
+                textView2.setText(user.getUsername());
+            }else if(msg.what == 22){
+                basebitmap = (Bitmap)msg.obj;
+                avatar.setImageBitmap(basebitmap);
             }else if (msg.what == ERROR) {
                 Toast.makeText(MapFindAcitvity.this, "显示图片错误",
                         Toast.LENGTH_SHORT).show();
@@ -123,12 +139,12 @@ public class MapFindAcitvity extends AppCompatActivity {
                     Bundle bundle = marker.getExtraInfo();
                     FindTable infoUtil = (FindTable) bundle.getSerializable("info");
                     Log.e("皮卡皮卡",infoUtil.getId()+infoUtil.getTitle()+"");
+                    Log.e("皮卡",infoUtil.getUserid()+"");
+                    getUser(infoUtil.getUserid());
                     path = infoUtil.getImgjson();
                     getPicBitmap1();
-
                     textView.setText(infoUtil.getTitle());
                     textView1.setText(infoUtil.getCity());
-                    textView2.setText("小鲤鱼泡泡");
                     textView3.setText(infoUtil.getPettype());
                     textView7.setText(infoUtil.getContent());
                     return true;
@@ -143,6 +159,7 @@ public class MapFindAcitvity extends AppCompatActivity {
         setContentView(R.layout.activity_totally);
         // 获取地图控件引用
         mMapView = (MapView)findViewById(R.id.bmapView);
+        avatar = findViewById(R.id.avatar);
         imageView1 = findViewById(R.id.imageView1);
         textView = findViewById(R.id.textView);
         textView1 = findViewById(R.id.textView1);
@@ -418,6 +435,53 @@ public class MapFindAcitvity extends AppCompatActivity {
             }
         }.start();
     }
+    //读取网络图片URL
+    public void getPicBitmap2(){
+        new Thread() {
+            private HttpURLConnection conn;
+            private Bitmap bitmap;
+            public void run() {
+                // 连接服务器 get 请求 获取图片
+                try {
+                    //创建URL对象
+                    Log.e("ppppp",purl);
+                    URL url = new URL(purl);
+                    // 根据url 发送 http的请求
+                    conn = (HttpURLConnection) url.openConnection();
+                    // 设置请求的方式
+                    conn.setRequestMethod("GET");
+                    //设置超时时间
+                    conn.setConnectTimeout(5000);
+                    // 得到服务器返回的响应码
+                    int code = conn.getResponseCode();
+                    //请求网络成功后返回码是200
+                    if (code == 200) {
+                        //获取输入流
+                        InputStream is = conn.getInputStream();
+                        //将流转换成Bitmap对象
+                        bitmap = BitmapFactory.decodeStream(is);
+                        //将更改主界面的消息发送给主线程
+                        Message msg = new Message();
+                        msg.what = 22;
+                        msg.obj = bitmap;
+                        handler.sendMessage(msg);
+                    } else {
+                        //返回码不等于200 请求服务器失败
+                        Message msg = new Message();
+                        msg.what = ERROR;
+                        handler.sendMessage(msg);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Message msg = new Message();
+                    msg.what = ERROR;
+                    handler.sendMessage(msg);
+                }
+                //关闭连接
+                conn.disconnect();
+            }
+        }.start();
+    }
     /**
      * 图片的缩放方法
      *
@@ -485,6 +549,38 @@ public class MapFindAcitvity extends AppCompatActivity {
         msg.what = 26;
         handler.sendMessage(msg);
     }
+    //传输数据gsonuser
+    private void getUser(final int id) {
+        new Thread(){
+            @Override
+            public void run() {
+                try {
+                    String userId = id+"";
+                    Log.e("xx1",userId);
+                    URL url = new URL("http://192.168.43.169:8080/CarePet/user/getuser?id="+userId);
+                    URLConnection conn = url.openConnection();
+                    InputStream in = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+                    String info = reader.readLine();
+                    Log.e("pikaqiu","传过来了呢！");
+                    Log.e("xx2",info);
+                    wrapperMessage1(info);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+    private void wrapperMessage1(String info) {
+        Message msg = Message.obtain();
+        msg.obj = info;
+        msg.what = 66;
+        handler.sendMessage(msg);
+}
     @Override
     public void onDestroy() {
         super.onDestroy();
