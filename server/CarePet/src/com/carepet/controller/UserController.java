@@ -63,4 +63,27 @@ public class UserController {
 //		model.addAttribute("findTables", findTablestring);
 //		return "list";
 //	}
+	@RequestMapping("/getuser")
+	public String list(@RequestParam String id,Model model,HttpServletRequest req,HttpServletResponse rep) {
+		rep.setCharacterEncoding("UTF-8");
+		rep.setContentType("text/html;charset=UTF-8");
+		Gson gson=new Gson();
+		System.out.println(id);
+		int userId = Integer.parseInt(id);
+		User user=userService.getUser(userId);
+		String usering=gson.toJson(user);
+		model.addAttribute("user",usering);
+		System.out.println(usering);
+		PrintWriter writer;
+		try {
+			writer = rep.getWriter();
+			writer.println(usering);
+		    writer.flush();
+		    writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
