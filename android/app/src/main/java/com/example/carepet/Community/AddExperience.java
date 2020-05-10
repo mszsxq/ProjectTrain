@@ -108,7 +108,7 @@ public class AddExperience extends AppCompatActivity {
 //                community.setTag("experience");
 //                community.setTitle(title.toString());
 //                community.setFlag(1);
-                Community community = PackCommunity(content.getText().toString(),2,imgs,time,title.getText().toString());
+                Community community = PackCommunity(content.getText().toString(),2,imgs,time,title.getText().toString(),"head.jpg");
                 sendToServer(community);
                 Intent intent = new Intent(AddExperience.this, MainActivity.class);
                 intent.putExtra("title", title.getText());
@@ -120,7 +120,7 @@ public class AddExperience extends AppCompatActivity {
 
     }
 
-    private Community PackCommunity(String toString, int i, String imgs, String time, String toString1) {
+    private Community PackCommunity(String toString, int i, String imgs, String time, String toString1,String pic) {
         Community community = new Community();
         community.setUserId(i);
         community.setContent(toString);
@@ -128,6 +128,7 @@ public class AddExperience extends AppCompatActivity {
         community.setTime(time);
         community.setFlag(2);
         community.setTag("exep");
+        community.setPic(pic);
         community.setTitle(toString1);
         return community;
     }

@@ -94,7 +94,10 @@ public class LookPicture extends Activity {
         }
 
         Bitmap bitmap  = BitmapFactory.decodeStream(fs);
-        ivHead.setImageBitmap(bitmap);
+        if (bitmap==null){
+            ivHead.setImageResource(R.drawable.tx);
+        }else
+            ivHead.setImageBitmap(bitmap);
         btnTakephoto=findViewById(R.id.btnCamera);
     }
 
@@ -211,7 +214,7 @@ public class LookPicture extends Activity {
                         new Thread(new Runnable(){
                             @Override
                             public void run() {
-                                new OssService(getApplicationContext()).uploadImage("myHead/head.jpg","/sdcard/myHead/head.jpg","202.221.010");
+                                new OssService(getApplicationContext()).uploadImage("","/sdcard/myHead/head.jpg","");
                             }
                         }).start();
                         Log.e("sss","成功");

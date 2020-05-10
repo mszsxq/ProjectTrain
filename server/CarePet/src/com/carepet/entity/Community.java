@@ -18,7 +18,7 @@ public class Community {
     private String title;
     //imgjson存储图片的连接 多个图片时 采用++进行间隔
     private String imgjson;
-    private int pic;
+    private String pic;
     private String content;
     private int userId;
     private String time;
@@ -49,11 +49,11 @@ public class Community {
         this.title = title;
     }
 
-    public int getPic() {
+    public String getPic() {
         return pic;
     }
 
-    public void setPic(int pic) {
+    public void setPic(String pic) {
         this.pic = pic;
     }
 

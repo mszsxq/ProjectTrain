@@ -137,9 +137,11 @@ public class MainActivity extends AppCompatActivity {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-
             Bitmap bitmap  = BitmapFactory.decodeStream(fs);
-            nick_image.setImageBitmap(bitmap);
+            if (bitmap==null){
+                nick_image.setImageResource(R.drawable.tx);
+            }else
+                nick_image.setImageBitmap(bitmap);
         }else {
             nick_image.setImageResource(R.drawable.tx);
         }

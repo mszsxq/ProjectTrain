@@ -87,14 +87,18 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
 
         Community listData = mDataList.get(position);
         Log.e("数据",listData.toString());
-        File file=new File(context.getFilesDir(),"oss"+listData.getPic());
+        File file=new File(context.getFilesDir(),"oss/"+listData.getPic());
         if(!file.exists()){
             OssService ossService = new OssService(context);
             ossService.downLoad("",listData.getPic());//listData.getPic()
             Log.e("检测","dd");
         }
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-        holder.imageAvatar.setImageBitmap(bitmap);
+        if (bitmap==null){
+            holder.imageAvatar.setImageResource(R.drawable.tx);
+        }else {
+            holder.imageAvatar.setImageBitmap(bitmap);
+        }
 //        Glide.with(context)
 //                .load("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg")//https://picturer.oss-cn-beijing.aliyuncs.com/1588149087234.jpg
 //                .into(holder.imageAvatar);
@@ -124,6 +128,9 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(imgList, holder.viewPager,context);
         holder.viewPager.setAdapter(viewPagerAdapter);
         holder.viewPager.setOnPageChangeListener(new ViewPagerIndicator(context, holder.viewPager, holder.linearLayout, imgList.size()));
+        if (imgList.size()==0){
+
+        }
         holder.name.setText(listData.getTitle());//设置名称
         int state=mTextStateList.get(position,STATE_UNKNOW);
 //        如果该itme是第一次初始化，则取获取文本的行数
