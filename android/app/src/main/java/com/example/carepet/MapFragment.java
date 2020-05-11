@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.bumptech.glide.Glide;
 import com.etsy.android.grid.StaggeredGridView;
@@ -53,6 +54,17 @@ public class MapFragment extends Fragment {
                 return gue.onTouchEvent(motionEvent);
             }
         });
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent  intent  =new Intent(getActivity(),MapDetails.class);
+                Bundle bundle =new Bundle();
+                bundle.putSerializable("findtable",findlist.get(i));
+                Log.e("bundle",findlist.get(i).toString());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         MyAsnycTask myAsnycTask = new MyAsnycTask();
         myAsnycTask.execute();
 
@@ -91,8 +103,10 @@ public class MapFragment extends Fragment {
 
         @Override
         protected List<FindTable> doInBackground(Integer... integers) {
+
 //            final String ip = "http://192.168.101.16:8080/CarePet/findtable/listall";
             final String ip = "http://192.168.43.109:8080/CarePet/findtable/listall";
+//            final String ip ="http://175.24.16.26:8080/CarePet/findtable/listall";
             URL url;
             String json = "";
             List<FindTable> findList = new ArrayList<>();

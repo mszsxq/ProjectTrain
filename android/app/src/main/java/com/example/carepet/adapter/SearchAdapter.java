@@ -56,7 +56,8 @@ public class SearchAdapter extends BaseAdapter {
          holder.title.setText(data.get(i).getTitle());
          holder.city.setText(data.get(i).getCity());
         //设置图片圆角角度
-         Glide.with(context).load(data.get(i).getImgjson()).into(holder.bimg);
+
+         Glide.with(context).load(data.get(i).getImgjson()).fitCenter().into(holder.bimg);
         return convertView;
     }
 
