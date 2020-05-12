@@ -69,7 +69,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     public  ListAdapter(List<Community> listDatas,Context context){
         this.context=context;
         mDataList = listDatas;
-        Log.e("数据",listDatas.get(0).toString());
         mTextStateList = new SparseArray<>();
     }
 

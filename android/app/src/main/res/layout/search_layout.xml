@@ -120,4 +120,10 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@android:color/white"/>
+    <ImageView  android:layout_below="@+id/ymtablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/none"
+        android:visibility="gone"/>
+
 </RelativeLayout>

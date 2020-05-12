@@ -21,27 +21,24 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
 import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
 import static android.content.Context.MODE_PRIVATE;
 
-public class search_look extends Fragment {
+public class search_experience extends Fragment {
     private SharedPreferences p;
-    private SharedPreferences p1;
     private String sousuo;
     private Handler handler;
 
-    public static search_look newInstance() {
-        search_look fragment=new search_look();
+    public static search_experience newInstance() {
+        search_experience fragment=new search_experience();
         return fragment;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recyclerview_layout ,container, false);
@@ -59,31 +56,30 @@ public class search_look extends Fragment {
                 Gson gson = new Gson();
                 List<Community> list = gson.fromJson(object, new TypeToken<List<Community>>() {}.getType());
                 ListAdapter listAdapter = new ListAdapter(list,getContext()); //创建适配器，并且导入数据list
-
                 listAdapter.notifyDataSetChanged();
                 recyclerView.setAdapter(listAdapter);//布局导入适配器
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+
             }
 
         };
-
         return rootView;
     }
 
     private void getData() {
-        sousuo=p.getString("sousuo",null);
+        sousuo = p.getString("sousuo", null);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("http://192.168.43.65:8080/CarePet/community/liststrp?sousuo="+sousuo);
+                    URL url = new URL("http://192.168.43.65:8080/CarePet/community/liststre?sousuo=" + sousuo);
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
                     String info = reader.readLine();
-                    Log.e("wer", "df" + info);
+                    Log.e("experience", "df" + info);
                     wrapperMessage(info);
-                }catch (MalformedURLException e) {
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -96,4 +92,7 @@ public class search_look extends Fragment {
         msg.obj = info;
         handler.sendMessage(msg);
     }
+
+
 }
+
