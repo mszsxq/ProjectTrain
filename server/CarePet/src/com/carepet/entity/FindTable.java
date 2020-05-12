@@ -25,16 +25,7 @@ public class FindTable {
 	private String time;
 	private String city;
 	private String pettype;
-	
-//	private User user;
-//	@ManyToOne
-//	@JoinColumn(name="userid")
-//	public User getUser() {
-//		return user;
-//	}
-//	public void setUser(User user) {
-//		this.user = user;
-//	}
+
 	public int getId() {
 		return id;
 	}
@@ -99,7 +90,7 @@ public class FindTable {
 	public String toString() {
 		return "FindTable [id=" + id + ", userid=" + userid + ", longitude=" + longitude + ", latitude=" + latitude
 				+ ", imgjson=" + imgjson + ", title=" + title + ", content=" + content + ", time=" + time + ", city="
-				+ city + ", pettype=" + pettype + ", user="  + "]";
+				+ city + ", pettype=" + pettype  + "]";
 	}
 	
 	
