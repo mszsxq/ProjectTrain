@@ -58,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
     private NavigationController navigationController;
     private PageNavigationView tab;
     private PopMenu mPopMenu;
-
+    private SharedPreferences ps;
+    private String headPath;
+    private SharedPreferences sharedPreferences;
+    private String currentheadName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,8 +111,10 @@ public class MainActivity extends AppCompatActivity {
         nick_name.setText("可乐加冰");
 //        nick_image.setImageResource(R.drawable.tx);
         //设置图像大小时，必须先有第一句才可以进行设置
+//        String value = ps.getString("headName","");
+//        headPath=value+"head.jpg";
         getHeadFromSD(nick_image);
-//        getBitmapFromSharedPreferences(nick_image);
+
         nick_image.setAdjustViewBounds(true);
         nick_image.setMaxHeight(180);
         nick_image.setMaxWidth(180);
@@ -122,30 +127,28 @@ public class MainActivity extends AppCompatActivity {
                 int frgTag = navigationController.getSelected();
 //                int frgTag = fragmentTabHost.getCurrentTab();
                 Log.i("tag",frgTag+"");
-                intent.putExtra("tagId",frgTag);
+                intent.putExtra("userId","0001");
                 startActivity(intent);
             }
         });
     }
 
     private void getHeadFromSD(ImageView nick_image) {
-        File file =new File("/sdcard/myHead/head.jpg");
-        if (file.exists()){
+        sharedPreferences = getSharedPreferences("headName", Context.MODE_PRIVATE);
+        currentheadName = sharedPreferences.getString("name", "");
+        if (currentheadName.isEmpty()) {
+            nick_image.setImageResource(R.drawable.tx);
+        } else {
             FileInputStream fs = null;
             try {
-                fs = new FileInputStream("/sdcard/myHead/head.jpg");
+                Log.e("111", currentheadName);
+                fs = new FileInputStream("/sdcard/myHead/" + currentheadName);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            Bitmap bitmap  = BitmapFactory.decodeStream(fs);
-            if (bitmap==null){
-                nick_image.setImageResource(R.drawable.tx);
-            }else
-                nick_image.setImageBitmap(bitmap);
-        }else {
-            nick_image.setImageResource(R.drawable.tx);
+            Bitmap bitmap = BitmapFactory.decodeStream(fs);
+            nick_image.setImageBitmap(bitmap);
         }
-
     }
 
     public void initPop(){

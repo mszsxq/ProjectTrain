@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +47,7 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
         TextView timeText;
         ViewPager viewPager;
         LinearLayout linearLayout;
+        RelativeLayout relativeLayout;
         public ViewHolder(View itemView) {
             super(itemView);
             //注意这里可能需要import com.example.lenovo.myrecyclerview.R; 才能使用R.id
@@ -57,9 +59,8 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
             name = (TextView) itemView.findViewById(R.id.title);
             content = (TextView) itemView.findViewById(R.id.content);
             expandOrCollapse = (TextView) itemView.findViewById(R.id.tv_expand_or_collapse);
-
+            relativeLayout=(RelativeLayout)itemView.findViewById(R.id.viewpager);
         }
-
     }
 
 
@@ -99,6 +100,7 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
         }else {
             holder.imageAvatar.setImageBitmap(bitmap);
         }
+
 //        Glide.with(context)
 //                .load("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg")//https://picturer.oss-cn-beijing.aliyuncs.com/1588149087234.jpg
 //                .into(holder.imageAvatar);
@@ -107,29 +109,17 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
         String imgjson=listData.getImgjson();
         //List<String> imgList = new ArrayList<>();
         List<String> list = new ArrayList<>();
-        if (imgjson.contains("--")) {
+        if (imgjson.isEmpty()){
+            holder.relativeLayout.setVisibility(View.GONE);
+        }else if (imgjson.contains("--")) {
             String[] s = imgjson.split("--");
             for(String ss:s){
                 list.add(ss);
             }
-        }else {
+            showImage(list,holder);
+        }else{
             list.add(imgjson);
-        }
-        for(int i=0;i<list.size();i++){
-            File pics=new File(context.getFilesDir(),"oss"+list.get(i));
-            Log.e("file",list.get(i)+"");
-            if(!pics.exists()){
-                OssService ossService = new OssService(context);
-                ossService.downLoad("",list.get(i));
-            }
-            imgList.add(context.getFilesDir()+"/oss"+File.separator+list.get(i));//pics.getAbsolutePath()
-        }
-
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(imgList, holder.viewPager,context);
-        holder.viewPager.setAdapter(viewPagerAdapter);
-        holder.viewPager.setOnPageChangeListener(new ViewPagerIndicator(context, holder.viewPager, holder.linearLayout, imgList.size()));
-        if (imgList.size()==0){
-
+            showImage(list,holder);
         }
         holder.name.setText(listData.getTitle());//设置名称
         int state=mTextStateList.get(position,STATE_UNKNOW);
@@ -194,6 +184,21 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
                 }
             }
         });
+    }
+
+    private void showImage(List<String> list, ViewHolder holder) {
+        for(int i=0;i<list.size();i++){
+            File pics=new File(context.getFilesDir(),"oss/"+list.get(i));
+            Log.e("file",list.get(i)+"");
+            if(!pics.exists()){
+                OssService ossService = new OssService(context);
+                ossService.downLoad("",list.get(i));
+            }
+            imgList.add(context.getFilesDir()+"/oss"+File.separator+list.get(i));//pics.getAbsolutePath()
+        }
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(imgList, holder.viewPager,context);
+        holder.viewPager.setAdapter(viewPagerAdapter);
+        holder.viewPager.setOnPageChangeListener(new ViewPagerIndicator(context, holder.viewPager, holder.linearLayout, imgList.size()));
     }
 
     @Override
