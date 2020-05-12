@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Message;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Base64;
@@ -29,7 +30,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.carepet.oss.OssService;
+import com.google.gson.Gson;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -37,6 +40,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,6 +57,10 @@ public class LookPicture extends Activity {
     private Bitmap head;//头像Bitmap
     private static String path="/sdcard/myHead/";//sd路径
     private Boolean aBoolean=false;
+    private String laterheadName;
+    private String currentheadName;
+    private int userId;
+    private SharedPreferences sharedPreferences;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +69,12 @@ public class LookPicture extends Activity {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
+        Intent intent=getIntent();
+        String id=intent.getStringExtra("userId");
+        laterheadName=id+System.currentTimeMillis();
+        userId=(Integer.parseInt(intent.getStringExtra("userId")));
         init();
         getListener();
-        Log.e("ss",aBoolean+"");
 //        if (aBoolean){
 //            Intent intent=new Intent(this,Main2Activity.class);
 //            startActivity(intent);
@@ -86,36 +102,26 @@ public class LookPicture extends Activity {
 //             */
 //        }
 //        getBitmapFromSharedPreferences();
-        FileInputStream fs = null;
-        try {
-            fs = new FileInputStream("/sdcard/myHead/head.jpg");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Bitmap bitmap  = BitmapFactory.decodeStream(fs);
-        ivHead.setImageBitmap(bitmap);
-        btnTakephoto=findViewById(R.id.btnCamera);
-    }
-
-    private void getBitmapFromSharedPreferences() {
-        SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
-        //第一步:取出字符串形式的Bitmap
-        String imageString=sharedPreferences.getString("image", "");
-        //第二步:利用Base64将字符串转换为ByteArrayInputStream
-        byte[] byteArray= Base64.decode(imageString, Base64.DEFAULT);
-        if(byteArray.length==0){
+        sharedPreferences=getSharedPreferences("headName", Context.MODE_PRIVATE);
+        currentheadName=sharedPreferences.getString("name","");
+        if (currentheadName.isEmpty()){
             ivHead.setImageResource(R.drawable.tx);
         }else{
-            ByteArrayInputStream byteArrayInputStream=new ByteArrayInputStream(byteArray);
-
-            //第三步:利用ByteArrayInputStream生成Bitmap
-            Bitmap bitmap= BitmapFactory.decodeStream(byteArrayInputStream);
+            FileInputStream fs = null;
+            try {
+                Log.e("111",currentheadName);
+                fs = new FileInputStream("/sdcard/myHead/"+currentheadName);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            Bitmap bitmap  = BitmapFactory.decodeStream(fs);
             ivHead.setImageBitmap(bitmap);
         }
 
-    }
 
+
+        btnTakephoto=findViewById(R.id.btnCamera);
+    }
     public class Listener implements View.OnClickListener{
 
         @Override
@@ -181,7 +187,7 @@ public class LookPicture extends Activity {
     private void modiftHeadFromPhotograph() {
         Intent intent2 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //头像文件名称 head.jpg
-        intent2.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(),"head.jpg")));
+        intent2.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(Environment.getExternalStorageDirectory(),laterheadName+"head.jpg")));
         startActivityForResult(intent2, 2);//采用ForResult打开
 
     }
@@ -190,12 +196,12 @@ public class LookPicture extends Activity {
             case 1:
                 if (resultCode == RESULT_OK) {
                     cropPhoto(data.getData());//裁剪图片
-                } aBoolean=true;
+                }
                 break;
             case 2:
                 if (resultCode == RESULT_OK) {
                     File temp = new File(Environment.getExternalStorageDirectory()
-                            + "/head.jpg");
+                            +"/"+laterheadName+"head.jpg");
                     cropPhoto(Uri.fromFile(temp));//裁剪图片
                 }
                 break;
@@ -211,13 +217,12 @@ public class LookPicture extends Activity {
                         new Thread(new Runnable(){
                             @Override
                             public void run() {
-                                new OssService(getApplicationContext()).uploadImage("myHead/head.jpg","/sdcard/myHead/head.jpg","202.221.010");
+                                new OssService(getApplicationContext()).uploadImage("","/sdcard/myHead/"+laterheadName+"head.jpg","");
                             }
                         }).start();
-                        Log.e("sss","成功");
-//                        saveBitmapToSharedPreferences(head);
+                        sendToServer();
+                        saveHeadNameToSharedPreferences(laterheadName+"head.jpg");
                         ivHead.setImageBitmap(head);//用ImageView显示出来
-                        aBoolean = true;
                     }
                 }
                 break;
@@ -228,16 +233,34 @@ public class LookPicture extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void saveBitmapToSharedPreferences(Bitmap head) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        head.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
-        //第二步:利用Base64将字节数组输出流中的数据转换成字符串String
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        String imageString = new String(Base64.encodeToString(byteArray, Base64.DEFAULT));
-        //第三步:将String保持至SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("testSP", Context.MODE_PRIVATE);
+    private void sendToServer() {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Gson gson = new Gson();
+                    URL url = new URL("http://192.168.137.1:8080/CarePet/changephoto/change?headname="+laterheadName+"head.jpg"+"&userId="+userId);
+                    URLConnection conn = url.openConnection();
+                    InputStream in = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+                    String info = reader.readLine();
+                    Log.i("检测","得到"+info);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
+
+    private void saveHeadNameToSharedPreferences(String headName) {
+        SharedPreferences sharedPreferences = getSharedPreferences("headName", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("image", imageString);
+        Log.e("3333",headName);
+        editor.putString("name", headName);
         editor.commit();
 
         //上传头像
@@ -252,7 +275,8 @@ public class LookPicture extends Activity {
         FileOutputStream b = null;
         File file = new File(path);
         file.mkdirs();// 创建文件夹
-        String fileName = path + "head.jpg";//图片名字
+            Log.e("222",laterheadName);
+        String fileName = path +laterheadName+"head.jpg";//图片名字
         try {
             b = new FileOutputStream(fileName);
             head.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件

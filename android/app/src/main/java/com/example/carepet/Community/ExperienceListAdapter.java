@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +47,7 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
         TextView timeText;
         ViewPager viewPager;
         LinearLayout linearLayout;
+        RelativeLayout relativeLayout;
         public ViewHolder(View itemView) {
             super(itemView);
             //注意这里可能需要import com.example.lenovo.myrecyclerview.R; 才能使用R.id
@@ -57,9 +59,8 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
             name = (TextView) itemView.findViewById(R.id.title);
             content = (TextView) itemView.findViewById(R.id.content);
             expandOrCollapse = (TextView) itemView.findViewById(R.id.tv_expand_or_collapse);
-
+            relativeLayout=(RelativeLayout)itemView.findViewById(R.id.viewpager);
         }
-
     }
 
 
@@ -87,14 +88,19 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
 
         Community listData = mDataList.get(position);
         Log.e("数据",listData.toString());
-        File file=new File(context.getFilesDir(),"oss"+listData.getPic());
+        File file=new File(context.getFilesDir(),"oss/"+listData.getPic());
         if(!file.exists()){
             OssService ossService = new OssService(context);
             ossService.downLoad("",listData.getPic());//listData.getPic()
             Log.e("检测","dd");
         }
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-        holder.imageAvatar.setImageBitmap(bitmap);
+        if (bitmap==null){
+            holder.imageAvatar.setImageResource(R.drawable.tx);
+        }else {
+            holder.imageAvatar.setImageBitmap(bitmap);
+        }
+
 //        Glide.with(context)
 //                .load("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg")//https://picturer.oss-cn-beijing.aliyuncs.com/1588149087234.jpg
 //                .into(holder.imageAvatar);
@@ -103,27 +109,18 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
         String imgjson=listData.getImgjson();
         //List<String> imgList = new ArrayList<>();
         List<String> list = new ArrayList<>();
-        if (imgjson.contains("--")) {
+        if (imgjson.isEmpty()){
+            holder.relativeLayout.setVisibility(View.GONE);
+        }else if (imgjson.contains("--")) {
             String[] s = imgjson.split("--");
             for(String ss:s){
                 list.add(ss);
             }
-        }else {
+            showImage(list,holder);
+        }else{
             list.add(imgjson);
+            showImage(list,holder);
         }
-        for(int i=0;i<list.size();i++){
-            File pics=new File(context.getFilesDir(),"oss"+list.get(i));
-            Log.e("file",list.get(i)+"");
-            if(!pics.exists()){
-                OssService ossService = new OssService(context);
-                ossService.downLoad("",list.get(i));
-            }
-            imgList.add(context.getFilesDir()+"/oss"+File.separator+list.get(i));//pics.getAbsolutePath()
-        }
-
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(imgList, holder.viewPager,context);
-        holder.viewPager.setAdapter(viewPagerAdapter);
-        holder.viewPager.setOnPageChangeListener(new ViewPagerIndicator(context, holder.viewPager, holder.linearLayout, imgList.size()));
         holder.name.setText(listData.getTitle());//设置名称
         int state=mTextStateList.get(position,STATE_UNKNOW);
 //        如果该itme是第一次初始化，则取获取文本的行数
@@ -187,6 +184,21 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
                 }
             }
         });
+    }
+
+    private void showImage(List<String> list, ViewHolder holder) {
+        for(int i=0;i<list.size();i++){
+            File pics=new File(context.getFilesDir(),"oss/"+list.get(i));
+            Log.e("file",list.get(i)+"");
+            if(!pics.exists()){
+                OssService ossService = new OssService(context);
+                ossService.downLoad("",list.get(i));
+            }
+            imgList.add(context.getFilesDir()+"/oss"+File.separator+list.get(i));//pics.getAbsolutePath()
+        }
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(imgList, holder.viewPager,context);
+        holder.viewPager.setAdapter(viewPagerAdapter);
+        holder.viewPager.setOnPageChangeListener(new ViewPagerIndicator(context, holder.viewPager, holder.linearLayout, imgList.size()));
     }
 
     @Override

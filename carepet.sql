@@ -74,3 +74,14 @@ CREATE TABLE `findtable` (
 -- Records of findtable
 -- ----------------------------
 >>>>>>> dbe3f07cd1cd676e41b0c001c3c5c67d9e2eb98f
+
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) DEFAULT NULL,
+  `password` varchar(50) DEFAULT NULL,
+  `touxiang` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

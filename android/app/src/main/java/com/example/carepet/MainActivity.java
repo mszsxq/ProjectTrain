@@ -40,6 +40,9 @@ import com.google.android.material.navigation.NavigationView;
 
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout Drawer;
@@ -55,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
     private NavigationController navigationController;
     private PageNavigationView tab;
     private PopMenu mPopMenu;
-
+    private SharedPreferences ps;
+    private String headPath;
+    private SharedPreferences sharedPreferences;
+    private String currentheadName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +111,10 @@ public class MainActivity extends AppCompatActivity {
         nick_name.setText("可乐加冰");
 //        nick_image.setImageResource(R.drawable.tx);
         //设置图像大小时，必须先有第一句才可以进行设置
-        getBitmapFromSharedPreferences(nick_image);
+//        String value = ps.getString("headName","");
+//        headPath=value+"head.jpg";
+        getHeadFromSD(nick_image);
+
         nick_image.setAdjustViewBounds(true);
         nick_image.setMaxHeight(180);
         nick_image.setMaxWidth(180);
@@ -118,11 +127,30 @@ public class MainActivity extends AppCompatActivity {
                 int frgTag = navigationController.getSelected();
 //                int frgTag = fragmentTabHost.getCurrentTab();
                 Log.i("tag",frgTag+"");
-                intent.putExtra("tagId",frgTag);
+                intent.putExtra("userId","0001");
                 startActivity(intent);
             }
         });
     }
+
+    private void getHeadFromSD(ImageView nick_image) {
+        sharedPreferences = getSharedPreferences("headName", Context.MODE_PRIVATE);
+        currentheadName = sharedPreferences.getString("name", "");
+        if (currentheadName.isEmpty()) {
+            nick_image.setImageResource(R.drawable.tx);
+        } else {
+            FileInputStream fs = null;
+            try {
+                Log.e("111", currentheadName);
+                fs = new FileInputStream("/sdcard/myHead/" + currentheadName);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            Bitmap bitmap = BitmapFactory.decodeStream(fs);
+            nick_image.setImageBitmap(bitmap);
+        }
+    }
+
     public void initPop(){
         mPopMenu = new PopMenu.Builder().attachToActivity(MainActivity.this)
                 .addMenuItem(new PopMenuItem("晒宠贴", getResources().getDrawable(R.drawable.shaichong)))
@@ -244,23 +272,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void getBitmapFromSharedPreferences(ImageView imageView) {
-        SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
-        //第一步:取出字符串形式的Bitmap
-        String imageString=sharedPreferences.getString("image", "");
-        //第二步:利用Base64将字符串转换为ByteArrayInputStream
-        byte[] byteArray= Base64.decode(imageString, Base64.DEFAULT);
-        if(byteArray.length==0){
-            imageView.setImageResource(R.drawable.tx);
-        }else{
-            ByteArrayInputStream byteArrayInputStream=new ByteArrayInputStream(byteArray);
-
-            //第三步:利用ByteArrayInputStream生成Bitmap
-            Bitmap bitmap= BitmapFactory.decodeStream(byteArrayInputStream);
-            imageView.setImageBitmap(bitmap);
-        }
-
-    }
 
     private void initView() {
 
@@ -268,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
         navigationView =findViewById(R.id.cebian);
         layout=findViewById(R.id.header_layout);
         touxiang=findViewById(R.id.touxiang);
-        getBitmapFromSharedPreferences(touxiang);
+        getHeadFromSD(touxiang);
 
     }
 

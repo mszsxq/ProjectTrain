@@ -118,12 +118,12 @@
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="380dp"
-        android:layout_height="200dp"
+        android:layout_height="400dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/textView6"
         android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
-        android:src="@mipmap/background" />
+        android:src="@mipmap/b1" />
 
     <TextView
         android:id="@+id/textView7"

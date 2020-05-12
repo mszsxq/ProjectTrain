@@ -9,18 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.carepet.ai.animal.AnimalClassify;
 import com.carepet.entity.Community;
-import com.carepet.entity.FindTable;
-import com.carepet.entity.User;
 import com.carepet.utils.dao.CommunityDao;
-import com.carepet.utils.dao.UserDao;
-
+import com.carepet.utils.dao.ExperienceDao;
 @Service
-public class CommunityService {
-
+public class ExperienceService {
 	@Resource
-	private CommunityDao communityDao;
-	@Resource
-	private UserDao userDao;
+	private ExperienceDao experienceDao;
 	@Transactional(readOnly = false)
 	public void saveCommunity(Community community) {
 		String imgjson=community.getImgjson();
@@ -31,40 +25,37 @@ public class CommunityService {
 			urlpath=imgjson;
 		}
 		String type=new AnimalClassify().animal(urlpath);
-		User user=userDao.findUser(community.getUserId());
-		imgjson=user.getUsername()+"--"+user.getTouxiang()+"--"+imgjson;
-		community.setImgjson(imgjson);
 		community.setContent("#"+type+community.getContent());
-		this.communityDao.saveCommunity(community);
+		this.experienceDao.saveCommunity(community);
 	}
 	
 	@Transactional(readOnly = false)
 	public void updateCommunity(Community community) {
-		this.communityDao.uploadCommunity(community);
+		this.experienceDao.uploadCommunity(community);
 	}
 	
 	@Transactional(readOnly = false)
 	public void insertCommunity(Community community) {
-		this.communityDao.saveCommunity(community);
+		this.experienceDao.saveCommunity(community);
 	}
 	
 	@Transactional(readOnly = false)
 	public void deleteCommunity(Community community) {
-		this.communityDao.deleteCommunity(community.getId());
+		this.experienceDao.deleteCommunity(community.getId());
 	}
 	
 	@Transactional(readOnly = false)
 	public void deleteCommunity(int id) {
-		this.communityDao.deleteCommunity(id);
+		this.experienceDao.deleteCommunity(id);
 	}
 	
 	@Transactional(readOnly = false)
 	public List<Community> list() {
-		return this.communityDao.findAllCommunity();
+		return this.experienceDao.findAllExperience();
 	}
 	
 	@Transactional(readOnly = false)
 	public List<Community> listSameCity(String city) {
-		return this.communityDao.findSameCity(city);
+		return this.experienceDao.findSameCity(city);
 	}
 }
