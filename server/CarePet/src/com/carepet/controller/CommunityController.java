@@ -33,7 +33,7 @@ public class CommunityController {
 	private CommunityService communityService;
 	
 	@ResponseBody
-	@RequestMapping("listall")
+	@RequestMapping("/listall")
 	public String list(Model model,HttpServletRequest req,HttpServletResponse rep) throws IOException {
 		Gson gson=new Gson();
 		List<Community> communities=communityService.list();
@@ -61,4 +61,30 @@ public class CommunityController {
 		model.addAttribute("findTables", findTablestring);
 		return "list";
 	}
+	
+	@RequestMapping("/liststrp")
+	public String liststrp(@RequestParam String sousuo,HttpServletRequest req,HttpServletResponse rep2) throws IOException {
+		List<Community> communities=communityService.listWithStrP(sousuo);
+		Gson gson2=new Gson();
+		String communityString=gson2.toJson(communities);
+		PrintWriter writer = rep2.getWriter();
+		writer.println(communityString+"\n");
+	    writer.flush();
+	    writer.close();
+	    System.out.println(communityString+"yanmanyanman");
+		return communityString;	
+	}
+	@RequestMapping("/liststre")
+	public String liststre(@RequestParam String sousuo,HttpServletRequest req,HttpServletResponse rep1) throws IOException {
+		List<Community> communities=communityService.listWithStrE(sousuo);
+		Gson gson2=new Gson();
+		String communityString=gson2.toJson(communities);
+		PrintWriter writer = rep1.getWriter();
+		writer.println(communityString+"\n");
+	    writer.flush();
+	    writer.close();
+	    System.out.println(communityString+"yanmanyanman");
+		return communityString;	
+	}
+	
 }

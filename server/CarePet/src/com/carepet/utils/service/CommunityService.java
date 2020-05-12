@@ -67,4 +67,12 @@ public class CommunityService {
 	public List<Community> listSameCity(String city) {
 		return this.communityDao.findSameCity(city);
 	}
+@Transactional(readOnly = false)
+	public List<Community> listWithStrP(String str){
+		return this.communityDao.findCommunityWithStr(str);
+	}
+	@Transactional(readOnly = false)
+	public List<Community> listWithStrE(String str){
+		return this.communityDao.findCommunityWithStrE(str);
+	}
 }

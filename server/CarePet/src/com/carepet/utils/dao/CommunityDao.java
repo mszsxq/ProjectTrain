@@ -52,4 +52,25 @@ public class CommunityDao {
 		}
 		return communitys2;
 	}
+	//搜索分享帖
+	public List<Community> findCommunityWithStr(String str){
+		Session session2=this.sessionFactory.getCurrentSession();
+		Query query=session2.createQuery("from Community where tag= ? and title like ?");
+		query.setParameter(0, "puppy");
+		query.setParameter(1, "%"+str+"%");
+		List<Community> communitys=query.list();
+		return communitys;
+	}
+	
+	//搜索经验贴
+	public List<Community> findCommunityWithStrE(String str){
+		Session session3=this.sessionFactory.getCurrentSession();
+		Query query=session3.createQuery("from Community where tag= ? and title like ?");
+		query.setParameter(0, "experience");
+		query.setParameter(1, "%"+str+"%");
+		List<Community> communitys=query.list();
+		return communitys;
+		
+	}
+
 }
