@@ -133,6 +133,8 @@ public class search extends AppCompatActivity implements ViewPager.OnPageChangeL
                             list.add(3,search_look.newInstance());
                             list.remove(4);
                             list.add(4,search_experience.newInstance());
+                            list.remove(5);
+                            list.add(5,search_find.newInstance());
                             viewPager.setAdapter( new FragmentAdapter(getSupportFragmentManager(),list));
                             viewPager.setCurrentItem(3);
                             ym2.setTextColor(getResources().getColor(R.color.rrr));
@@ -159,7 +161,7 @@ public class search extends AppCompatActivity implements ViewPager.OnPageChangeL
                            ym4.setOnClickListener(new View.OnClickListener() {
                                @Override
                                public void onClick(View view) {
-                                   viewPager.setCurrentItem(2);
+                                   viewPager.setCurrentItem(5);
                                    ym2.setTextColor(getResources().getColor(R.color.bbb));
                                    ym3.setTextColor(getResources().getColor(R.color.bbb));
                                    ym4.setTextColor(getResources().getColor(R.color.rrr));
@@ -249,6 +251,8 @@ public class search extends AppCompatActivity implements ViewPager.OnPageChangeL
         list.add(NotFoundActivity.newInstance());
         list.add(search_look.newInstance());
         list.add(search_experience.newInstance());
+        //寻找页面
+        list.add(search_find.newInstance());
         /*
         这两个页面是搜索后展示的页面：只有数据不同，形式相同
         list.add(search_look.newInstance);
