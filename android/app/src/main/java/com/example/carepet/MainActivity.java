@@ -7,6 +7,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import lrq.com.addpopmenu.PopMenu;
 import lrq.com.addpopmenu.PopMenuItem;
 import lrq.com.addpopmenu.PopMenuItemListener;
@@ -23,6 +24,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
@@ -34,15 +37,31 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carepet.Community.AddExperience;
+import com.example.carepet.Community.ListAdapter;
 import com.example.carepet.PostPuppy.CommonUtil;
 import com.example.carepet.PostPuppy.ReleaseMessageActivity;
+import com.example.carepet.entity.Community;
+import com.example.carepet.entity.User;
+import com.example.carepet.oss.OssService;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
+
+import static com.baidu.mapapi.BMapManager.getContext;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout Drawer;
@@ -62,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
     private String headPath;
     private SharedPreferences sharedPreferences;
     private String currentheadName;
+    private Handler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +92,41 @@ public class MainActivity extends AppCompatActivity {
         initTabBar();
         initPop();
 
+        getData();
+        handler = new Handler() {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                String object = (String) msg.obj;
+                Gson gson = new Gson();
+                User user=gson.fromJson(object,User.class);
+                String txstr=user.getTouxiang();
+                Log.e("1",txstr);
+                nick_phone.setText(user.getPassword());
+                nick_name.setText(user.getUsername());
+/*              getHeadFromSD(nick_image);*/
+                nick_image.setAdjustViewBounds(true);
+                nick_image.setMaxHeight(180);
+                nick_image.setMaxWidth(180);
+                if (txstr.isEmpty()) {
+                    //默认的头像
+                    nick_image.setImageResource(R.drawable.tx);
+
+                } else {
+                    FileInputStream fs = null;
+                    try {
+                        Log.e("111", txstr);
+                        fs = new FileInputStream("/sdcard/myHead/" + txstr);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    Bitmap bitmap = BitmapFactory.decodeStream(fs);
+                    nick_image.setImageBitmap(bitmap);
+                    touxiang.setImageBitmap(bitmap);
+                }
+            }
+
+        };
 
         Drawer.closeDrawer(GravityCompat.END);
         navigationView.setItemIconTintList(null);
@@ -107,17 +163,18 @@ public class MainActivity extends AppCompatActivity {
         nick_name=(TextView) headerLayout.findViewById(R.id.nick_name);
         nick_image=(ImageView)headerLayout.findViewById(R.id.nick_image);
 
-        nick_phone.setText("12345555");
-        nick_name.setText("可乐加冰");
+        /*nick_phone.setText("12345555");
+        nick_name.setText("可乐加冰");*/
 //        nick_image.setImageResource(R.drawable.tx);
+
         //设置图像大小时，必须先有第一句才可以进行设置
 //        String value = ps.getString("headName","");
 //        headPath=value+"head.jpg";
-        getHeadFromSD(nick_image);
+        /*getHeadFromSD(nick_image);
 
         nick_image.setAdjustViewBounds(true);
         nick_image.setMaxHeight(180);
-        nick_image.setMaxWidth(180);
+        nick_image.setMaxWidth(180);*/
 
         /*点击头像跳转到上传头像界面*/
         nick_image.setOnClickListener(new View.OnClickListener() {
@@ -131,6 +188,35 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void getData() {
+       /* 利用SharedPreferences 获取到userid；*/
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL("http://192.168.43.65:8080/CarePet/user/getuser?id=" + 1);
+                    URLConnection conn = url.openConnection();
+                    InputStream in = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+                    String info = reader.readLine();
+                    Log.e("user", "user" + info);
+                    wrapperMessage(info);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    private void wrapperMessage(String info) {
+        Message msg = Message.obtain();
+        msg.obj = info;
+        handler.sendMessage(msg);
+
     }
 
     private void getHeadFromSD(ImageView nick_image) {
