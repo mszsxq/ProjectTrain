@@ -54,4 +54,13 @@ public class FindTableDao {
 		}
 		return findTables2;
 	}
+//搜索
+	public List<FindTable> liststrf(String str){
+		Session session=this.sessionFactory.getCurrentSession();
+		Query query=session.createQuery("from FindTable where title like ?");
+		query.setParameter(0, "%"+str+"%");
+		List<FindTable> findtables=query.list();
+		return findtables;
+		
+	}
 }

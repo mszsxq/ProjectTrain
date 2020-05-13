@@ -67,4 +67,24 @@ public class FindTableController {
 		model.addAttribute("findTables", findTablestring);
 		return "list";
 	}
+	@RequestMapping("/liststrf")
+	public String list(@RequestParam String sousuo,HttpServletRequest req,HttpServletResponse rep) {
+		rep.setCharacterEncoding("UTF-8");
+		rep.setContentType("text/html;charset=UTF-8");
+		Gson gson=new Gson();
+		List<FindTable> findTables=findTableService.liststrf(sousuo);
+		String findTablestring=gson.toJson(findTables);
+		System.out.println(findTablestring);
+		PrintWriter writer;
+		try {
+			writer = rep.getWriter();
+			writer.println(findTablestring);
+		    writer.flush();
+		    writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return findTablestring;
+	}
 }

@@ -64,4 +64,9 @@ public class FindTableService {
 	public List<FindTable> listSameCity(String city) {
 		return this.findTableDao.findSameCity(city);
 	}
+//搜索
+	@Transactional(readOnly = false)
+	public List<FindTable> liststrf(String str) {
+		return this.findTableDao.liststrf(str);
+	}
 }
