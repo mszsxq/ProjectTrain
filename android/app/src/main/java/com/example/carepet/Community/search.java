@@ -48,33 +48,8 @@ public class search extends AppCompatActivity implements ViewPager.OnPageChangeL
     private ImageView ymimageview;
     private TextView ymtextview;
     int i=0;
-    private int puttynum;
-    private String info;
-    private String info2;
-    private int experiencenum;
     private SharedPreferences p;
     private SharedPreferences pl;
-    private Handler handler = new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            String object = (String) msg.obj;
-            Gson gson = new Gson();
-            List<Community> list = gson.fromJson(object, new TypeToken<List<Community>>() {}.getType());
-            Log.e("list",list.toString());
-        }
-    };
-    private Handler handler2 = new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            String object = (String) msg.obj;
-            Gson gson = new Gson();
-            List<Community> list = gson.fromJson(object, new TypeToken<List<Community>>() {}.getType());
-            Log.e("list2",list.toString());
-        }
-
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,8 +102,6 @@ public class search extends AppCompatActivity implements ViewPager.OnPageChangeL
                             SharedPreferences.Editor editor=p.edit();
                             editor.putString("sousuo",str);
                             editor.commit();
-                            toServerPuppy(str);
-                            toServerExperience(str);
                             list.remove(3);
                             list.add(3,search_look.newInstance());
                             list.remove(4);
@@ -172,64 +145,6 @@ public class search extends AppCompatActivity implements ViewPager.OnPageChangeL
                 });
             }
         });
-    }
-    private void toServerExperience(final String str) {
-        new Thread(){
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(" http://192.168.43.65:8080/CarePet/community/liststre?sousuo="+str);
-                    URLConnection conn = url.openConnection();
-                    InputStream in = conn.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
-                    info = reader.readLine();
-                    Log.e("num1",experiencenum+"");
-                    Log.i("2222","sasa"+info);
-                    wrapperMessage2(info);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
-    }
-    private void toServerPuppy(final String str) {
-        new Thread(){
-            @Override
-            public void run() {
-                try {
-                    URL url = new URL(" http://192.168.43.65:8080/CarePet/community/liststrp?sousuo="+str);
-                    URLConnection conn = url.openConnection();
-                    InputStream in = conn.getInputStream();
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
-                    info2 = reader.readLine();
-                    Log.e("num2",puttynum+"");
-                    Log.i("llll","sasa"+info);
-                    wrapperMessage(info2);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
-        
-    }
-
-    private void wrapperMessage(String info) {
-        Message msg = Message.obtain();
-        msg.obj =info;
-        handler.sendMessage(msg);
-    }
-    private void wrapperMessage2(String info) {
-        Message msg=Message.obtain();
-        msg.obj=info;
-        handler2.sendMessage(msg);
     }
 
     private void initView() {

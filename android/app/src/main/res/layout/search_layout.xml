@@ -81,7 +81,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/white"
             android:textColor="#FCD9DD"
-            android:text="经验"
+            android:text="动态"
             android:textSize="18sp"
             android:textStyle="bold"
             style="?android:attr/borderlessButtonStyle"
@@ -95,7 +95,7 @@
             android:layout_marginLeft="80dp"
             android:layout_toRightOf="@id/ym2"
             android:background="@android:color/white"
-            android:text="动态"
+            android:text="经验"
             android:textColor="#B4D1E1"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -113,12 +113,13 @@
             android:textSize="18sp"
             android:textStyle="bold" />
     </RelativeLayout>
-    <androidx.viewpager.widget.ViewPager
+    <com.example.carepet.Community.NoSrollViewPager
         android:layout_below="@+id/ymtablayout"
         android:id="@+id/ymtab_viewpager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:isScrollContainer="false"
         android:background="@android:color/white"/>
     <ImageView  android:layout_below="@+id/ymtablayout"
         android:layout_width="match_parent"

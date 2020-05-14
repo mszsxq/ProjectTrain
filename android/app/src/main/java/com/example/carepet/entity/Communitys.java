@@ -1,16 +1,16 @@
 package com.example.carepet.entity;
 
 public class Communitys {
-        private String title;
-        private String imgjson;
-        private String content;
-        private int userId;
-        private String name;
-        private String headName;
-        private String time;
-        private String city;
-        private String tag;
-        private int flag;
+        private String title;//标题
+        private String imgjson;//内容图
+        private String content;//n内容
+        private int userId;//用户ID
+        private String name;//
+        private String headName;//
+        private String time;//发布时间
+        private String city;//城市
+        private String tag;//puppy 和experience
+        private int flag;//0和1
 
         public String getName() {
             return name;

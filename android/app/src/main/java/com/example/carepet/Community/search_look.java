@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.carepet.R;
 import com.example.carepet.entity.Community;
@@ -38,6 +39,7 @@ public class search_look extends Fragment {
     private SharedPreferences p1;
     private String sousuo;
     private Handler handler;
+    private ImageView notf;
 
     public static search_look newInstance() {
         search_look fragment=new search_look();
@@ -47,6 +49,7 @@ public class search_look extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recyclerview_layout ,container, false);
         final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
+        notf=rootView.findViewById(R.id.notf);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(1,
                 StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
@@ -59,8 +62,10 @@ public class search_look extends Fragment {
                 String object = (String) msg.obj;
                 Gson gson = new Gson();
                 List<Communitys> list = gson.fromJson(object, new TypeToken<List<Communitys>>() {}.getType());
+                if(list.size()==0){
+                    notf.setVisibility(View.VISIBLE);
+                }
                 ListAdapter listAdapter = new ListAdapter(list,getContext()); //创建适配器，并且导入数据list
-
                 listAdapter.notifyDataSetChanged();
                 recyclerView.setAdapter(listAdapter);//布局导入适配器
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
