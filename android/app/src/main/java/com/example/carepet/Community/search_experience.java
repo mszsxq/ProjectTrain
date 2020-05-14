@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.carepet.R;
 import com.example.carepet.entity.Community;
+import com.example.carepet.entity.Communitys;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -54,7 +55,7 @@ public class search_experience extends Fragment {
                 super.handleMessage(msg);
                 String object = (String) msg.obj;
                 Gson gson = new Gson();
-                List<Community> list = gson.fromJson(object, new TypeToken<List<Community>>() {}.getType());
+                List<Communitys> list = gson.fromJson(object, new TypeToken<List<Communitys>>() {}.getType());
                 ListAdapter listAdapter = new ListAdapter(list,getContext()); //创建适配器，并且导入数据list
                 listAdapter.notifyDataSetChanged();
                 recyclerView.setAdapter(listAdapter);//布局导入适配器

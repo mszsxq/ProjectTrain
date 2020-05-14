@@ -25,7 +25,7 @@ public class UserService {
 	
 	@Transactional(readOnly = false)
 	public void updateUser(User user) {
-		this.userDao.uploadUser(user);
+		this.userDao.updateUser(user);
 	}
 	
 	@Transactional(readOnly = false)

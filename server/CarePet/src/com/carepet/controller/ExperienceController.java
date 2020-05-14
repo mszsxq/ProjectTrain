@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.carepet.entity.Community;
+import com.carepet.entity.Communitys;
 import com.carepet.utils.service.CommunityService;
 import com.carepet.utils.service.ExperienceService;
 import com.google.gson.Gson;
@@ -33,11 +34,11 @@ public class ExperienceController {
 		experienceService.saveCommunity(community2);
 	}
 	@ResponseBody
-	@RequestMapping("listall")
+	@RequestMapping("/listall")
 	public String list(Model model,HttpServletRequest req,HttpServletResponse rep) throws IOException {
 		rep.setCharacterEncoding("UTF-8");
 		Gson gson=new Gson();
-		List<Community> communities=experienceService.list();
+		List<Communitys> communities=experienceService.list();
 		String communityString=gson.toJson(communities);
 		model.addAttribute("findTables", communityString);
 		PrintWriter writer = rep.getWriter();

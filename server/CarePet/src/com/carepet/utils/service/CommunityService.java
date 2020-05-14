@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.carepet.ai.animal.AnimalClassify;
 import com.carepet.entity.Community;
+import com.carepet.entity.Communitys;
 import com.carepet.entity.FindTable;
 import com.carepet.entity.User;
 import com.carepet.utils.dao.CommunityDao;
@@ -59,7 +60,7 @@ public class CommunityService {
 	}
 	
 	@Transactional(readOnly = false)
-	public List<Community> list() {
+	public List<Communitys> list() {
 		return this.communityDao.findAllCommunity();
 	}
 	

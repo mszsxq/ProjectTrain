@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.carepet.ai.animal.AnimalClassify;
 import com.carepet.entity.Community;
+import com.carepet.entity.Communitys;
 import com.carepet.utils.dao.CommunityDao;
 import com.carepet.utils.dao.ExperienceDao;
 @Service
@@ -50,7 +51,7 @@ public class ExperienceService {
 	}
 	
 	@Transactional(readOnly = false)
-	public List<Community> list() {
+	public List<Communitys> list() {
 		return this.experienceDao.findAllExperience();
 	}
 	

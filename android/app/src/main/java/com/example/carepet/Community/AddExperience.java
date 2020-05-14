@@ -81,51 +81,17 @@ public class AddExperience extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 StringBuffer stringBuffer = new StringBuffer();
-                if (listImagePath.size()==0){
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss");// HH:mm:ss
-                    //获取当前时间
-                    Date date = new Date(System.currentTimeMillis());
-                    String time=simpleDateFormat.format(date);
-//                Community community=new Community();
-//                community.setId(2);
-//                community.setContent(content.toString());
-//                community.setImgjson(imgs);
-//                community.setTime(time);
-//                community.setTag("experience");
-//                community.setTitle(title.toString());
-//                community.setFlag(1);
-                    Community community = PackCommunity(content.getText().toString(),2,"kong",time,title.getText().toString(),"23head.jpg");
-                    sendToServer(community);
-                }else {
-                    for(int i=0;i<listImagePath.size();i++){
-                        int filenameLocal=listImagePath.get(i).split("/").length;
-                        OssService ossService = new OssService(getApplicationContext());
-                        String fileName=listImagePath.get(i).split("/")[filenameLocal-1];
-                        ossService.uploadImage("",listImagePath.get(i),"");
-                        Log.e("检测file",listImagePath.get(i));
-                        if(i==0){
-                            stringBuffer.append(fileName);
-                        }else{
-                            stringBuffer.append("--"+fileName);
-                        }
+                for(int i=0;i<listImagePath.size();i++){
+                    int filenameLocal=listImagePath.get(i).split("/").length;
+                    OssService ossService = new OssService(getApplicationContext());
+                    String fileName=listImagePath.get(i).split("/")[filenameLocal-1];
+                    ossService.uploadImage("",listImagePath.get(i),"");
+                    Log.e("检测file",listImagePath.get(i));
+                    if(i==0){
+                        stringBuffer.append(fileName);
+                    }else{
+                        stringBuffer.append("--"+fileName);
                     }
-                    String imgs = stringBuffer.toString();
-                    Log.e("Buffer",imgs);
-                    Log.e("图片",imgs);
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss");// HH:mm:ss
-                    //获取当前时间
-                    Date date = new Date(System.currentTimeMillis());
-                    String time=simpleDateFormat.format(date);
-//                Community community=new Community();
-//                community.setId(2);
-//                community.setContent(content.toString());
-//                community.setImgjson(imgs);
-//                community.setTime(time);
-//                community.setTag("experience");
-//                community.setTitle(title.toString());
-//                community.setFlag(1);
-                Community community = PackCommunity(content.getText().toString(),2,imgs,time,title.getText().toString(),"head.jpg");
-                sendToServer(community);
                 }
                 String imgs = stringBuffer.toString();
                 Log.e("Buffer",imgs);
@@ -142,27 +108,22 @@ public class AddExperience extends AppCompatActivity {
 //                community.setTag("experience");
 //                community.setTitle(title.toString());
 //                community.setFlag(1);
-//                Community community = PackCommunity(content.getText().toString(),2,imgs,time,title.getText().toString(),"head.jpg");
-//                sendToServer(community);
-                Intent intent = new Intent(AddExperience.this, MainActivity.class);
-                intent.putExtra("title", title.getText());
-                intent.putExtra("content", content.getText());
-                startActivity(intent);
+                Community community = PackCommunity(content.getText().toString(),1,imgs,time,title.getText().toString());
+                sendToServer(community);
                 finish();
             }
         });
 
     }
 
-    private Community PackCommunity(String toString, int i, String imgs, String time, String toString1,String pic) {
+    private Community PackCommunity(String toString, int i, String imgs, String time, String toString1) {
         Community community = new Community();
         community.setUserId(i);
         community.setContent(toString);
         community.setImgjson(imgs);
         community.setTime(time);
         community.setFlag(2);
-        community.setTag("exep");
-        community.setPic(pic);
+        community.setTag("exeperience");
         community.setTitle(toString1);
         return community;
     }

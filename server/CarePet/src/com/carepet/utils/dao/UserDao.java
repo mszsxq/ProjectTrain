@@ -24,10 +24,17 @@ public class UserDao {
 		session.save(user);
 	}
 	
-	public void uploadUser(User user) {
+	public void updateUserTouxiang(String headName,int id) {
 		Session session=this.sessionFactory.getCurrentSession();
-		session.update(user);
+		User user=session.get(User.class, id);
+		user.setTouxiang(headName);
+		session.save(user);
 	}
+	public void updateUser(User user) {
+		Session session=this.sessionFactory.getCurrentSession();
+		session.save(user);
+	}
+	
 	
 	public void deleteUser(int id) {
 		Session session=this.sessionFactory.getCurrentSession();

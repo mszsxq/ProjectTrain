@@ -16,5 +16,6 @@ public class ChangePhotoDao {
 		Session session=this.sessionFactory.getCurrentSession();
 		User user=session.get(User.class, id);
 		user.setTouxiang(head);
+		session.save(user);
 	}
 }

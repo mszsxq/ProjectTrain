@@ -187,7 +187,7 @@ public class ReleaseMessageActivity extends AppCompatActivity {
                 try {
                     Gson gson = new Gson();
                     String jsonObject = gson.toJson(community);
-                    URL url = new URL("http://192.168.43.65:8080/CarePet/community/insertcommunity?community="+jsonObject+"");
+                    URL url = new URL("http://192.168.137.1:8080/CarePet/community/insertcommunity?community="+jsonObject+"");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
@@ -205,10 +205,11 @@ public class ReleaseMessageActivity extends AppCompatActivity {
     }
     public Community PackCommunity(String content,int id,String images,String time,String title){
         Community community = new Community();
-        community.setId(id);
+        community.setUserId(id);
         community.setContent(content);
         community.setImgjson(images);
         community.setTime(time);
+        community.setFlag(1);
         community.setTag("puppy");
         community.setTitle(title);
         return community;

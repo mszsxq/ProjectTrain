@@ -21,6 +21,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.bumptech.glide.Glide;
 import com.example.carepet.R;
 import com.example.carepet.entity.Community;
+import com.example.carepet.entity.Communitys;
 import com.example.carepet.oss.OssService;
 
 import java.io.File;
@@ -35,7 +36,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private final int STATE_EXPANDED = 3;//文本超过限定行数，被点击全文展开
     private SparseArray<Integer> mTextStateList;
     private Context context;
-    private List<Community> mDataList;
+    private List<Communitys> mDataList;
     private ArrayList<String> imgList=new ArrayList<>();
     //private  int[] imageViewList={R.drawable.k1,R.drawable.k2};
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -66,7 +67,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
 
 
-    public  ListAdapter(List<Community> listDatas,Context context){
+    public  ListAdapter(List<Communitys> listDatas,Context context){
         this.context=context;
         mDataList = listDatas;
         mTextStateList = new SparseArray<>();
@@ -85,20 +86,27 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         imgList = new ArrayList<>();
 
-        Community listData = mDataList.get(position);
+        Communitys listData = mDataList.get(position);
         Log.e("数据",listData.toString());
-        File file=new File(context.getFilesDir(),"oss"+listData.getPic());
+        File file=new File(context.getFilesDir(),"oss/"+listData.getHeadName());
         if(!file.exists()){
             OssService ossService = new OssService(context);
-            ossService.downLoad("",listData.getPic());//listData.getPic()
+            Log.e("ss","下载前");
+//            Log.e("图片名称",listData.getPic());
+            ossService.downLoad("",listData.getHeadName());//listData.getPic()
+            Log.e("dd","下载后");
             Log.e("检测","dd");
         }
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-        holder.imageAvatar.setImageBitmap(bitmap);
+        if (bitmap==null){
+            holder.imageAvatar.setImageResource(R.drawable.tx);
+        }else {
+            holder.imageAvatar.setImageBitmap(bitmap);
+        }
 //        Glide.with(context)
 //                .load("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg")//https://picturer.oss-cn-beijing.aliyuncs.com/1588149087234.jpg
 //                .into(holder.imageAvatar);
-        holder.nameText.setText(listData.getId()+"");
+        holder.nameText.setText(listData.getName()+"");
         holder.timeText.setText(listData.getTime());
         String imgjson=listData.getImgjson();
         //List<String> imgList = new ArrayList<>();
@@ -112,7 +120,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             list.add(imgjson);
         }
         for(int i=0;i<list.size();i++){
-            File pics=new File(context.getFilesDir(),"oss"+list.get(i));
+            File pics=new File(context.getFilesDir(),"oss/"+list.get(i));
             Log.e("file",list.get(i)+"");
             if(!pics.exists()){
                 OssService ossService = new OssService(context);

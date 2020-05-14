@@ -20,6 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.carepet.R;
 import com.example.carepet.entity.Community;
+import com.example.carepet.entity.Communitys;
 import com.example.carepet.oss.OssService;
 
 
@@ -35,7 +36,7 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
     private final int STATE_EXPANDED = 3;//文本超过限定行数，被点击全文展开
     private SparseArray<Integer> mTextStateList;
     private Context context;
-    private List<Community> mDataList;
+    private List<Communitys> mDataList;
     private ArrayList<String> imgList=new ArrayList<>();
     //private  int[] imageViewList={R.drawable.k1,R.drawable.k2};
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -59,17 +60,17 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
             name = (TextView) itemView.findViewById(R.id.title);
             content = (TextView) itemView.findViewById(R.id.content);
             expandOrCollapse = (TextView) itemView.findViewById(R.id.tv_expand_or_collapse);
-            relativeLayout=(RelativeLayout)itemView.findViewById(R.id.viewpager);
+            relativeLayout=(RelativeLayout)itemView.findViewById(R.id.viewpager1);
         }
     }
 
 
 
 
-    public  ExperienceListAdapter(List<Community> listDatas,Context context){
+    public  ExperienceListAdapter(List<Communitys> listDatas,Context context){
         this.context=context;
         mDataList = listDatas;
-        Log.e("数据",listDatas.get(0).toString());
+//        Log.e("数据",listDatas.get(0).toString());
         mTextStateList = new SparseArray<>();
     }
 
@@ -86,12 +87,14 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
     public void onBindViewHolder(final ExperienceListAdapter.ViewHolder holder, final int position) {
         imgList = new ArrayList<>();
 
-        Community listData = mDataList.get(position);
+        Communitys listData = mDataList.get(position);
         Log.e("数据",listData.toString());
-        File file=new File(context.getFilesDir(),"oss/"+listData.getPic());
+        File file=new File(context.getFilesDir(),"oss/"+listData.getHeadName());
         if(!file.exists()){
             OssService ossService = new OssService(context);
-            ossService.downLoad("",listData.getPic());//listData.getPic()
+            Log.e("ss","下载前");
+            ossService.downLoad("",listData.getHeadName());//listData.getPic()
+            Log.e("dd","下载后");
             Log.e("检测","dd");
         }
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -104,13 +107,14 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
 //        Glide.with(context)
 //                .load("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg")//https://picturer.oss-cn-beijing.aliyuncs.com/1588149087234.jpg
 //                .into(holder.imageAvatar);
-        holder.nameText.setText(listData.getId()+"");
+        holder.nameText.setText(listData.getName()+"");
         holder.timeText.setText(listData.getTime());
         String imgjson=listData.getImgjson();
         //List<String> imgList = new ArrayList<>();
         List<String> list = new ArrayList<>();
         if (imgjson.isEmpty()){
             holder.relativeLayout.setVisibility(View.GONE);
+            holder.linearLayout.setVisibility(View.GONE);
         }else if (imgjson.contains("--")) {
             String[] s = imgjson.split("--");
             for(String ss:s){

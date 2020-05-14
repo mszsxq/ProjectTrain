@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.carepet.R;
 import com.example.carepet.entity.Community;
+import com.example.carepet.entity.Communitys;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -39,7 +40,7 @@ public class ExperienceFragment extends Fragment {
             super.handleMessage(msg);
             String object = (String) msg.obj;
             Gson gson = new Gson();
-            List<Community> list = gson.fromJson(object, new TypeToken<List<Community>>() {}.getType());
+            List<Communitys> list = gson.fromJson(object, new TypeToken<List<Communitys>>() {}.getType());
 //            List<Community> list = new ArrayList<>();
 //            Community community = new Community();
 //            community.setId(1);
@@ -50,7 +51,6 @@ public class ExperienceFragment extends Fragment {
             ExperienceListAdapter listAdapter = new  ExperienceListAdapter(list,getContext()); //创建适配器，并且导入数据list
             recyclerView.setAdapter(listAdapter);//布局导入适配器
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-
         }
     };
 
@@ -88,6 +88,10 @@ public class ExperienceFragment extends Fragment {
             public void run() {
                 try {
                     Gson gson = new Gson();
+<<<<<<< Updated upstream
+=======
+//                    URL url = new URL("http://192.168.43.65:8080/CarePet/community/listall");
+>>>>>>> Stashed changes
                     URL url = new URL("http://192.168.137.1:8080/CarePet/experience/listall");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();

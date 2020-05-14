@@ -11,6 +11,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 
 import com.carepet.entity.Community;
+import com.carepet.entity.Communitys;
+import com.carepet.entity.User;
 import com.carepet.entity.Community;
 
 @Repository
@@ -35,10 +37,27 @@ public class CommunityDao {
 		session.delete(community);
 	}
 	
-	public List<Community> findAllCommunity(){
+	public List<Communitys> findAllCommunity(){
 		Session session=this.sessionFactory.getCurrentSession();
-		Query query=session.createQuery("from Community");
-		return query.list();
+		System.out.println("flag=====1");
+		Query query=session.createQuery("from Community where flag=1");
+		List<Community> list=query.list();
+		List<Communitys> cs=new ArrayList<>();
+		for(int i=0;i<list.size();i++) {
+			String title=list.get(i).getTitle();
+			String imgjson=list.get(i).getImgjson();
+			String content=list.get(i).getContent();
+			int userId=list.get(i).getUserId();
+			String time=list.get(i).getTime();
+			Query query1=session.createQuery("from User where id="+userId);
+			User user=(User) query1.uniqueResult();
+			String name=user.getUsername();
+			String headName=user.getTouxiang();
+			Communitys communitys=new Communitys(title,imgjson, content,userId,name,headName,time);
+			System.out.println(communitys.toString());
+			cs.add(communitys);
+		}
+		return cs;
 	}
 	public List<Community> findSameCity(String city){
 		Session session=this.sessionFactory.getCurrentSession();
@@ -52,7 +71,7 @@ public class CommunityDao {
 		}
 		return communitys2;
 	}
-	//搜索分享帖
+	//鎼滅储鍒嗕韩甯�
 	public List<Community> findCommunityWithStr(String str){
 		Session session2=this.sessionFactory.getCurrentSession();
 		Query query=session2.createQuery("from Community where tag= ? and title like ?");
@@ -62,7 +81,7 @@ public class CommunityDao {
 		return communitys;
 	}
 	
-	//搜索经验贴
+	//鎼滅储缁忛獙璐�
 	public List<Community> findCommunityWithStrE(String str){
 		Session session3=this.sessionFactory.getCurrentSession();
 		Query query=session3.createQuery("from Community where tag= ? and title like ?");

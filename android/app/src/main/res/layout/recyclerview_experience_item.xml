@@ -33,7 +33,7 @@
     </RelativeLayout>
     <RelativeLayout
         android:layout_below="@+id/head_navigation_bar"
-        android:id="@+id/viewpager"
+        android:id="@+id/viewpager1"
         android:layout_width="match_parent"
         android:layout_height="400dp">
         <androidx.viewpager.widget.ViewPager
@@ -42,7 +42,7 @@
             android:layout_height="400dp"/>
     </RelativeLayout>
     <LinearLayout
-        android:layout_below="@+id/viewpager"
+        android:layout_below="@+id/viewpager1"
         android:id="@+id/dot_horizontal"
         android:layout_width="match_parent"
         android:layout_height="30dp"
