@@ -32,8 +32,6 @@ public class CommunityService {
 			urlpath=imgjson;
 		}
 		String type=new AnimalClassify().animal(urlpath);
-		User user=userDao.findUser(community.getUserId());
-		imgjson=user.getUsername()+"--"+user.getTouxiang()+"--"+imgjson;
 		community.setImgjson(imgjson);
 		community.setContent("#"+type+community.getContent());
 		this.communityDao.saveCommunity(community);
@@ -69,11 +67,11 @@ public class CommunityService {
 		return this.communityDao.findSameCity(city);
 	}
 @Transactional(readOnly = false)
-	public List<Community> listWithStrP(String str){
+	public List<Communitys> listWithStrP(String str){
 		return this.communityDao.findCommunityWithStr(str);
 	}
 	@Transactional(readOnly = false)
-	public List<Community> listWithStrE(String str){
+	public List<Communitys> listWithStrE(String str){
 		return this.communityDao.findCommunityWithStrE(str);
 	}
 }

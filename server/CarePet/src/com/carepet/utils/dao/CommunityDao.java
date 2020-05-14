@@ -72,24 +72,53 @@ public class CommunityDao {
 		return communitys2;
 	}
 	//鎼滅储鍒嗕韩甯�
-	public List<Community> findCommunityWithStr(String str){
+	public List<Communitys> findCommunityWithStr(String str){
 		Session session2=this.sessionFactory.getCurrentSession();
 		Query query=session2.createQuery("from Community where tag= ? and title like ?");
 		query.setParameter(0, "puppy");
 		query.setParameter(1, "%"+str+"%");
-		List<Community> communitys=query.list();
-		return communitys;
+		List<Community> list=query.list();
+		List<Communitys> cs=new ArrayList<>();
+		for(int i=0;i<list.size();i++) {
+			String title=list.get(i).getTitle();
+			String imgjson=list.get(i).getImgjson();
+			String content=list.get(i).getContent();
+			int userId=list.get(i).getUserId();
+			String time=list.get(i).getTime();
+			Query query1=session2.createQuery("from User where id="+userId);
+			User user=(User) query1.uniqueResult();
+			String name=user.getUsername();
+			String headName=user.getTouxiang();
+			Communitys communitys=new Communitys(title,imgjson, content,userId,name,headName,time);
+			System.out.println(communitys.toString());
+			cs.add(communitys);
+		}
+		return cs;
 	}
 	
 	//鎼滅储缁忛獙璐�
-	public List<Community> findCommunityWithStrE(String str){
+	public List<Communitys> findCommunityWithStrE(String str){
 		Session session3=this.sessionFactory.getCurrentSession();
 		Query query=session3.createQuery("from Community where tag= ? and title like ?");
 		query.setParameter(0, "experience");
 		query.setParameter(1, "%"+str+"%");
-		List<Community> communitys=query.list();
-		return communitys;
-		
+		List<Community> list=query.list();
+		List<Communitys> cs=new ArrayList<>();
+		for(int i=0;i<list.size();i++) {
+			String title=list.get(i).getTitle();
+			String imgjson=list.get(i).getImgjson();
+			String content=list.get(i).getContent();
+			int userId=list.get(i).getUserId();
+			String time=list.get(i).getTime();
+			Query query1=session3.createQuery("from User where id="+userId);
+			User user=(User) query1.uniqueResult();
+			String name=user.getUsername();
+			String headName=user.getTouxiang();
+			Communitys communitys=new Communitys(title,imgjson, content,userId,name,headName,time);
+			System.out.println(communitys.toString());
+			cs.add(communitys);
+		}
+		return cs;
 	}
 
 }

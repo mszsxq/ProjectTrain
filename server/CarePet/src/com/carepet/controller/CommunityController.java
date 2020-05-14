@@ -66,7 +66,7 @@ public class CommunityController {
 	
 	@RequestMapping("/liststrp")
 	public String liststrp(@RequestParam String sousuo,HttpServletRequest req,HttpServletResponse rep2) throws IOException {
-		List<Community> communities=communityService.listWithStrP(sousuo);
+		List<Communitys> communities=communityService.listWithStrP(sousuo);
 		Gson gson2=new Gson();
 		String communityString=gson2.toJson(communities);
 		PrintWriter writer = rep2.getWriter();
@@ -78,7 +78,7 @@ public class CommunityController {
 	}
 	@RequestMapping("/liststre")
 	public String liststre(@RequestParam String sousuo,HttpServletRequest req,HttpServletResponse rep1) throws IOException {
-		List<Community> communities=communityService.listWithStrE(sousuo);
+		List<Communitys> communities=communityService.listWithStrE(sousuo);
 		Gson gson2=new Gson();
 		String communityString=gson2.toJson(communities);
 		PrintWriter writer = rep1.getWriter();

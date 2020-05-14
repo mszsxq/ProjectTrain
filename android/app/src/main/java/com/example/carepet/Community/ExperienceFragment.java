@@ -88,11 +88,8 @@ public class ExperienceFragment extends Fragment {
             public void run() {
                 try {
                     Gson gson = new Gson();
-<<<<<<< Updated upstream
-=======
 //                    URL url = new URL("http://192.168.43.65:8080/CarePet/community/listall");
->>>>>>> Stashed changes
-                    URL url = new URL("http://192.168.137.1:8080/CarePet/experience/listall");
+                    URL url = new URL("http://192.168.43.65:8080/CarePet/experience/listall");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
