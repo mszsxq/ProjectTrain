@@ -18,7 +18,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.carepet"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -74,4 +74,7 @@ dependencies {
     implementation 'com.squareup.okio:okio:1.9.0'
     implementation 'com.google.code.gson:gson:2.8.1'
     implementation 'me.shouheng.compressor:compressor:1.3.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
+    implementation 'com.library.tangxiaolv:telegramgallery:1.0.5'
 }

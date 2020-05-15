@@ -253,15 +253,17 @@ public class MainActivity extends AppCompatActivity {
                                 intent.putExtra("flag",0);
                                 startActivity(intent);
 
-                                Toast.makeText(MainActivity.this, "你点击了第0个位置", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(MainActivity.this, "你点击了第0个位置", Toast.LENGTH_SHORT).show();
                                 break;
                             case 1:
                                 Intent intent1=new Intent(MainActivity.this, AddExperience.class);
                                 startActivity(intent1);
-                                Toast.makeText(MainActivity.this, "你点击了第1个位置", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(MainActivity.this, "你点击了第1个位置", Toast.LENGTH_SHORT).show();
                                 break;
                             case 2:
-                                Toast.makeText(MainActivity.this, "你点击了第2个位置", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(),NewFindTable.class));
+
+//                                Toast.makeText(MainActivity.this, "你点击了第2个位置", Toast.LENGTH_SHORT).show();
                                 break;
                         }
                     }
