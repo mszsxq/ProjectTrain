@@ -163,6 +163,7 @@ public class NewFindTable extends Activity {
                     Request request = new Request.Builder()
                             .url("http://175.24.16.26:8080/CarePet/findtable/insertfindtable?findtable="+findtableString)
                             .build();
+                    Log.e("url         ","http://175.24.16.26:8080/CarePet/findtable/insertfindtable?findtable="+findtableString);
                     Call call = okHttpClient.newCall(request);
                     call.enqueue(new Callback() {
                         @Override
