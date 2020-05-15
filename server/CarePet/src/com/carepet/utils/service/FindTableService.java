@@ -22,7 +22,11 @@ public class FindTableService {
 	@Transactional(readOnly = false)
 	public void saveFindTable(FindTable findTable) {
 		String imgjson=findTable.getImgjson();
+		System.out.println(findTable);
 		String urlpath="";
+		if (imgjson==null) {
+			imgjson="https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg";
+		}
 		if (imgjson.contains("--")) {
 			urlpath=imgjson.split("--")[0];
 		}else {
