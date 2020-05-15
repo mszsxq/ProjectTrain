@@ -39,7 +39,7 @@
         android:textColor="@color/gray"
         android:paddingVertical="6dp"
         android:background="@null"
-        android:text="写下标题收获更多赞哦！！" />
+        android:text="写下标题收获更多赞哦!!" />
     <LinearLayout
         android:background="@color/gray"
         android:layout_width="match_parent"
