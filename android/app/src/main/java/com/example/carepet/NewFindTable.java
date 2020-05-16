@@ -19,6 +19,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.bumptech.glide.Glide;
 import com.example.carepet.entity.FindTable;
+import com.example.carepet.oss.OssService;
 import com.google.gson.Gson;
 import com.tangxiaolv.telegramgallery.GalleryActivity;
 import com.tangxiaolv.telegramgallery.GalleryConfig;
@@ -136,6 +137,7 @@ public class NewFindTable extends Activity {
 
                     break;
                 case R.id.fabu:
+                    OssService ossService=new OssService(getApplicationContext());
                     String te1=mEditText.getText().toString().trim();
                     String te2=mEditText1.getText().toString().trim();
                     String didian =dizhi.getText().toString().trim();
@@ -145,37 +147,47 @@ public class NewFindTable extends Activity {
                     findTable.setLongitude(lon);
                     findTable.setLatitude(lat);
                     SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    findTable.setTime(ft.format(new Date()));
+                    findTable.setUserid(1);
+                    findTable.setCity(dizhi1.getText().toString());
                     String imgjson="";
                     for (String img:imgs){
                         String im=img.split("/")[img.split("/").length-1];
                         imgjson="https://picturer.oss-cn-beijing.aliyuncs.com/"+im+"--"+imgjson;
                         Log.e("img",img);
+                        if (img.equals(imgs.get(imgs.size()-1))){
+                            findTable.setImgjson(imgjson);
+                            Gson gson=new Gson();
+                            String findtableString=gson.toJson(findTable);
+                            ossService.uploadImage("",img,"http://175.24.16.26:8080/CarePet/findtable/insertfindtable?findtable="+findtableString);
+
+                        }else{
+                            ossService.uploadImage("",img,"");
+                        }
                     }
-                    findTable.setImgjson(imgjson);
+//                    findTable.setImgjson(imgjson);
 //                    https://picturer.oss-cn-beijing.aliyuncs.com/
-                    findTable.setTime(ft.format(new Date()));
-                    findTable.setUserid(1);
-                    findTable.setCity(dizhi1.getText().toString());
+;
 //                    findTable.setCity(CityInfo);
-                    Gson gson=new Gson();
-                    String findtableString=gson.toJson(findTable);
-                    OkHttpClient okHttpClient=new OkHttpClient();
-                    Request request = new Request.Builder()
-                            .url("http://175.24.16.26:8080/CarePet/findtable/insertfindtable?findtable="+findtableString)
-                            .build();
-                    Log.e("url         ","http://175.24.16.26:8080/CarePet/findtable/insertfindtable?findtable="+findtableString);
-                    Call call = okHttpClient.newCall(request);
-                    call.enqueue(new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            response.body().string();
-                        }
-                    });
+//                    Gson gson=new Gson();
+//                    String findtableString=gson.toJson(findTable);
+//                    OkHttpClient okHttpClient=new OkHttpClient();
+//                    Request request = new Request.Builder()
+//                            .url("http://175.24.16.26:8080/CarePet/findtable/insertfindtable?findtable="+findtableString)
+//                            .build();
+//                    Log.e("url         ","http://175.24.16.26:8080/CarePet/findtable/insertfindtable?findtable="+findtableString);
+//                    Call call = okHttpClient.newCall(request);
+//                    call.enqueue(new Callback() {
+//                        @Override
+//                        public void onFailure(Call call, IOException e) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onResponse(Call call, Response response) throws IOException {
+//                            response.body().string();
+//                        }
+//                    });
 //                    new OssService(getApplicationContext()).downLoad("","OIP.jpg");
                     finish();
                     break;
@@ -189,13 +201,16 @@ public class NewFindTable extends Activity {
                     dizhi.setText(dizhi3.getText());
                     break;
                 case R.id.noimg:
+                    String[] ss={"image/png","image/jpeg"};
                     GalleryConfig config = new GalleryConfig.Build()
                             .limitPickPhoto(3)
                             .singlePhoto(false)
                             .hintOfPick("this is pick hint")
-                            .filterMimeTypes(new String[]{"image/jpeg"})
+                            .filterMimeTypes(ss)
                             .build();
-                    GalleryActivity.openActivity(NewFindTable.this, reqCode, config);
+//                    GalleryActivity.openActivity(NewFindTable.this, reqCode, config);
+                    GalleryActivity.openActivity(NewFindTable.this, false,3,reqCode);
+
                     break;
             }
         }

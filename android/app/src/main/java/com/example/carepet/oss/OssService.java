@@ -22,10 +22,17 @@ import com.alibaba.sdk.android.oss.model.PutObjectResult;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.Nullable;
 import me.shouheng.compress.Compress;
 import me.shouheng.compress.strategy.Strategies;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class OssService {
     OSS oss;
@@ -94,17 +101,31 @@ public class OssService {
                 Log.d("ETag", result.getETag());
                 Log.d("RequestId", result.getRequestId());
 
-//                OkHttpClient client=new OkHttpClient();
-//                if (httpUrl!=null){
-//                    Request req = new Request.Builder()
-//                            .url(httpUrl)
-//                            .build();
-//                    try {
-//                        client.newCall(req).execute();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
+                OkHttpClient client=new OkHttpClient.Builder()
+                        .connectTimeout(15,TimeUnit.SECONDS)
+                        .readTimeout(15, TimeUnit.SECONDS)
+                        .writeTimeout(15, TimeUnit.MILLISECONDS)
+                        .build();
+                if (httpUrl!=null){
+                    Request req = new Request.Builder()
+                            .url(httpUrl)
+                            .build();
+                    Log.e("网络地址","    ");
+
+                    client.newCall(req).enqueue(new Callback() {
+
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.e("网络地址","    错误"+e.toString());
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Log.e("网络地址",response.toString());
+                        }
+                    });
+                }
 
             }
 

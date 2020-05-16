@@ -39,15 +39,20 @@ public class AnimalClassify {
         String url = "https://aip.baidubce.com/rest/2.0/image-classify/v1/animal";
         try {
             // 本地文件路径
-            String filePath = "C:\\";
+            String filePath = "C:\\Users\\Administrator\\Desktop\\";
+//             filePath = "C:\\Users\\dell\\Desktop\\";
 
-            
+            System.out.println("url为"+urlpath);
             // 注意这里仅为了简化编码每一次请求都去获取access_token，线上环境access_token有过期时间， 客户端可自行缓存，过期后重新获取。
             String accessToken = AuthService.getAuth();
             String imageName=urlpath.split("/")[urlpath.split("/").length-1];
             System.out.println(imageName);
             String imageFormat=imageName.split("\\.")[1];
             System.out.println(imageFormat);
+            java.io.File file=new java.io.File(filePath+imageName);
+//            if (!file.exists()) {
+//				file.mkdir();
+//			}
             java.io.File imageFile=new java.io.File(filePath+imageName);
             ImageIO.write(ImageIO.read(new URL(urlpath)),imageFormat, imageFile);
             byte[] imgData = FileUtil.readFileByBytes(imageFile.getAbsolutePath());
