@@ -17,11 +17,12 @@ import com.google.gson.Gson;
 @RequestMapping("/changephoto")
 public class ChangePhotoController {
 	@Resource
-	private UserDao changephoto;
+	private ChangePhotoService changephoto;
 	@RequestMapping("/change")
 	public void updateUserPhoto(@RequestParam String headname,@RequestParam int userId) {
 		System.out.println("photo");
 		String head=headname;
-		changephoto.updateUserTouxiang(head,userId);
+		System.out.println(head+userId);
+		changephoto.updateUser(head,userId);
 	}
 }

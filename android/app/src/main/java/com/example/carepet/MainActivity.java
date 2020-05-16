@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 int frgTag = navigationController.getSelected();
 //                int frgTag = fragmentTabHost.getCurrentTab();
                 Log.i("tag",frgTag+"");
-                intent.putExtra("userId","0001");
+                intent.putExtra("userId","1");
                 startActivity(intent);
             }
         });
@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("http://192.168.43.65:8080/CarePet/user/getuser?id=" + 1);
+                    URL url = new URL("http://192.168.137.1:8080/CarePet/user/getuser?id=" + 1);
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

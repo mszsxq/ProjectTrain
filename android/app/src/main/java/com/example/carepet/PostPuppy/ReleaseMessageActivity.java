@@ -187,7 +187,7 @@ public class ReleaseMessageActivity extends AppCompatActivity {
                 try {
                     Gson gson = new Gson();
                     String jsonObject = gson.toJson(community);
-                    URL url = new URL("http://192.168.43.65:8080/CarePet/community/insertcommunity?community="+jsonObject+"");
+                    URL url = new URL("http://192.168.137.1:8080/CarePet/community/insertcommunity?community="+jsonObject+"");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
