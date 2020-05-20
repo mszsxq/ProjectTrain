@@ -11,9 +11,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.etsy.android.grid.StaggeredGridView;
+import com.example.carepet.Community.search;
+import com.example.carepet.Community.search_find;
+import com.example.carepet.adapter.FootAdapter;
 import com.example.carepet.adapter.SearchAdapter;
 import com.example.carepet.entity.FindTable;
 import com.example.carepet.entity.MapContent;
@@ -23,12 +28,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -37,19 +40,49 @@ import androidx.fragment.app.Fragment;
 
 public class MapFragment extends Fragment {
     private GestureDetector gue;
-    private List<FindTable> findlist = new ArrayList<>();
+    private View view;
     private  StaggeredGridView gridView;
-    private SearchAdapter adapter;
-    private List<MapContent> dataList = new ArrayList<>();
     private List<MapContent> list = new ArrayList<>();
+    private SwipeRefreshView swipeRefreshLayout;
+    private ImageView mImageView;
+    private TextView medittext;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.map_layout, container, false);
+        view = inflater.inflate(R.layout.map_layout, container, false);
+        initView();
+        initData();
+        setListner();
+        return view;
+    }
+    private  void initView(){
         gridView = view.findViewById(R.id.gview);
+        swipeRefreshLayout=view.findViewById(R.id.swipeRefreshLayout);
         gue = new GestureDetector(getContext(), new MyGestureListener());
-        adapter = new SearchAdapter(getContext(), R.layout.map_search_item, getData());
-        gridView.setAdapter(adapter);
+        mImageView=(ImageView)view.findViewById(R.id.mimageview);
+        medittext=view.findViewById(R.id.medittext);
+    }
+    public void initData(){
+        MyAsnycTask myAsnycTask = new MyAsnycTask();
+        myAsnycTask.execute();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void  setListner(){
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getContext(), search_find.class);
+                startActivity(intent);
+            }
+        });
+        medittext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1=new Intent(getContext(),search_find.class);
+                startActivity(intent1);
+            }
+        });
         gridView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -67,19 +100,24 @@ public class MapFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        MyAsnycTask myAsnycTask = new MyAsnycTask();
-        myAsnycTask.execute();
+        swipeRefreshLayout.setOnRefreshListener(new RefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+               initData();
+               swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+//        swipeRefreshLayout.setOnLoadMoreListener(new SwipeRefreshView.OnLoadMoreListener()
+//        {
+//            @Override
+//            public void onLoadMore() {
+//                MyAsnycTask myAsnycTask = new MyAsnycTask();
+//                myAsnycTask.execute();
+//                swipeRefreshLayout.setLoading(false);
+//            }
+//
+//        });
 
-        return view;
-    }
-    private List<MapContent> getData(){
-        FindTable findTable =new FindTable();
-        findTable.setCity("石家庄");
-        findTable.setTitle("title");
-        MapContent mapContent = new MapContent();
-        mapContent.setFindTable(findTable);
-        dataList.add(mapContent);
-        return  dataList;
     }
     //滑动显示显示
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -98,6 +136,7 @@ public class MapFragment extends Fragment {
         }
     }
 
+    @SuppressLint("StaticFieldLeak")
     class MyAsnycTask extends AsyncTask<Integer, Integer, List<FindTable>> {
         //用来写等待时的UI（加载中转圈）
         @Override
@@ -109,8 +148,8 @@ public class MapFragment extends Fragment {
         protected List<FindTable> doInBackground(Integer... integers) {
 
 //            final String ip = "http://192.168.101.16:8080/CarePet/findtable/listall";
-            final String ip = "http://192.168.43.109:8080/CarePet/findtable/listall";
-//            final String ip ="http://175.24.16.26:8080/CarePet/findtable/listall";
+//            final String ip = "http://192.168.43.109:8080/CarePet/findtable/listall";
+            final String ip ="http://175.24.16.26:8080/CarePet/findtable/listall";
             URL url;
             String json = "";
             List<FindTable> findList = new ArrayList<>();
@@ -134,9 +173,9 @@ public class MapFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<FindTable> findTables) {
-            findlist=findTables;
-            if (findlist != null) {
-                for(FindTable f:findlist){
+            list.clear();
+            if (findTables != null) {
+                for(FindTable f: findTables){
                     Log.e("aaaaa", f.toString());
                     String jason=f.getImgjson();
                     String name =jason.split("--")[0];
@@ -151,8 +190,8 @@ public class MapFragment extends Fragment {
                 }
             }
             //findtable 数据 不更新问题
-            SearchAdapter adapter1= new SearchAdapter(getContext(), R.layout.map_search_item, list);
-            gridView.setAdapter(adapter1);
+            SearchAdapter adapter= new SearchAdapter(getContext(), R.layout.map_search_item, list);
+            gridView.setAdapter(adapter);
 
         }
     }

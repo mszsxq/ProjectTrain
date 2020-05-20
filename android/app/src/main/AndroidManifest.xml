@@ -60,7 +60,6 @@
         <activity android:name=".MapDetails"/>
         <activity android:name=".NewFindTable" />
         <activity android:name="com.tangxiaolv.telegramgallery.GalleryActivity" />
-
     </application>
 
 </manifest>

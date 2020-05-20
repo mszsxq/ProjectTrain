@@ -85,6 +85,6 @@ public class FindTableController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return findTablestring;
+		return null;
 	}
 }

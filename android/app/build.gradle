@@ -59,6 +59,7 @@ dependencies {
     implementation 'com.etsy.android.grid:library:1.0.5' // see changelog
     implementation 'me.majiajie:pager-bottom-tab-strip:+'
     implementation 'com.lrq.menu:addpopmenu:1.0.7'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     //地图
     implementation project(':SlideNestedPanel')
     implementation 'com.android.support:appcompat-v7:29.0.0'
@@ -67,7 +68,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.google.android.material:material:1.1.0-alpha09'
     implementation 'org.xutils:xutils:3.5.0'
-    implementation 'com.androidkun:XTabLayout:1.1.4'
+    implementation 'in.srain.cube:ptr-load-more:1.0.6'
+
+
     //liuchang
     implementation 'com.aliyun.dpa:oss-android-sdk:+'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
