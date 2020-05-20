@@ -73,4 +73,8 @@ public class FindTableService {
 	public List<FindTable> liststrf(String str) {
 		return this.findTableDao.liststrf(str);
 	}
+	@Transactional(readOnly = false)
+	public List<FindTable> listrencent() {
+		return this.findTableDao.listrecent();
+	}
 }

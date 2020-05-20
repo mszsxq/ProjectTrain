@@ -18,7 +18,6 @@ public class MapDetails extends AppCompatActivity {
     private TextView name;
     private TextView city;
     private TextView type;
-    private ImageView touxiang;
     private ImageView bimg;
     private MapContent mapContent;
     @Override
@@ -32,7 +31,6 @@ public class MapDetails extends AppCompatActivity {
     }
     private void setView(){
         String name1=mapContent.getName();
-        String touxiang1 =mapContent.getTouxiang();
         String bimg1= mapContent.getBimg();
         String city1=mapContent.getFindTable().getCity();
         String content1=mapContent.getFindTable().getContent();
@@ -43,12 +41,10 @@ public class MapDetails extends AppCompatActivity {
         city.setText(city1);
         content.setText(content1);
         type.setText(type1);
-        Glide.with(this).load(touxiang1).fitCenter().into(touxiang);
         Glide.with(this).load(bimg1).fitCenter().into(bimg);
     }
     public void getView(){
         title=findViewById(R.id.textView);
-        touxiang=findViewById(R.id.avatar);
         city=findViewById(R.id.textView1);
         name=findViewById(R.id.textView2);
         type=findViewById(R.id.textView3);
