@@ -13,4 +13,9 @@
     <color name="bbb">#B4D1E1</color>
     <color name="rrr">#FCD9DD</color>
     <color name="photopicker_background">#181819</color>
+
+    <color name="orange">#FFA500</color>
+    <color name="red">#FB2830</color>
+    <color name="alpha">#80000000</color>
+    <color name="orange_dark">#fe7900</color>
 </resources>

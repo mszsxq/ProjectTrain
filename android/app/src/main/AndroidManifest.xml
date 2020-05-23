@@ -36,8 +36,7 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="2xoGra94KHd666IrmIlUpNTzMs2qTVXk" />
-
-        <activity android:name=".MainActivity">
+        <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -60,6 +59,9 @@
         <activity android:name=".MapDetails"/>
         <activity android:name=".NewFindTable" />
         <activity android:name="com.tangxiaolv.telegramgallery.GalleryActivity" />
+        <activity android:name="com.example.carepet.Register"/>
+        <activity android:name="com.example.carepet.Forgetpwd"/>
+        <activity android:name="com.example.carepet.MainActivity"/>
     </application>
 
 </manifest>

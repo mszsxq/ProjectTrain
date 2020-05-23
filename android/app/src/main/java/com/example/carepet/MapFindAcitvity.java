@@ -525,7 +525,7 @@ public class MapFindAcitvity extends AppCompatActivity {
             public void run() {
                 try {
                     Log.e("pikaqiu","你说一二三，打碎了过往！");
-                    URL url = new URL("http://192.168.43.169:8080/CarePet/findtable/listall?a=1");
+                    URL url = new URL("http://175.24.16.26:8080/CarePet/findtable/listall?a=1");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
@@ -557,7 +557,7 @@ public class MapFindAcitvity extends AppCompatActivity {
                 try {
                     String userId = id+"";
                     Log.e("xx1",userId);
-                    URL url = new URL("http://192.168.43.169:8080/CarePet/user/getuser?id="+userId);
+                    URL url = new URL("http://175.24.16.26:8080/CarePet/user/getuser?id="+userId);
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
