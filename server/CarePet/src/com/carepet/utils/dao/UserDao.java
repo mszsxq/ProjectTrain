@@ -48,6 +48,13 @@ public class UserDao {
 		user=session.get(User.class, id);
 		return user;
 	}
+	public User findUserbyName(String name) {
+		Query query = this.sessionFactory.getCurrentSession().createQuery("from User where username = ?");
+		query.setParameter(0, name);
+		User user = (User) query.uniqueResult();
+		System.out.println("name"+user.getUsername());
+		return user;
+	}
 	public List<User> findAllUser(){
 		Session session=this.sessionFactory.getCurrentSession();
 		Query query=session.createQuery("from User");

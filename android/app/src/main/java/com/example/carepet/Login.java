@@ -265,7 +265,7 @@ public class Login extends AppCompatActivity {
 
                 try {
 
-                    URL url = new URL("http://192.168.43.81:8080/CarePet/user/ifuser?client="+client);
+                    URL url = new URL("http://175.24.16.26:8080/CarePet/user/ifuser?client="+client);
 
                     URLConnection conn = url.openConnection();
 

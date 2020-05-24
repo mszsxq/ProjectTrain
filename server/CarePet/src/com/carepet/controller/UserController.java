@@ -86,4 +86,32 @@ public class UserController {
 		}
 		return usering;
 	}
+	@RequestMapping("/ifuser")
+	public String loginif(@RequestParam String client,Model model,HttpServletRequest req,HttpServletResponse rep) {
+		rep.setCharacterEncoding("UTF-8");
+		rep.setContentType("text/html;charset=UTF-8");
+		User user = new User();
+		Gson gson=new Gson();
+		user = gson.fromJson(client,User.class);
+		User ruUer = userService.getUserbyName(user.getUsername());
+		PrintWriter writer;
+		if(ruUer.getPassword().equals(user.getPassword())) {
+			Gson gson2 = new Gson();
+			String ruclient = gson.toJson(ruUer);
+			try {
+				writer = rep.getWriter();
+				writer.println(ruclient);
+			    writer.flush();
+			    writer.close();
+			    System.out.println(ruclient);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return ruclient;
+		}
+		else {
+			return "√‹¬Î¥ÌŒÛ";
+		}
+	}
 }

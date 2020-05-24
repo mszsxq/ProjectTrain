@@ -52,4 +52,9 @@ public class UserService {
 	public User getUser(int id) {
 		return this.userDao.findUser(id);
 	}
+	
+	@Transactional(readOnly = false)
+	public User getUserbyName(String name) {
+		return this.userDao.findUserbyName(name);
+	}
 }
