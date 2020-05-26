@@ -54,6 +54,8 @@ dependencies {
     implementation 'com.foamtrace:photopicker:1.0'
     implementation 'top.zibin:Luban:1.0.3'
     implementation 'com.google.code.gson:gson:2.8.4'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.3'//没有使用特殊Header，可以不加这行
     //zsx
     implementation 'com.qmuiteam:qmui:1.2.0'
     implementation 'com.etsy.android.grid:library:1.0.5' // see changelog

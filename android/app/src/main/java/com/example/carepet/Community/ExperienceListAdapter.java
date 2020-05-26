@@ -221,6 +221,20 @@ public class ExperienceListAdapter extends RecyclerView.Adapter<ExperienceListAd
         return context.getResources().getDrawable(resId);
     }
 
+    public void add(List<Communitys>  addMessageList) {
+        //增加数据
+        int position = mDataList.size();
+        mDataList.addAll(position, addMessageList);
+        notifyItemInserted(position);
+    }
+
+    public void refresh(List<Communitys>  newList) {
+        //刷新数据
+        mDataList.removeAll(mDataList);
+        mDataList.addAll(newList);
+        notifyDataSetChanged();
+    }
+
 
 
 }

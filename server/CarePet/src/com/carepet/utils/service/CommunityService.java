@@ -63,6 +63,11 @@ public class CommunityService {
 	}
 	
 	@Transactional(readOnly = false)
+	public List<Communitys> listSome(int flag) {
+		return this.communityDao.findSomeCommunity(flag);
+	}
+	
+	@Transactional(readOnly = false)
 	public List<Community> listSameCity(String city) {
 		return this.communityDao.findSameCity(city);
 	}

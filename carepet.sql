@@ -10,13 +10,8 @@ Target Server Type    : MYSQL
 Target Server Version : 50701
 File Encoding         : 65001
 
-<<<<<<< HEAD
-Date: 2020-04-29 22:48:22
-*/
 
-SET FOREIGN_KEY_CHECKS=0;
-=======
-Date: 2020-04-30 18:12:45
+Date: 2020-04-29 22:48:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -73,7 +68,7 @@ CREATE TABLE `findtable` (
 -- ----------------------------
 -- Records of findtable
 -- ----------------------------
->>>>>>> dbe3f07cd1cd676e41b0c001c3c5c67d9e2eb98f
+
 
 
 DROP TABLE IF EXISTS `user`;

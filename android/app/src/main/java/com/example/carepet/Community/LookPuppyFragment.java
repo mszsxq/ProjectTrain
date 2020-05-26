@@ -20,6 +20,11 @@ import com.example.carepet.entity.Community;
 import com.example.carepet.entity.Communitys;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,14 +38,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LookPuppyFragment extends Fragment {
+    List<Communitys> newList = new ArrayList<Communitys>();
+    List<Communitys> list=new ArrayList<>();
+    private ListAdapter myAdapter;
     RecyclerView recyclerView;
+    RefreshLayout refreshLayout;
     private Handler handler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             String object = (String) msg.obj;
             Gson gson = new Gson();
-            List<Communitys> list = gson.fromJson(object, new TypeToken<List<Communitys>>() {}.getType());
+            List<Communitys> alist = gson.fromJson(object, new TypeToken<List<Community>>() {}.getType());
+            newList=alist;
+            list.addAll(list.size(),alist);
 //            List<Community> list = new ArrayList<>();
 //            Community community = new Community();
 //            community.setId(1);
@@ -48,9 +59,30 @@ public class LookPuppyFragment extends Fragment {
 //            community.setPic("OIP");
 //            community.setImgjson("OIP");
 //            list.add(community);
-            ListAdapter listAdapter = new ListAdapter(list,getContext()); //创建适配器，并且导入数据list
-            recyclerView.setAdapter(listAdapter);//布局导入适配器
+            myAdapter = new ListAdapter(list,getContext()); //创建适配器，并且导入数据list
+            recyclerView.setAdapter(myAdapter);//布局导入适配器
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+
+        }
+    };
+    private Handler handler2 = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            String object = (String) msg.obj;
+            Gson gson = new Gson();
+            List<Communitys> alist = gson.fromJson(object, new TypeToken<List<Community>>() {}.getType());
+            newList=alist;
+            //list.addAll(list.size(),alist);
+//            List<Community> list = new ArrayList<>();
+//            Community community = new Community();
+//            community.setId(1);
+//            community.setTime("2020");
+//            community.setPic("OIP");
+//            community.setImgjson("OIP");
+//            list.add(community);
+            myAdapter.add(alist);
+
 
         }
     };
@@ -64,6 +96,9 @@ public class LookPuppyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.recyclerview_layout ,container, false);
+        refreshLayout = (RefreshLayout)rootView.findViewById(R.id.refreshLayout);
+        //刷新数据加载
+        setPullRefresher();
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(1,
                 StaggeredGridLayoutManager.VERTICAL);
@@ -89,7 +124,7 @@ public class LookPuppyFragment extends Fragment {
             public void run() {
                 try {
                     Gson gson = new Gson();
-                    URL url = new URL("http://192.168.137.1:8080/CarePet/community/listall");
+                    URL url = new URL("http://192.168.5.7:8080/CarePet/community/listall");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
@@ -107,9 +142,71 @@ public class LookPuppyFragment extends Fragment {
         }.start();
     }
 
+    public void ToServer2(final int flag){
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Gson gson = new Gson();
+                    URL url = new URL("http://192.168.5.7:8080/CarePet/community/listsome?flag="+flag+"");
+                    URLConnection conn = url.openConnection();
+                    InputStream in = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
+                    String info = reader.readLine();
+                    Log.i("检测","得到"+info);
+                    wrapperMessage2(info);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
     private void wrapperMessage(String num){
         Message msg = Message.obtain();
         msg.obj =num;
         handler.sendMessage(msg);
+    }
+    private void wrapperMessage2(String num){
+        Message msg = Message.obtain();
+        msg.obj =num;
+        handler2.sendMessage(msg);
+    }
+
+    private void setPullRefresher(){
+        //设置 Header 为 MaterialHeader
+        //设置 Header 为 ClassicsFooter 比较经典的样式
+        refreshLayout.setRefreshHeader(new ClassicsHeader(getContext()));
+        //设置 Footer 为 经典样式
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getContext()));
+
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                //在这里执行上拉刷新时的具体操作(网络请求、更新UI等)
+
+                //模拟网络请求到的数据
+                //ArrayList<Community> newList = new ArrayList<Community>();
+
+                //myAdapter.refresh(newList);
+                refreshlayout.finishRefresh(2000/*,false*/);
+                //不传时间则立即停止刷新    传入false表示刷新失败
+            }
+        });
+        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+            @Override
+            public void onLoadmore(RefreshLayout refreshlayout) {
+
+                //模拟网络请求到的数据
+                int num=myAdapter.getItemCount();
+                ToServer2(num);
+
+                //在这里执行下拉加载时的具体操作(网络请求、更新UI等)
+                refreshlayout.finishLoadmore(2000/*,false*/);//不传时间则立即停止刷新    传入false表示加载失败
+            }
+        });
     }
 }

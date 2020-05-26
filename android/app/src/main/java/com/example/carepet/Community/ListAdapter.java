@@ -70,6 +70,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     public  ListAdapter(List<Communitys> listDatas,Context context){
         this.context=context;
         mDataList = listDatas;
+        Log.e("数据",listDatas.get(0).toString());
         mTextStateList = new SparseArray<>();
     }
 
@@ -88,21 +89,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         Communitys listData = mDataList.get(position);
         Log.e("数据",listData.toString());
-        File file=new File(context.getFilesDir(),"oss/"+listData.getHeadName());
+        File file=new File(context.getFilesDir(),"oss"+listData.getHeadName());
         if(!file.exists()){
             OssService ossService = new OssService(context);
-            Log.e("ss","下载前");
-//            Log.e("图片名称",listData.getPic());
             ossService.downLoad("",listData.getHeadName());//listData.getPic()
-            Log.e("dd","下载后");
             Log.e("检测","dd");
         }
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-        if (bitmap==null){
-            holder.imageAvatar.setImageResource(R.drawable.tx);
-        }else {
-            holder.imageAvatar.setImageBitmap(bitmap);
-        }
+        holder.imageAvatar.setImageBitmap(bitmap);
 //        Glide.with(context)
 //                .load("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg")//https://picturer.oss-cn-beijing.aliyuncs.com/1588149087234.jpg
 //                .into(holder.imageAvatar);
@@ -120,7 +114,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             list.add(imgjson);
         }
         for(int i=0;i<list.size();i++){
-            File pics=new File(context.getFilesDir(),"oss/"+list.get(i));
+            File pics=new File(context.getFilesDir(),"oss"+list.get(i));
             Log.e("file",list.get(i)+"");
             if(!pics.exists()){
                 OssService ossService = new OssService(context);
@@ -213,6 +207,20 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return context.getResources().getDrawable(resId);
     }
 
+
+    public void add(List<Communitys>  addMessageList) {
+        //增加数据
+        int position = mDataList.size();
+        mDataList.addAll(position, addMessageList);
+        notifyItemInserted(position);
+    }
+
+    public void refresh(List<Communitys>  newList) {
+        //刷新数据
+        mDataList.removeAll(mDataList);
+        mDataList.addAll(newList);
+        notifyDataSetChanged();
+    }
 
 
 }

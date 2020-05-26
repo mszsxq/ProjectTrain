@@ -38,9 +38,36 @@ public class CommunityDao {
 	}
 	
 	public List<Communitys> findAllCommunity(){
+		UserDao userDao = new UserDao();
 		Session session=this.sessionFactory.getCurrentSession();
 		System.out.println("flag=====1");
-		Query query=session.createQuery("from Community where flag=1");
+		Query query=session.createQuery("from Community order by id desc");
+		query.setMaxResults(4);
+		List<Community> list=query.list();
+		List<Communitys> cs=new ArrayList<>();
+		for(int i=0;i<list.size();i++) {
+			String title=list.get(i).getTitle();
+			String imgjson=list.get(i).getImgjson();
+			String content=list.get(i).getContent();
+			int userId=list.get(i).getUserId();
+			String time=list.get(i).getTime();
+			Query query1=session.createQuery("from User where id="+userId);
+			User user=(User) query1.uniqueResult();
+			String name=user.getUsername();
+			String headName=user.getTouxiang();
+			Communitys communitys=new Communitys(title,imgjson, content,userId,name,headName,time);
+			System.out.println(communitys.toString());
+			cs.add(communitys);
+		}
+		return cs;
+	}
+	public List<Communitys> findSomeCommunity(int flag){
+		UserDao userDao = new UserDao();
+		Session session=this.sessionFactory.getCurrentSession();
+		System.out.println("flag=====2");
+		Query query=session.createQuery("from Community order by id desc");
+		query.setMaxResults(4);
+		query.setFirstResult(flag-1);
 		List<Community> list=query.list();
 		List<Communitys> cs=new ArrayList<>();
 		for(int i=0;i<list.size();i++) {
