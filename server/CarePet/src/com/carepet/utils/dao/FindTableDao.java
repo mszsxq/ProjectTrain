@@ -63,12 +63,17 @@ public class FindTableDao {
 		return findtables;
 		
 	}
+	
 	public List<FindTable> listrecent(){
 		Session session=this.sessionFactory.getCurrentSession();
-		Query query=session.createQuery("from FindTable order by id desc ");
-	    query.setMaxResults(5);
-		List<FindTable> findtables=query.list();
-		return findtables;
+	
+		while(true) {
+			Query query=session.createQuery("from FindTable order by rand()  ");
+		    query.setMaxResults(5);
+			List<FindTable> findtables=query.list();
+			return findtables;
+		}
+		
 		
 	}
 }
