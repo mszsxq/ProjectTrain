@@ -9,23 +9,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dp"
         android:text="猫咪的尾巴和身体不是一个整体"
         android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dp"
         android:alpha="0.8"
         android:drawableStart="@mipmap/icon_tour_location"
         android:drawablePadding="4dp"
         android:text="石家庄"
         android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textSize="15sp"
         android:layout_below="@+id/textView"/>
 
     <TextView
@@ -38,8 +40,9 @@
         android:drawableStart="@mipmap/icon_tour_map"
         android:drawablePadding="4dp"
         android:text="发布人"
+        android:layout_marginBottom="5dp"
         android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textSize="15sp"
         android:layout_below="@+id/textView"
         android:layout_toRightOf="@+id/textView1" />
 
@@ -52,8 +55,9 @@
         android:drawableStart="@mipmap/icon_tour_label"
         android:drawablePadding="4dp"
         android:text="英短"
+        android:layout_marginBottom="5dp"
         android:textColor="@color/gray"
-        android:textSize="10sp"
+        android:textSize="13sp"
         android:layout_below="@+id/textView1" />
 
 
@@ -67,8 +71,9 @@
         android:drawableStart="@mipmap/icon_tour_label"
         android:drawablePadding="4dp"
         android:text="寻找贴"
+        android:layout_marginBottom="5dp"
         android:textColor="@color/gray"
-        android:textSize="10sp"
+        android:textSize="13sp"
         android:layout_below="@+id/textView1"
         android:layout_toRightOf="@+id/textView3"
         />
@@ -81,11 +86,12 @@
         android:layout_marginStart="15dp"
         android:alpha="0.8"
         android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:drawableStart="@mipmap/icon_tour_label"
         android:drawablePadding="4dp"
         android:text="河北师范大学"
         android:textColor="@color/gray"
-        android:textSize="10sp"
+        android:textSize="13sp"
         android:layout_below="@+id/textView1"
         android:layout_toRightOf="@+id/textView4"
         />
@@ -104,11 +110,12 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="15dp"
         android:text="寻找贴详情"
+        android:layout_marginBottom="5dp"
         android:textColor="@color/black"
         android:textSize="12sp"
         android:layout_below="@id/textView3" />
 
-    <ImageView
+    <com.qmuiteam.qmui.widget.QMUIRadiusImageView
         android:id="@+id/imageView1"
         android:layout_width="380dp"
         android:layout_height="400dp"
@@ -128,8 +135,9 @@
 是他们讨厌猫？还是觉得小莎不配养猫？他们眼里的我到底是怎样一个工作狂或者男人婆？
 凡是劝我不要养猫的人肯定不够了解我。
 从小跟猫们一起长大，觉得自己像一只猫多过一个人，我的理想就是做一个猫一样的女人。"
-        android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textColor="@color/gray"
+        android:textStyle="bold"
+        android:textSize="17dp"
         android:layout_below="@+id/imageView1"/>
 
     <View
