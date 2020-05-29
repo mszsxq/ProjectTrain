@@ -136,7 +136,7 @@ public class MapFragment extends Fragment {
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
+
     class MyAsnycTask extends AsyncTask<Integer, Integer, List<FindTable>> {
         //用来写等待时的UI（加载中转圈）
         @Override
