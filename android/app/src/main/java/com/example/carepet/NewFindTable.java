@@ -2,6 +2,7 @@ package com.example.carepet;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -62,6 +63,7 @@ public class NewFindTable extends Activity {
     //经纬度
     private double lat;
     private double lon;
+    private int id;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +98,8 @@ public class NewFindTable extends Activity {
         dizhi2.setOnClickListener(new mbuttonlistener());
         dizhi3.setOnClickListener(new mbuttonlistener());
         mRelativeLayout1.setOnClickListener(new mbuttonlistener());
-
+        SharedPreferences p =getSharedPreferences("user",MODE_PRIVATE);
+        id=p.getInt("user_id",1);
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (12 == requestCode && resultCode == Activity.RESULT_OK) {
@@ -148,7 +151,7 @@ public class NewFindTable extends Activity {
                     findTable.setLatitude(lat);
                     SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                     findTable.setTime(ft.format(new Date()));
-                    findTable.setUserid(1);
+                    findTable.setUserid(id);
                     findTable.setCity(dizhi1.getText().toString());
                     String imgjson="";
                     for (String img:imgs){

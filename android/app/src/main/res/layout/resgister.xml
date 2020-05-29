@@ -77,7 +77,6 @@
                 android:maxLength="15"
 
                 android:layout_marginTop="13dp"
-                android:inputType="phone"
 
                 />
 

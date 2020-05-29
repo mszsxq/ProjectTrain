@@ -77,8 +77,6 @@
 
                 android:hint="请输入用户名"
 
-                android:inputType="phone"
-
                 android:maxLength="15"
 
                 android:layout_gravity="center"/>
