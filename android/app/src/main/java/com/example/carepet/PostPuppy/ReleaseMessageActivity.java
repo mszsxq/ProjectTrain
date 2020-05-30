@@ -97,7 +97,11 @@ public class ReleaseMessageActivity extends AppCompatActivity {
                 Date date = new Date(System.currentTimeMillis());
                 String time=simpleDateFormat.format(date);
                 Community community = PackCommunity(etMesssage.getText().toString(),1,imgs,time,title.getText().toString());
-                ToServer(community);
+                Gson gson = new Gson();
+                String jsonObject = gson.toJson(community);
+                OssService ossService=new OssService(getApplicationContext());
+                ossService.uploadImage("",listImagePath.get(0),"http://175.24.16.26:8080/CarePet/community/insertcommunity?community="+jsonObject+"");
+//                ToServer(community);
                 finish();
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), MainActivity.class);

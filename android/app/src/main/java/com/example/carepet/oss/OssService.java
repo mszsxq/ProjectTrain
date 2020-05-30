@@ -123,6 +123,7 @@ public class OssService {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.e("网络地址",response.toString());
+                            Log.e("网络地址",httpUrl);
                         }
                     });
                 }
