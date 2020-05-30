@@ -62,6 +62,7 @@
         <activity android:name="com.example.carepet.Register"/>
         <activity android:name="com.example.carepet.Forgetpwd"/>
         <activity android:name="com.example.carepet.MainActivity"/>
+        <activity android:name=".Community.search_find"/>
     </application>
 
 </manifest>

@@ -62,6 +62,7 @@ dependencies {
     implementation 'me.majiajie:pager-bottom-tab-strip:+'
     implementation 'com.lrq.menu:addpopmenu:1.0.7'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
     //地图
     implementation project(':SlideNestedPanel')
     implementation 'com.android.support:appcompat-v7:29.0.0'
