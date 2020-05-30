@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("http://192.168.137.1:8080/CarePet/user/getuser?id=" + 1);
+                    URL url = new URL("http://175.24.16.26:8080/CarePet/user/getuser?id=" + 1);
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

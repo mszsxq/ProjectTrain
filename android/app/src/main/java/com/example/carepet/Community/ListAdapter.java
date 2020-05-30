@@ -36,7 +36,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private final int STATE_EXPANDED = 3;//文本超过限定行数，被点击全文展开
     private SparseArray<Integer> mTextStateList;
     private Context context;
-    private List<Communitys> mDataList;
+    private List<Communitys> mDataList=new ArrayList<>();
     private ArrayList<String> imgList=new ArrayList<>();
     //private  int[] imageViewList={R.drawable.k1,R.drawable.k2};
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -70,7 +70,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     public  ListAdapter(List<Communitys> listDatas,Context context){
         this.context=context;
         mDataList = listDatas;
-        Log.e("数据",listDatas.get(0).toString());
         mTextStateList = new SparseArray<>();
     }
 
@@ -87,9 +86,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         imgList = new ArrayList<>();
 
-        Communitys listData = mDataList.get(position);
+        Communitys listData =(Communitys) mDataList.get(position);
         Log.e("数据",listData.toString());
-        File file=new File(context.getFilesDir(),"oss"+listData.getHeadName());
+        File file=new File(context.getFilesDir(),"oss/"+listData.getHeadName());
         if(!file.exists()){
             OssService ossService = new OssService(context);
             ossService.downLoad("",listData.getHeadName());//listData.getPic()
@@ -98,7 +97,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
         holder.imageAvatar.setImageBitmap(bitmap);
 //        Glide.with(context)
-//                .load("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg")//https://picturer.oss-cn-beijing.aliyuncs.com/1588149087234.jpg
+//                .load("https://picturer.oss-cn-beijing.aliyuncs.com/11590824626626head.jpg")//https://picturer.oss-cn-beijing.aliyuncs.com/1588149087234.jpg
 //                .into(holder.imageAvatar);
         holder.nameText.setText(listData.getName()+"");
         holder.timeText.setText(listData.getTime());
