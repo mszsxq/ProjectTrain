@@ -172,7 +172,6 @@ public class MapFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<FindTable> findTables) {
-            list.clear();
             if (findTables != null) {
                 for(FindTable f: findTables){
                     Log.e("aaaaa", f.toString());
