@@ -8,9 +8,8 @@
         android:id="@+id/et_ss"
         android:layout_alignParentTop="true"
         android:queryHint="搜索猫狗类型或所在城市"
-        android:iconifiedByDefault="false"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="30dp"/>
 <!--    <LinearLayout-->
 <!--        android:id="@+id/et_ss"-->
 <!--        android:layout_width="match_parent"-->

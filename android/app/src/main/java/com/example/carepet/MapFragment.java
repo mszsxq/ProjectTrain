@@ -88,6 +88,7 @@ public class MapFragment extends Fragment {
 //                startActivity(intent1);
 //            }
 //        });
+        searchview.setSubmitButtonEnabled(true);
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -102,6 +103,14 @@ public class MapFragment extends Fragment {
                 return false;
             }
        });
+        searchview.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                MyAsnycTask myAsnycTask = new MyAsnycTask();
+                myAsnycTask.execute();
+                return false;
+            }
+        });
         gridView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
