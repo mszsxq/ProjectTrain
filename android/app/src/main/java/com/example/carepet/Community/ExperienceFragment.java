@@ -125,7 +125,9 @@ public class ExperienceFragment extends Fragment {
             public void run() {
                 try {
                     Gson gson = new Gson();
-                    URL url = new URL("http://192.168.5.7:8080/CarePet/community/listall");
+
+                    //192.168.5.7
+                    URL url = new URL("http://192.168.43.65:8080/CarePet/community/listall");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
@@ -149,7 +151,8 @@ public class ExperienceFragment extends Fragment {
             public void run() {
                 try {
                     Gson gson = new Gson();
-                    URL url = new URL("http://192.168.5.7:8080/CarePet/community/listsome?flag="+flag+"");
+                    //192.168.5.7
+                    URL url = new URL("http://192.168.43.65:8080/CarePet/community/listsome?flag="+flag+"");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

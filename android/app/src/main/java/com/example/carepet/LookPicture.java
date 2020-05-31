@@ -60,6 +60,7 @@ public class LookPicture extends Activity {
     private String laterheadName;
     private String currentheadName;
     private int userId;
+    private ImageView touxiang;
     private SharedPreferences sharedPreferences;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
@@ -90,6 +91,7 @@ public class LookPicture extends Activity {
     private void init() {
         back = findViewById(R.id.btn1);
         ivHead=findViewById(R.id.img2);
+        touxiang=findViewById(R.id.touxiang);
 //        Bitmap bt = BitmapFactory.decodeFile(path + "head.jpg");//从Sd中找头像，转换成Bitmap
 //        if(bt!=null){
 //            @SuppressWarnings("deprecation")
@@ -102,9 +104,30 @@ public class LookPicture extends Activity {
 //             */
 //        }
 //        getBitmapFromSharedPreferences();
+
+        sharedPreferences=getSharedPreferences("user",MODE_PRIVATE);
+        String txname= sharedPreferences.getString("user_tx","");
+
         sharedPreferences=getSharedPreferences("headName", Context.MODE_PRIVATE);
         currentheadName=sharedPreferences.getString("name","");
-        if (currentheadName.isEmpty()){
+        Log.e("qqqqq0000",currentheadName);
+
+        if (txname.isEmpty()){
+            ivHead.setImageResource(R.drawable.tx);
+        }else{
+            FileInputStream fs = null;
+            try {
+                Log.e("111",currentheadName);
+                fs = new FileInputStream("/sdcard/myHead/"+txname);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            Bitmap bitmap  = BitmapFactory.decodeStream(fs);
+            ivHead.setImageBitmap(bitmap);
+        }
+
+
+       /* if (currentheadName.isEmpty()){
             ivHead.setImageResource(R.drawable.tx);
         }else{
             FileInputStream fs = null;
@@ -116,7 +139,7 @@ public class LookPicture extends Activity {
             }
             Bitmap bitmap  = BitmapFactory.decodeStream(fs);
             ivHead.setImageBitmap(bitmap);
-        }
+        }*/
 
 
 
@@ -222,7 +245,8 @@ public class LookPicture extends Activity {
                         }).start();
                         sendToServer();
                         saveHeadNameToSharedPreferences(laterheadName+"head.jpg");
-                        ivHead.setImageBitmap(head);//用ImageView显示出来
+//                        ivHead.setImageBitmap(head);//用ImageView显示出来
+                        touxiang.setImageBitmap(head);
                     }
                 }
                 break;
@@ -239,7 +263,8 @@ public class LookPicture extends Activity {
             public void run() {
                 try {
                     Gson gson = new Gson();
-                    URL url = new URL("http://192.168.137.1:8080/CarePet/changephoto/change?headname="+laterheadName+"head.jpg"+"&userId="+userId);
+
+                    URL url = new URL("http://192.168.43.65:8080/CarePet/changephoto/change?headname="+laterheadName+"head.jpg"+"&userId="+userId);
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
@@ -262,6 +287,21 @@ public class LookPicture extends Activity {
         Log.e("3333",headName);
         editor.putString("name", headName);
         editor.commit();
+        currentheadName=sharedPreferences.getString("name","");
+        Log.e("qqqqq0000",currentheadName);
+        if (currentheadName.isEmpty()){
+            ivHead.setImageResource(R.drawable.tx);
+        }else{
+            FileInputStream fs = null;
+            try {
+                Log.e("111",currentheadName);
+                fs = new FileInputStream("/sdcard/myHead/"+currentheadName);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            Bitmap bitmap  = BitmapFactory.decodeStream(fs);
+            ivHead.setImageBitmap(bitmap);
+        }
 
         //上传头像
 //        setImgByStr(imageString,"");

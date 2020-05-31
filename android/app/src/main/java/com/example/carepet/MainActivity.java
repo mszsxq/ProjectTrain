@@ -7,7 +7,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import lrq.com.addpopmenu.PopMenu;
 import lrq.com.addpopmenu.PopMenuItem;
 import lrq.com.addpopmenu.PopMenuItemListener;
@@ -16,7 +15,6 @@ import me.majiajie.pagerbottomtabstrip.PageNavigationView;
 import me.majiajie.pagerbottomtabstrip.listener.OnTabItemSelectedListener;
 import me.majiajie.pagerbottomtabstrip.listener.SimpleTabItemSelectedListener;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,31 +24,23 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carepet.Community.AddExperience;
-import com.example.carepet.Community.ListAdapter;
 import com.example.carepet.PostPuppy.CommonUtil;
 import com.example.carepet.PostPuppy.ReleaseMessageActivity;
-import com.example.carepet.entity.Community;
 import com.example.carepet.entity.User;
-import com.example.carepet.oss.OssService;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -59,7 +49,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.List;
 
 import static com.baidu.mapapi.BMapManager.getContext;
 
@@ -91,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
         initFragment(0);
         initTabBar();
         initPop();
-
+        sharedPreferences=getSharedPreferences("user",MODE_PRIVATE);
+/*        sharedPreferences=getContext().getSharedPreferences("user",MODE_PRIVATE);*/
         getData();
         handler = new Handler() {
             @Override
@@ -101,17 +91,17 @@ public class MainActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 User user=gson.fromJson(object,User.class);
                 String txstr=user.getTouxiang();
-                Log.e("1",txstr);
+                /*Log.e("1",txstr);*/
                 nick_phone.setText(user.getPassword());
                 nick_name.setText(user.getUsername());
 /*              getHeadFromSD(nick_image);*/
                 nick_image.setAdjustViewBounds(true);
                 nick_image.setMaxHeight(180);
                 nick_image.setMaxWidth(180);
-                if (txstr.isEmpty()) {
+                if (txstr==null) {
                     //默认的头像
                     nick_image.setImageResource(R.drawable.tx);
-
+                    touxiang.setImageResource(R.drawable.tx);
                 } else {
                     FileInputStream fs = null;
                     try {
@@ -137,13 +127,23 @@ public class MainActivity extends AppCompatActivity {
                 //为item设置逐个点击事件
                switch (menuItem.getItemId()){
                   case  R.id.daren:
-                      Toast.makeText(MainActivity.this,"暂时还没有被开发出来~",Toast.LENGTH_SHORT).show();
+                      Intent intent = new Intent(MainActivity.this, Daren.class);
+                      startActivity(intent);
                       break;
                    case R.id.xiugai:
                        Toast.makeText(MainActivity.this,"暂时还没有被开发出来~",Toast.LENGTH_SHORT).show();
                        break;
                    case R.id.yinsi:
                        Toast.makeText(MainActivity.this,"暂时还没有被开发出来~",Toast.LENGTH_SHORT).show();
+                       break;
+                   case R.id.unlogin:
+                       SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
+                       SharedPreferences.Editor editor = sharedPreferences.edit();
+                       editor.clear();
+                       preferences.edit().putBoolean("isFirstIn",true).commit();
+                       editor.commit();
+                       Intent intent3 = new Intent(MainActivity.this, Login.class);
+                       startActivity(intent3);
                        break;
                 }
                 return false;
@@ -192,11 +192,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void getData() {
        /* 利用SharedPreferences 获取到userid；*/
+        final int userid=sharedPreferences.getInt("user_id",0);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("http://192.168.137.1:8080/CarePet/user/getuser?id=" + 1);
+                    //192.168.137.1
+                    URL url = new URL("http://192.168.43.65:8080/CarePet/user/getuser?id=" + userid);
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

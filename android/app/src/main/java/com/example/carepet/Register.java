@@ -1,6 +1,7 @@
 package com.example.carepet;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -24,13 +25,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Register extends AppCompatActivity {
-
-
-
 
     private final String TAG = "--Register--";
 
@@ -178,6 +178,15 @@ public class Register extends AppCompatActivity {
                         Toast.makeText(Register.this,"验证码不能为空",Toast.LENGTH_SHORT).show();
                     }else {
                         RegisterUser(phone, password);
+
+                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");// HH:mm:ss
+                        //获取当前时间
+                        Date date = new Date(System.currentTimeMillis());
+                        Log.e("注册时间",simpleDateFormat.format(date));
+                        final SharedPreferences p =getSharedPreferences("time",MODE_PRIVATE);
+                        SharedPreferences.Editor editor=p.edit();
+                        editor.putString("regist"+phone,simpleDateFormat.format(date));
+                        editor.commit();
                         break;
                     }
 
@@ -209,8 +218,8 @@ public class Register extends AppCompatActivity {
             public void run() {
 
                 try {
-
-                    URL url = new URL("http://175.24.16.26:8080/CarePet/user/insertuser?user="+client);
+                    //175.24.16.26
+                    URL url = new URL("http://192.168.43.65:8080/CarePet/user/insertuser?user="+client);
 
                     URLConnection conn = url.openConnection();
 

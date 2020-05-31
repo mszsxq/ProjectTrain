@@ -114,6 +114,18 @@ public class Login extends AppCompatActivity {
 
                     editor.commit();
 
+                    SharedPreferences.Editor editor1=p.edit();
+
+                    editor1.putString("user_tx",usering.getTouxiang());
+
+                    editor1.commit();
+
+                    SharedPreferences.Editor editor2=p.edit();
+
+                    editor2.putString("name",usering.getUsername());
+
+                    editor2.commit();
+
                     int a = p.getInt("user_id",0);
 
                     Log.e("yz",a+"");
@@ -244,7 +256,7 @@ public class Login extends AppCompatActivity {
     //向服务器发送数据
 
     private void sendMessage() {
-
+        /*int id=*/
         String num = user_number.getText().toString();
 
         String pwd = user_pwd.getText().toString();
@@ -263,8 +275,8 @@ public class Login extends AppCompatActivity {
             public void run() {
 
                 try {
-
-                    URL url = new URL("http://175.24.16.26:8080/CarePet/user/ifuser?client="+client);
+                    //175.24.16.26
+                    URL url = new URL("http://192.168.43.65:8080/CarePet/user/ifuser?client="+client);
 
                     URLConnection conn = url.openConnection();
 
