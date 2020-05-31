@@ -249,7 +249,6 @@ public class MapFragment extends Fragment {
             num=num+1;
             SearchAdapter adapter= new SearchAdapter(getContext(), R.layout.map_search_item, list);
             gridView.setAdapter(adapter);
-
         }
     }
 

@@ -15,36 +15,37 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold" />
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+
+    <com.qmuiteam.qmui.widget.QMUIRadiusImageView
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="15dp"
-        android:alpha="0.8"
-        android:drawableStart="@mipmap/icon_tour_location"
-        android:drawablePadding="4dp"
-        android:text="石家庄"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:layout_below="@+id/textView"/>
+        android:id="@+id/detail_touxiang"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/textView"
+        android:src="@drawable/cat"
+        app:qmui_corner_radius="100dp"
+
+        />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:layout_marginStart="15dp"
         android:alpha="0.8"
-        android:drawableStart="@mipmap/icon_tour_map"
+        android:drawableStart="@drawable/yongh"
         android:drawablePadding="4dp"
         android:text="发布人"
         android:layout_marginBottom="5dp"
         android:textColor="@color/black"
         android:textSize="15sp"
+
         android:layout_below="@+id/textView"
-        android:layout_toRightOf="@+id/textView1" />
+        android:layout_toRightOf="@+id/detail_touxiang" />
 
     <TextView
         android:id="@+id/textView3"
@@ -58,7 +59,7 @@
         android:layout_marginBottom="5dp"
         android:textColor="@color/gray"
         android:textSize="13sp"
-        android:layout_below="@+id/textView1" />
+        android:layout_below="@+id/detail_touxiang" />
 
 
     <TextView
@@ -74,7 +75,7 @@
         android:layout_marginBottom="5dp"
         android:textColor="@color/gray"
         android:textSize="13sp"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/detail_touxiang"
         android:layout_toRightOf="@+id/textView3"
         />
 
@@ -87,12 +88,12 @@
         android:alpha="0.8"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:drawableStart="@mipmap/icon_tour_label"
+        android:drawableStart="@mipmap/icon_tour_location"
         android:drawablePadding="4dp"
         android:text="河北师范大学"
         android:textColor="@color/gray"
         android:textSize="13sp"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/detail_touxiang"
         android:layout_toRightOf="@+id/textView4"
         />
 
@@ -123,6 +124,7 @@
         android:layout_below="@+id/textView6"
         android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
+        app:qmui_corner_radius="15dp"
         android:src="@mipmap/b1" />
 
     <TextView
