@@ -24,7 +24,21 @@ public class FindTableDao {
 		Session session=this.sessionFactory.getCurrentSession();
 		session.save(findTable);
 	}
-	
+	public void updateModel(String head, int id) {
+		ArrayList<FindTable> findTables=(ArrayList<FindTable>) findAllFindTable();
+		for (FindTable findTable : findTables) {
+			if (findTable.getUserid()==id) {
+				String[] strings=findTable.getImgjson().split("--");
+				strings[1]=head;
+				String img=new String();
+				for (int i = 0; i < strings.length; i++) {
+					img+=strings[i]+"--";
+				}
+				findTable.setImgjson(img);
+			}
+			
+		}
+	}
 	public void uploadFindTable(FindTable findTable) {
 		Session session=this.sessionFactory.getCurrentSession();
 		session.update(findTable);
