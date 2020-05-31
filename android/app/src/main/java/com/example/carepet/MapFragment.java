@@ -26,6 +26,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -240,6 +241,7 @@ public class MapFragment extends Fragment {
                     mapContent.setTouxiang(touxiang);
                     mapContent.setBimg(bimg);
                     list.add(mapContent);
+                    Collections.reverse(list);
                 }
             }
             //findtable 数据 不更新问题
