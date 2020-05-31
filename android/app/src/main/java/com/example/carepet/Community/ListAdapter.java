@@ -95,7 +95,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             Log.e("检测","dd");
         }
         Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-        holder.imageAvatar.setImageBitmap(bitmap);
+        if (bitmap==null){
+            holder.imageAvatar.setImageResource(R.drawable.tx);
+        }else {
+            holder.imageAvatar.setImageBitmap(bitmap);
+        }
 //        Glide.with(context)
 //                .load("https://picturer.oss-cn-beijing.aliyuncs.com/11590824626626head.jpg")//https://picturer.oss-cn-beijing.aliyuncs.com/1588149087234.jpg
 //                .into(holder.imageAvatar);
