@@ -73,7 +73,14 @@ public class FindTableDao {
 			List<FindTable> findtables=query.list();
 			return findtables;
 		}
+		 
 		
-		
+	}
+	public List<FindTable> ListRandom(int num) {
+		Session session=this.sessionFactory.getCurrentSession();
+		Query query=session.createQuery("from FindTable");
+		query.setFirstResult(num*8);
+		query.setMaxResults(8);
+		return query.list();
 	}
 }

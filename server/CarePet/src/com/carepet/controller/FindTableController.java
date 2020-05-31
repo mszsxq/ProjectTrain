@@ -36,6 +36,30 @@ public class FindTableController {
 		List<FindTable> findTables=findTableService.list();
 		String findTablestring=gson.toJson(findTables);
 		model.addAttribute("findTables", findTablestring);
+		PrintWriter writer;
+		try {
+			writer = rep.getWriter();
+			writer.println(findTablestring);
+		    writer.flush();
+		    writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	@RequestMapping("/listRandom")
+	public String listRandom(@RequestParam int num,Model model,HttpServletRequest req,HttpServletResponse rep) {
+		rep.setCharacterEncoding("UTF-8");
+		rep.setContentType("text/html;charset=UTF-8");
+		Gson gson=new Gson();
+//		List<String> strings=new ArrayList<String>();
+//		strings.add("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg");
+//		strings.add("https://picturer.oss-cn-beijing.aliyuncs.com/OIP.jpg");
+//		System.out.println(gson.toJson(strings));
+		List<FindTable> findTables=findTableService.listRandom(num);
+		String findTablestring=gson.toJson(findTables);
+		model.addAttribute("findTables", findTablestring);
 		System.out.println(findTablestring);
 		PrintWriter writer;
 		try {
