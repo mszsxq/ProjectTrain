@@ -8,20 +8,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-
 import com.example.carepet.R;
-import com.example.carepet.entity.FindTable;
 import com.example.carepet.entity.MapContent;
-
 import java.util.List;
-import java.util.Map;
+
 
 public class SearchAdapter extends BaseAdapter {
     private Context context;
     private int layoutid;
     private List<MapContent> data;
+    private String pre="https://picturer.oss-cn-beijing.aliyuncs.com/";
     public SearchAdapter(Context context ,int id,List list){
         this.context=context;
         this.layoutid=id;
@@ -65,7 +62,7 @@ public class SearchAdapter extends BaseAdapter {
         holder.title.setText(data.get(i).getFindTable().getTitle());
         holder.city.setText(data.get(i).getFindTable().getCity());
         //设置图片圆角角度
-        Glide.with(context).load(touxiang).fitCenter().into(holder.touxiang);
+        Glide.with(context).load(pre+touxiang).fitCenter().into(holder.touxiang);
         Glide.with(context).load(bimg).fitCenter().into(holder.bimg);
         return convertView;
     }

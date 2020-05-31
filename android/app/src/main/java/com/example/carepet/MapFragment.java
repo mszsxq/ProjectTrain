@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -12,18 +11,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.SearchView;
-import android.widget.TextView;
-
 import com.etsy.android.grid.StaggeredGridView;
 import com.example.carepet.adapter.SearchAdapter;
 import com.example.carepet.entity.FindTable;
 import com.example.carepet.entity.MapContent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +27,6 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -49,6 +42,7 @@ public class MapFragment extends Fragment {
     private SearchView searchview;
     private  String soso;
     private int flag=1;
+    private  int num=0;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -146,7 +140,6 @@ public class MapFragment extends Fragment {
 
 
     class MyAsnycTask2 extends AsyncTask<Integer, Integer, List<FindTable>> {
-        //用来写等待时的UI（加载中转圈）
         @Override
         protected void onPreExecute() {
 
@@ -154,8 +147,6 @@ public class MapFragment extends Fragment {
 
         @Override
         protected List<FindTable> doInBackground(Integer... integers) {
-
-//            final String ip = "http://192.168.101.16:8080/CarePet/findtable/listrecent";
             final String ip ="http://175.24.16.26:8080/CarePet/findtable/liststrf?sousuo="+soso ;
             URL url;
             String json = "";
@@ -212,8 +203,7 @@ public class MapFragment extends Fragment {
 
         @Override
         protected List<FindTable> doInBackground(Integer... integers) {
-
-//            final String ip = "http://192.168.101.16:8080/CarePet/findtable/listrecent";
+//            final String ip ="http://175.24.16.26:8080/CarePet/findtable/listRandom?num="+num;
             final String ip ="http://175.24.16.26:8080/CarePet/findtable/listrecent";
             URL url;
             String json = "";
@@ -254,7 +244,8 @@ public class MapFragment extends Fragment {
             }
             //findtable 数据 不更新问题
             flag=1;
-             SearchAdapter adapter= new SearchAdapter(getContext(), R.layout.map_search_item, list);
+            num=num+1;
+            SearchAdapter adapter= new SearchAdapter(getContext(), R.layout.map_search_item, list);
             gridView.setAdapter(adapter);
 
         }
