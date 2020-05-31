@@ -46,10 +46,9 @@ public class MapFragment extends Fragment {
     private List<MapContent> list = new ArrayList<>();
     private List<MapContent> list1 = new ArrayList<>();
     private SwipRefreshView swipeRefreshLayout;
-    private ImageView mImageView;
-    private TextView medittext;
     private SearchView searchview;
     private  String soso;
+    private int flag=1;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,39 +62,25 @@ public class MapFragment extends Fragment {
         gridView = view.findViewById(R.id.gview);
         swipeRefreshLayout=view.findViewById(R.id.swipeRefreshLayout);
         gue = new GestureDetector(getContext(), new MyGestureListener());
-//        mImageView=(ImageView)view.findViewById(R.id.mimageview);
-//        medittext=view.findViewById(R.id.medittext);
         searchview=view.findViewById(R.id.et_ss);
     }
     public void initData(){
         MyAsnycTask myAsnycTask = new MyAsnycTask();
         myAsnycTask.execute();
     }
-
+    public void initData1(){
+        MyAsnycTask2 myAsnycTask = new MyAsnycTask2();
+        myAsnycTask.execute();
+    }
     @SuppressLint("ClickableViewAccessibility")
     private void  setListner(){
-//        mImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent=new Intent(getContext(), search_find.class);
-//                startActivity(intent);
-//            }
-//        });
-//        medittext.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent1=new Intent(getContext(),search_find.class);
-//                startActivity(intent1);
-//            }
-//        });
         searchview.setSubmitButtonEnabled(true);
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 soso=query;
-                MyAsnycTask2 myAsnycTask = new MyAsnycTask2();
-                myAsnycTask.execute();
-                return false;
+                initData1();
+                return true;
             }
 
             @Override
@@ -106,8 +91,7 @@ public class MapFragment extends Fragment {
         searchview.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                MyAsnycTask myAsnycTask = new MyAsnycTask();
-                myAsnycTask.execute();
+                initData();
                 return false;
             }
         });
@@ -122,8 +106,14 @@ public class MapFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent  intent  =new Intent(getActivity(),MapDetails.class);
                 Bundle bundle =new Bundle();
-                bundle.putSerializable("findtable",list.get(i));
-                Log.e("bundle",list.get(i).toString());
+                if(flag!=0){
+                    bundle.putSerializable("findtable",list.get(i));
+                    Log.e("bundle",list.get(i).toString());
+                }else{
+                    bundle.putSerializable("findtable",list1.get(i));
+                    Log.e("bundle",list1.get(i).toString());
+                }
+
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -135,16 +125,6 @@ public class MapFragment extends Fragment {
                swipeRefreshLayout.setRefreshing(false);
             }
         });
-//        swipeRefreshLayout.setOnLoadMoreListener(new SwipeRefreshView.OnLoadMoreListener()
-//        {
-//            @Override
-//            public void onLoadMore() {
-//                MyAsnycTask myAsnycTask = new MyAsnycTask();
-//                myAsnycTask.execute();
-//                swipeRefreshLayout.setLoading(false);
-//            }
-//
-//        });
 
     }
     //滑动显示显示
@@ -203,7 +183,6 @@ public class MapFragment extends Fragment {
             list1.clear();
             if (findTables != null) {
                 for(FindTable f: findTables){
-                    Log.e("aaaaa", f.toString());
                     String jason=f.getImgjson();
                     String name =jason.split("--")[0];
                     String touxiang =jason.split("--")[1];
@@ -217,6 +196,7 @@ public class MapFragment extends Fragment {
                 }
             }
             //findtable 数据 不更新问题
+            flag=0;
             SearchAdapter adapter= new SearchAdapter(getContext(), R.layout.map_search_item, list1);
             gridView.setAdapter(adapter);
 
@@ -260,7 +240,6 @@ public class MapFragment extends Fragment {
         protected void onPostExecute(List<FindTable> findTables) {
             if (findTables != null) {
                 for(FindTable f: findTables){
-                    Log.e("aaaaa", f.toString());
                     String jason=f.getImgjson();
                     String name =jason.split("--")[0];
                     String touxiang =jason.split("--")[1];
@@ -274,7 +253,8 @@ public class MapFragment extends Fragment {
                 }
             }
             //findtable 数据 不更新问题
-            SearchAdapter adapter= new SearchAdapter(getContext(), R.layout.map_search_item, list);
+            flag=1;
+             SearchAdapter adapter= new SearchAdapter(getContext(), R.layout.map_search_item, list);
             gridView.setAdapter(adapter);
 
         }
