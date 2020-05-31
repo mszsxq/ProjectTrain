@@ -203,8 +203,8 @@ public class MapFragment extends Fragment {
 
         @Override
         protected List<FindTable> doInBackground(Integer... integers) {
-//            final String ip ="http://175.24.16.26:8080/CarePet/findtable/listRandom?num="+num;
-            final String ip ="http://175.24.16.26:8080/CarePet/findtable/listrecent";
+            final String ip ="http://175.24.16.26:8080/CarePet/findtable/listRandom?num="+num;
+//            final String ip ="http://175.24.16.26:8080/CarePet/findtable/listrecent";
             URL url;
             String json = "";
             List<FindTable> findList = new ArrayList<>();
