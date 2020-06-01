@@ -77,4 +77,8 @@ public class FindTableService {
 	public List<FindTable> listrencent() {
 		return this.findTableDao.listrecent();
 	}
+	@Transactional(readOnly = false)
+	public List<FindTable> listRandom(int num) {
+		return this.findTableDao.ListRandom(num);
+	}
 }

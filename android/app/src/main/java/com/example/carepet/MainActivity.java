@@ -82,11 +82,14 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private String currentheadName;
     private Handler handler;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences user = getSharedPreferences("user", Context.MODE_PRIVATE);
+        userId = user.getInt("user_id", 0);
         initView();
         initFragment(0);
         initTabBar();
@@ -184,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 int frgTag = navigationController.getSelected();
 //                int frgTag = fragmentTabHost.getCurrentTab();
                 Log.i("tag",frgTag+"");
-                intent.putExtra("userId","1");
+                intent.putExtra("userId",userId+"");
                 startActivity(intent);
             }
         });
@@ -196,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("http://175.24.16.26:8080/CarePet/user/getuser?id=" + 1);
+                    URL url = new URL("http://175.24.16.26:8080/CarePet/user/getuser?id=" + userId);
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
