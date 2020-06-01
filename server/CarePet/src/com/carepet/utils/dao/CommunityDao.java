@@ -41,7 +41,7 @@ public class CommunityDao {
 		UserDao userDao = new UserDao();
 		Session session=this.sessionFactory.getCurrentSession();
 		System.out.println("flag=====1");
-		Query query=session.createQuery("from Community order by id desc");
+		Query query=session.createQuery("from Community where flag = 1 order by id desc");
 		query.setMaxResults(4);
 		List<Community> list=query.list();
 		List<Communitys> cs=new ArrayList<>();
@@ -65,9 +65,9 @@ public class CommunityDao {
 		UserDao userDao = new UserDao();
 		Session session=this.sessionFactory.getCurrentSession();
 		System.out.println("flag=====2");
-		Query query=session.createQuery("from Community order by id desc");
+		Query query=session.createQuery("from Community where flag = 1 order by id desc");
 		query.setMaxResults(4);
-		query.setFirstResult(flag-1);
+		query.setFirstResult(flag);
 		List<Community> list=query.list();
 		List<Communitys> cs=new ArrayList<>();
 		for(int i=0;i<list.size();i++) {
