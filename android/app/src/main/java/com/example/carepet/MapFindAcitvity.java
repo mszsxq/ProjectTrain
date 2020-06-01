@@ -1,9 +1,11 @@
 package com.example.carepet;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,15 +36,22 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.UiSettings;
 import com.baidu.mapapi.model.LatLng;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.example.carepet.entity.FindTable;
 import com.example.carepet.entity.User;
+import com.example.carepet.oss.OssService;
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.snail.slidenested.SlideNestedPanelLayout;
 import com.snail.slidenested.StateCallback;
+
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -54,6 +63,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,7 +84,12 @@ public class MapFindAcitvity extends AppCompatActivity {
     private List<Marker> markerList = new ArrayList<>();
     protected static final int CHANGE_UI = 1;
     protected static final int ERROR = 2;
+
     private Bitmap basebitmap;
+    private Bitmap bitmap;
+    private List<Bitmap> bitmapp = new ArrayList<>();
+    private Context context;
+
     private String path = null;
     private String purl = null;
 
@@ -84,6 +99,7 @@ public class MapFindAcitvity extends AppCompatActivity {
     private TextView textView1;
     private TextView textView2;
     private TextView textView3;
+    private TextView textView5;
     private TextView textView7;
 
     private List<Bitmap> bitmaps = new ArrayList<>();
@@ -101,17 +117,24 @@ public class MapFindAcitvity extends AppCompatActivity {
                 Log.e("error",list.toString());
                 for(int i=0;i<list.size();i++){
                     postions.add(list.get(i));//my
-                    path = postions.get(i).getImgjson();
+                    path = postions.get(i).getImgjson().split("--")[2];
+//                    path = postions.get(i).getImgjson();
                     Log.e("pikaqiu",path);
 //                    getPicBitmap();
                 }
             }
-            getPicBitmap(postions);
+//            getPicBitmap(postions);
+//            change(postions);
+//            getPic(postions);
+            bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.iconlalla);
+            bitmaps = getZoomImage(postions,bitmap,128,128);
+            addOverlay(postions);
             if (msg.what == CHANGE_UI) {
                 bitmaps = (List<Bitmap>) msg.obj;
+                Log.e("eeeeee",bitmaps.toString());
 //                basebitmap = (Bitmap) msg.obj;
-                bitmaps = getZoomImage(bitmaps,64,64);
-                addOverlay(postions);
+                /*bitmaps = getZoomImage(bitmaps,128,128);
+                addOverlay(postions);*/
             }else if(msg.what == 62){
                 basebitmap = (Bitmap)msg.obj;
                 imageView1.setImageBitmap(basebitmap);
@@ -123,14 +146,23 @@ public class MapFindAcitvity extends AppCompatActivity {
                 Gson gson=new Gson();
                 User user = gson.fromJson(info,type);
                 purl = user.getTouxiang();
-                getPicBitmap2();
+//                getPicBitmap2();
+                File file=new File(getApplicationContext().getFilesDir(),"oss"+purl);
+                if(!file.exists()){
+                    OssService ossService = new OssService(getApplicationContext());
+                    ossService.downLoad("",purl);//listData.getPic()
+                    Log.e("检测","dd");
+                }
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                avatar.setImageBitmap(bitmap);
                 textView2.setText(user.getUsername());
             }else if(msg.what == 22){
                 basebitmap = (Bitmap)msg.obj;
                 avatar.setImageBitmap(basebitmap);
             }else if (msg.what == ERROR) {
-                Toast.makeText(MapFindAcitvity.this, "显示图片错误",
-                        Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(MapFindAcitvity.this, "显示图片错误",
+                        Toast.LENGTH_SHORT).show();*/
+                Log.e("报错了！","llalalalala");
             }
             //点击事件
             mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
@@ -141,11 +173,19 @@ public class MapFindAcitvity extends AppCompatActivity {
                     Log.e("皮卡皮卡",infoUtil.getId()+infoUtil.getTitle()+"");
                     Log.e("皮卡",infoUtil.getUserid()+"");
                     getUser(infoUtil.getUserid());
-                    path = infoUtil.getImgjson();
-                    getPicBitmap1();
+                    path = infoUtil.getImgjson().split("--")[2];
+                    Glide.with(getApplicationContext()).load(path).asBitmap().into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            bitmap = resource;
+                            Log.e("kenan",bitmap.toString());
+                            imageView1.setImageBitmap(bitmap);
+                        }
+                    });
                     textView.setText(infoUtil.getTitle());
                     textView1.setText(infoUtil.getCity());
                     textView3.setText(infoUtil.getPettype());
+                    textView5.setText(infoUtil.getTime());
                     textView7.setText(infoUtil.getContent());
                     return true;
                 }
@@ -165,6 +205,7 @@ public class MapFindAcitvity extends AppCompatActivity {
         textView1 = findViewById(R.id.textView1);
         textView2 = findViewById(R.id.textView2);
         textView3 = findViewById(R.id.textView3);
+        textView5 = findViewById(R.id.textView5);
         textView7 = findViewById(R.id.textView7);
         //初始化Map
         initializeMap();
@@ -306,6 +347,7 @@ public class MapFindAcitvity extends AppCompatActivity {
         LatLng latLng = null;
         Marker marker;
         OverlayOptions options;
+        Log.e("ccccccp",postions.size()+"");
         for(int i = 0;i<postions.size();i++){
             BitmapDescriptor bitmap = BitmapDescriptorFactory.fromBitmap(bitmaps.get(i));
             FindTable info = postions.get(i);
@@ -326,6 +368,86 @@ public class MapFindAcitvity extends AppCompatActivity {
             marker.setExtraInfo(bundle);
         }
     }
+    public void getPic(final List<FindTable> poss){
+        for(int i = 0;i<poss.size();i++){
+            FindTable listData = poss.get(i);
+//            Log.e("数据",listData.getImgjson().split("--")[2].split("/")[3]);
+            File file=new File(getApplicationContext().getFilesDir(),"oss/"+listData.getImgjson().split("--")[2].split("/")[3]);
+            if(!file.exists()){
+                OssService ossService = new OssService(getApplicationContext());
+                ossService.downLoad("",listData.getImgjson().split("--")[2].split("/")[3]);//listData.getPic()
+                Log.e("cccccc","dd");
+            }
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            bitmaps.add(bitmap);
+            Log.e("cccccce",bitmap+"");
+            Log.e("ccccccf",bitmaps.get(i)+"");
+            Log.e("cccccca",file.getAbsolutePath());
+            Log.e("ccccccb",bitmaps.size()+"");
+        }
+        Log.e("cccccccccc",bitmaps.get(0)+"");
+    }
+    public final static Bitmap returnBitMap(String url) {
+        URL myFileUrl = null;
+        Bitmap bitmap = null;
+        try {
+            myFileUrl = new URL(url);
+            HttpURLConnection conn;
+            conn = (HttpURLConnection) myFileUrl.openConnection();
+            conn.setDoInput(true);
+            int length = conn.getContentLength();
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is, length);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize =2;    // 设置缩放比例
+            Rect rect = new Rect(0, 0,0,0);
+            bitmap = BitmapFactory.decodeStream(bis,rect,options);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+    public void change(final List<FindTable> poss){
+        /*new Thread() {
+            public void run() {
+                for (int i = 0; i < poss.size(); i++) {
+                    try {
+                        Bitmap myBitmap = Glide.with(getApplicationContext())
+                                .asBitmap()
+                                .load(poss.get(i).getImgjson().split("--")[1])
+                                .submit(100, 100).get();
+                        Bitmap bitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight());
+                        Log.e("wwww", i + bitmap.toString());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }.start();*/
+        for(int i = 0;i<poss.size();i++){
+            Glide.with(getApplicationContext()).load(postions.get(i).getImgjson().split("--")[1]).asBitmap().into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    bitmap = resource;
+                    Log.e("kenan",bitmap.toString());
+//                  avatar.setImageBitmap(bitmap);
+                    bitmapp.add(bitmap);
+                    Log.e("kenan",bitmapp.size()+"::::"+poss.size());
+                    if(bitmapp.size() == poss.size()-1){
+                        /*bitmaps = getZoomImage(bitmapp,128,128);
+                        addOverlay(postions);*/
+                    }
+                }
+            });
+
+//            Log.e("kenan1",bitmapp.get(3)+"");
+        }
+//        Log.e("liebiao",bitmapp.get(2).toString());
+//        bitmapp = getZoomImage(bitmapp,64,64);
+//        addOverlay(postions);
+    }
     //读取网络图片URL
     public void getPicBitmap(final List<FindTable> poss){
         new Thread() {
@@ -338,7 +460,7 @@ public class MapFindAcitvity extends AppCompatActivity {
                     //创建URL对象
                     Log.e("ppppp",path);
                     for(int i = 0;i<poss.size();i++){
-                        URL url = new URL(poss.get(i).getImgjson());
+                        URL url = new URL(poss.get(i).getImgjson().split("--")[2]);
                         // 根据url 发送 http的请求
                         conn = (HttpURLConnection) url.openConnection();
                         // 设置请求的方式
@@ -360,11 +482,11 @@ public class MapFindAcitvity extends AppCompatActivity {
                         bitmap = BitmapFactory.decodeStream(is);
                         bitmaps.add(bitmap);
                     }
-                        //将更改主界面的消息发送给主线程
-                        Message msg = new Message();
-                        msg.what = CHANGE_UI;
-                        msg.obj = bitmaps;
-                        handler.sendMessage(msg);
+                    //将更改主界面的消息发送给主线程
+                    Message msg = new Message();
+                    msg.what = CHANGE_UI;
+                    msg.obj = bitmaps;
+                    handler.sendMessage(msg);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Message msg = new Message();
@@ -490,7 +612,7 @@ public class MapFindAcitvity extends AppCompatActivity {
      * @param newHeight ：缩放后高度
      * @return
      */
-    public static List<Bitmap> getZoomImage(List<Bitmap> orgBitmap, double newWidth, double newHeight) {
+    public static List<Bitmap> getZoomImage(List<FindTable> poss,Bitmap orgBitmap, double newWidth, double newHeight) {
         if (null == orgBitmap) {
             return null;
         }
@@ -501,10 +623,10 @@ public class MapFindAcitvity extends AppCompatActivity {
             return null;
         }
         List<Bitmap> bs = new ArrayList<>();
-        for(int i = 0;i<orgBitmap.size();i++){
+        for(int i = 0;i<poss.size();i++){
             // 获取图片的宽和高
-            float width = orgBitmap.get(i).getWidth();
-            float height = orgBitmap.get(i).getHeight();
+            float width = orgBitmap.getWidth();
+            float height = orgBitmap.getHeight();
             // 创建操作图片的matrix对象
             Matrix matrix = new Matrix();
             // 计算宽高缩放率
@@ -512,7 +634,7 @@ public class MapFindAcitvity extends AppCompatActivity {
             float scaleHeight = ((float) newHeight) / height;
             // 缩放图片动作
             matrix.postScale(scaleWidth, scaleHeight);
-            Bitmap bitmap = Bitmap.createBitmap(orgBitmap.get(i), 0, 0, (int) width, (int) height, matrix, true);
+            Bitmap bitmap = Bitmap.createBitmap(orgBitmap, 0, 0, (int) width, (int) height, matrix, true);
             bs.add(bitmap);
         }
 
@@ -580,7 +702,7 @@ public class MapFindAcitvity extends AppCompatActivity {
         msg.obj = info;
         msg.what = 66;
         handler.sendMessage(msg);
-}
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
