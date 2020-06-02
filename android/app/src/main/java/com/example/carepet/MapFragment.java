@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -12,18 +11,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.SearchView;
-import android.widget.TextView;
-
 import com.etsy.android.grid.StaggeredGridView;
 import com.example.carepet.adapter.SearchAdapter;
 import com.example.carepet.entity.FindTable;
 import com.example.carepet.entity.MapContent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,8 +26,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -46,10 +40,10 @@ public class MapFragment extends Fragment {
     private List<MapContent> list = new ArrayList<>();
     private List<MapContent> list1 = new ArrayList<>();
     private SwipRefreshView swipeRefreshLayout;
-    private ImageView mImageView;
-    private TextView medittext;
     private SearchView searchview;
     private  String soso;
+    private int flag=1;
+    private  int num=0;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -63,39 +57,25 @@ public class MapFragment extends Fragment {
         gridView = view.findViewById(R.id.gview);
         swipeRefreshLayout=view.findViewById(R.id.swipeRefreshLayout);
         gue = new GestureDetector(getContext(), new MyGestureListener());
-//        mImageView=(ImageView)view.findViewById(R.id.mimageview);
-//        medittext=view.findViewById(R.id.medittext);
         searchview=view.findViewById(R.id.et_ss);
     }
     public void initData(){
         MyAsnycTask myAsnycTask = new MyAsnycTask();
         myAsnycTask.execute();
     }
-
+    public void initData1(){
+        MyAsnycTask2 myAsnycTask = new MyAsnycTask2();
+        myAsnycTask.execute();
+    }
     @SuppressLint("ClickableViewAccessibility")
     private void  setListner(){
-//        mImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent=new Intent(getContext(), search_find.class);
-//                startActivity(intent);
-//            }
-//        });
-//        medittext.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent1=new Intent(getContext(),search_find.class);
-//                startActivity(intent1);
-//            }
-//        });
         searchview.setSubmitButtonEnabled(true);
         searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 soso=query;
-                MyAsnycTask2 myAsnycTask = new MyAsnycTask2();
-                myAsnycTask.execute();
-                return false;
+                initData1();
+                return true;
             }
 
             @Override
@@ -106,8 +86,7 @@ public class MapFragment extends Fragment {
         searchview.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
-                MyAsnycTask myAsnycTask = new MyAsnycTask();
-                myAsnycTask.execute();
+                initData();
                 return false;
             }
         });
@@ -122,8 +101,14 @@ public class MapFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent  intent  =new Intent(getActivity(),MapDetails.class);
                 Bundle bundle =new Bundle();
-                bundle.putSerializable("findtable",list.get(i));
-                Log.e("bundle",list.get(i).toString());
+                if(flag!=0){
+                    bundle.putSerializable("findtable",list.get(i));
+                    Log.e("bundle",list.get(i).toString());
+                }else{
+                    bundle.putSerializable("findtable",list1.get(i));
+                    Log.e("bundle",list1.get(i).toString());
+                }
+
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -135,16 +120,6 @@ public class MapFragment extends Fragment {
                swipeRefreshLayout.setRefreshing(false);
             }
         });
-//        swipeRefreshLayout.setOnLoadMoreListener(new SwipeRefreshView.OnLoadMoreListener()
-//        {
-//            @Override
-//            public void onLoadMore() {
-//                MyAsnycTask myAsnycTask = new MyAsnycTask();
-//                myAsnycTask.execute();
-//                swipeRefreshLayout.setLoading(false);
-//            }
-//
-//        });
 
     }
     //滑动显示显示
@@ -166,7 +141,6 @@ public class MapFragment extends Fragment {
 
 
     class MyAsnycTask2 extends AsyncTask<Integer, Integer, List<FindTable>> {
-        //用来写等待时的UI（加载中转圈）
         @Override
         protected void onPreExecute() {
 
@@ -174,8 +148,6 @@ public class MapFragment extends Fragment {
 
         @Override
         protected List<FindTable> doInBackground(Integer... integers) {
-
-//            final String ip = "http://192.168.101.16:8080/CarePet/findtable/listrecent";
             final String ip ="http://175.24.16.26:8080/CarePet/findtable/liststrf?sousuo="+soso ;
             URL url;
             String json = "";
@@ -203,7 +175,6 @@ public class MapFragment extends Fragment {
             list1.clear();
             if (findTables != null) {
                 for(FindTable f: findTables){
-                    Log.e("aaaaa", f.toString());
                     String jason=f.getImgjson();
                     String name =jason.split("--")[0];
                     String touxiang =jason.split("--")[1];
@@ -217,6 +188,7 @@ public class MapFragment extends Fragment {
                 }
             }
             //findtable 数据 不更新问题
+            flag=0;
             SearchAdapter adapter= new SearchAdapter(getContext(), R.layout.map_search_item, list1);
             gridView.setAdapter(adapter);
 
@@ -232,9 +204,8 @@ public class MapFragment extends Fragment {
 
         @Override
         protected List<FindTable> doInBackground(Integer... integers) {
-
-//            final String ip = "http://192.168.101.16:8080/CarePet/findtable/listrecent";
-            final String ip ="http://175.24.16.26:8080/CarePet/findtable/listrecent";
+            final String ip ="http://175.24.16.26:8080/CarePet/findtable/listRandom?num="+num;
+//            final String ip ="http://175.24.16.26:8080/CarePet/findtable/listrecent";
             URL url;
             String json = "";
             List<FindTable> findList = new ArrayList<>();
@@ -260,7 +231,6 @@ public class MapFragment extends Fragment {
         protected void onPostExecute(List<FindTable> findTables) {
             if (findTables != null) {
                 for(FindTable f: findTables){
-                    Log.e("aaaaa", f.toString());
                     String jason=f.getImgjson();
                     String name =jason.split("--")[0];
                     String touxiang =jason.split("--")[1];
@@ -271,12 +241,14 @@ public class MapFragment extends Fragment {
                     mapContent.setTouxiang(touxiang);
                     mapContent.setBimg(bimg);
                     list.add(mapContent);
+                    Collections.reverse(list);
                 }
             }
             //findtable 数据 不更新问题
+            flag=1;
+            num=num+1;
             SearchAdapter adapter= new SearchAdapter(getContext(), R.layout.map_search_item, list);
             gridView.setAdapter(adapter);
-
         }
     }
 

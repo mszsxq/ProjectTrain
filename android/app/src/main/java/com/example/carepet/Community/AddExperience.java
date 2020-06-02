@@ -1,7 +1,10 @@
 package com.example.carepet.Community;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -108,7 +111,9 @@ public class AddExperience extends AppCompatActivity {
 //                community.setTag("experience");
 //                community.setTitle(title.toString());
 //                community.setFlag(1);
-                Community community = PackCommunity(content.getText().toString(),1,imgs,time,title.getText().toString());
+                SharedPreferences user = getSharedPreferences("user", Context.MODE_PRIVATE);
+                int userId = user.getInt("user_id",0);
+                Community community = PackCommunity(content.getText().toString(),userId,imgs,time,title.getText().toString());
                 sendToServer(community);
                 finish();
             }

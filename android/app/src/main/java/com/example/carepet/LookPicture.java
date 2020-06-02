@@ -263,8 +263,12 @@ public class LookPicture extends Activity {
             public void run() {
                 try {
                     Gson gson = new Gson();
+<<<<<<< HEAD
 
                     URL url = new URL("http://192.168.43.65:8080/CarePet/changephoto/change?headname="+laterheadName+"head.jpg"+"&userId="+userId);
+=======
+                    URL url = new URL("http://175.24.16.26:8080/CarePet/changephoto/change?headname="+laterheadName+"head.jpg"+"&userId="+userId);
+>>>>>>> 64072d3a983f60b5a0328d1e53ba11c1f318b66c
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

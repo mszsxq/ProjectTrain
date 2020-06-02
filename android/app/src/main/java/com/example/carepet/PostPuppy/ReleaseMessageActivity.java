@@ -1,6 +1,8 @@
 package com.example.carepet.PostPuppy;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -96,17 +98,16 @@ public class ReleaseMessageActivity extends AppCompatActivity {
                 //获取当前时间
                 Date date = new Date(System.currentTimeMillis());
                 String time=simpleDateFormat.format(date);
-                Community community = PackCommunity(etMesssage.getText().toString(),1,imgs,time,title.getText().toString());
-                Gson gson = new Gson();
-                String jsonObject = gson.toJson(community);
-                OssService ossService=new OssService(getApplicationContext());
-                ossService.uploadImage("",listImagePath.get(0),"http://175.24.16.26:8080/CarePet/community/insertcommunity?community="+jsonObject+"");
-//                ToServer(community);
+                SharedPreferences user = getSharedPreferences("user", Context.MODE_PRIVATE);
+                int userId = user.getInt("user_id",0);
+                Community community = PackCommunity(etMesssage.getText().toString(),userId,imgs,time,title.getText().toString());
+                ToServer(community);
                 finish();
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
+
         });
         mRec=findViewById(R.id.mRec);
         etMesssage=findViewById(R.id.et_message);
