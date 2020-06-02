@@ -40,7 +40,7 @@ import java.util.List;
 public class ExperienceFragment extends Fragment {
     List<Communitys> newList = new ArrayList<Communitys>();
     List<Communitys> list=new ArrayList<>();
-    private ListAdapter myAdapter;
+    private ExperienceListAdapter myAdapter;
     RecyclerView recyclerView;
     RefreshLayout refreshLayout;
     private Handler handler = new Handler(){
@@ -49,7 +49,7 @@ public class ExperienceFragment extends Fragment {
             super.handleMessage(msg);
             String object = (String) msg.obj;
             Gson gson = new Gson();
-            List<Communitys> alist = gson.fromJson(object, new TypeToken<List<Community>>() {}.getType());
+            List<Communitys> alist = gson.fromJson(object, new TypeToken<List<Communitys>>() {}.getType());
             newList=alist;
             list.addAll(list.size(),alist);
 //            List<Community> list = new ArrayList<>();
@@ -59,7 +59,7 @@ public class ExperienceFragment extends Fragment {
 //            community.setPic("OIP");
 //            community.setImgjson("OIP");
 //            list.add(community);
-            myAdapter = new ListAdapter(list,getContext()); //创建适配器，并且导入数据list
+            myAdapter = new ExperienceListAdapter(list,getContext()); //创建适配器，并且导入数据list
             recyclerView.setAdapter(myAdapter);//布局导入适配器
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
@@ -71,7 +71,7 @@ public class ExperienceFragment extends Fragment {
             super.handleMessage(msg);
             String object = (String) msg.obj;
             Gson gson = new Gson();
-            List<Communitys> alist = gson.fromJson(object, new TypeToken<List<Community>>() {}.getType());
+            List<Communitys> alist = gson.fromJson(object, new TypeToken<List<Communitys>>() {}.getType());
             newList=alist;
             //list.addAll(list.size(),alist);
 //            List<Community> list = new ArrayList<>();
@@ -125,7 +125,6 @@ public class ExperienceFragment extends Fragment {
             public void run() {
                 try {
                     Gson gson = new Gson();
-
                     //192.168.5.7
                     URL url = new URL("http://192.168.43.65:8080/CarePet/community/listall");
                     URLConnection conn = url.openConnection();
@@ -153,6 +152,7 @@ public class ExperienceFragment extends Fragment {
                     Gson gson = new Gson();
                     //192.168.5.7
                     URL url = new URL("http://192.168.43.65:8080/CarePet/community/listsome?flag="+flag+"");
+/*                    URL url = new URL("http://175.24.16.26:8080/CarePet/experience/listsome?flag="+flag+"");*/
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

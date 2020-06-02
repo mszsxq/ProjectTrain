@@ -48,4 +48,22 @@ public class ExperienceController {
 	    System.out.println(communityString+"");
 		return communityString;
 	}
+	
+
+	@ResponseBody
+	@RequestMapping("/listsome")
+	public String listsome(@RequestParam(value = "flag") int flag,Model model,HttpServletRequest req,HttpServletResponse rep) throws IOException {
+		rep.setCharacterEncoding("UTF-8");
+		Gson gson=new Gson();
+		System.out.println("kkkk"+flag);
+		List<Communitys> communities=experienceService.listSome(flag);
+		String communityString=gson.toJson(communities);
+		model.addAttribute("findTables", communityString);
+		PrintWriter writer = rep.getWriter();
+		writer.println(communityString+"\n");
+	    writer.flush();
+	    writer.close();
+	    System.out.println(communityString+"");
+		return communityString;
+	}
 }

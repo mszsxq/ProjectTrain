@@ -1,37 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-     android:layout_height="match_parent"
-    android:layout_width="match_parent">
-    <LinearLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SearchView
         android:id="@+id/et_ss"
+        android:layout_alignParentTop="true"
+        android:queryHint="搜索猫狗类型或所在城市"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:orientation="horizontal"
-        android:background="@drawable/corners_bg"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="5dp"
-        android:gravity="center_vertical"
-        >
-        <ImageView
-            android:id="@+id/mimageview"
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/search"
-            />
-        <TextView
-            android:id="@+id/medittext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:layout_marginLeft="10dp"
-            android:background="@null"
-            android:text="搜索猫猫类型或所在城市" />
-    </LinearLayout>
-<com.example.carepet.SwipeRefreshView
+        android:layout_height="30dp"/>
+<!--    <LinearLayout-->
+<!--        android:id="@+id/et_ss"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:background="@drawable/corners_bg"-->
+<!--        android:layout_marginLeft="30dp"-->
+<!--        android:layout_marginRight="30dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:gravity="center_vertical"-->
+<!--        >-->
+<!--        <ImageView-->
+<!--            android:id="@+id/mimageview"-->
+<!--            android:layout_width="15dp"-->
+<!--            android:layout_height="15dp"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:src="@drawable/search"-->
+<!--            />-->
+<!--        <TextView-->
+<!--            android:id="@+id/medittext"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="15dp"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:background="@null"-->
+<!--            android:text="搜索猫猫类型或所在城市" />-->
+<!--    </LinearLayout>-->
+<com.example.carepet.SwipRefreshView
     android:layout_below="@+id/et_ss"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
@@ -46,5 +52,5 @@
         android:layout_height="match_parent"
         android:columnWidth="200dp"
         app:column_count="2" />
-</com.example.carepet.SwipeRefreshView>
+</com.example.carepet.SwipRefreshView>
 </RelativeLayout>

@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 User user=gson.fromJson(object,User.class);
                 String txstr=user.getTouxiang();
                 /*Log.e("1",txstr);*/
-                nick_phone.setText(user.getPassword());
+                nick_phone.setText("carepet，爱宠晒宠。");
                 nick_name.setText(user.getUsername());
 /*              getHeadFromSD(nick_image);*/
                 nick_image.setAdjustViewBounds(true);
@@ -129,12 +129,12 @@ public class MainActivity extends AppCompatActivity {
                   case  R.id.daren:
                       Intent intent = new Intent(MainActivity.this, Daren.class);
                       startActivity(intent);
+                      finish();
                       break;
-                   case R.id.xiugai:
-                       Toast.makeText(MainActivity.this,"暂时还没有被开发出来~",Toast.LENGTH_SHORT).show();
-                       break;
                    case R.id.yinsi:
-                       Toast.makeText(MainActivity.this,"暂时还没有被开发出来~",Toast.LENGTH_SHORT).show();
+                       Intent intent1 = new Intent(MainActivity.this, Yinsi.class);
+                        startActivity(intent1);
+/*                       Toast.makeText(MainActivity.this,"暂时还没有被开发出来~",Toast.LENGTH_SHORT).show();*/
                        break;
                    case R.id.unlogin:
                        SharedPreferences preferences = getSharedPreferences("login", MODE_PRIVATE);
@@ -144,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                        editor.commit();
                        Intent intent3 = new Intent(MainActivity.this, Login.class);
                        startActivity(intent3);
+                       finish();
                        break;
                 }
                 return false;

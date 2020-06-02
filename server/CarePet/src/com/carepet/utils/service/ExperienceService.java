@@ -56,6 +56,12 @@ public class ExperienceService {
 	}
 	
 	@Transactional(readOnly = false)
+	public List<Communitys> listSome(int flag) {
+		return this.experienceDao.findSomeExperience(flag);
+	}
+	
+	
+	@Transactional(readOnly = false)
 	public List<Community> listSameCity(String city) {
 		return this.experienceDao.findSameCity(city);
 	}

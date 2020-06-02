@@ -112,14 +112,12 @@ public class search extends AppCompatActivity implements ViewPager.OnPageChangeL
                             viewPager.setCurrentItem(3);
                             ym2.setTextColor(getResources().getColor(R.color.rrr));
                             ym3.setTextColor(getResources().getColor(R.color.bbb));
-                            ym4.setTextColor(getResources().getColor(R.color.bbb));
                            ym2.setOnClickListener(new View.OnClickListener() {
                                @Override
                                public void onClick(View view) {
                                    viewPager.setCurrentItem(3);
                                    ym2.setTextColor(getResources().getColor(R.color.rrr));
                                    ym3.setTextColor(getResources().getColor(R.color.bbb));
-                                   ym4.setTextColor(getResources().getColor(R.color.bbb));
                                     }
                            });
                            ym3.setOnClickListener(new View.OnClickListener() {
@@ -128,16 +126,6 @@ public class search extends AppCompatActivity implements ViewPager.OnPageChangeL
                                    viewPager.setCurrentItem(4);
                                    ym2.setTextColor(getResources().getColor(R.color.bbb));
                                    ym3.setTextColor(getResources().getColor(R.color.rrr));
-                                   ym4.setTextColor(getResources().getColor(R.color.bbb));
-                               }
-                           });
-                           ym4.setOnClickListener(new View.OnClickListener() {
-                               @Override
-                               public void onClick(View view) {
-                                   viewPager.setCurrentItem(5);
-                                   ym2.setTextColor(getResources().getColor(R.color.bbb));
-                                   ym3.setTextColor(getResources().getColor(R.color.bbb));
-                                   ym4.setTextColor(getResources().getColor(R.color.rrr));
                                }
                            });
                         }
@@ -150,7 +138,6 @@ public class search extends AppCompatActivity implements ViewPager.OnPageChangeL
     private void initView() {
         ym2=findViewById(R.id.ym2);
         ym3=findViewById(R.id.ym3);
-        ym4=findViewById(R.id.ym4);
         ymeditext=findViewById(R.id.ymedittext);
         ymimageview=findViewById(R.id.ymimageview);
         ymtextview=findViewById(R.id.ymtextview);
@@ -158,8 +145,6 @@ public class search extends AppCompatActivity implements ViewPager.OnPageChangeL
         list=new ArrayList<>();
         ym2.setOnClickListener(this);
         ym3.setOnClickListener(this);
-        ym4.setOnClickListener(this);
-
         //实现四个页面：头像页，动态页：晒宠，经验页，寻找页
         list.add(LookPuppyFragment.newInstance());
         list.add(ExperienceFragment.newInstance());
@@ -188,24 +173,14 @@ public class search extends AppCompatActivity implements ViewPager.OnPageChangeL
                 viewPager.setCurrentItem(0);
                 ym2.setTextColor(getResources().getColor(R.color.rrr));
                 ym3.setTextColor(getResources().getColor(R.color.bbb));
-                ym4.setTextColor(getResources().getColor(R.color.bbb));
                 break;
             case R.id.ym3:
                 // button02.setBackgroundColor(Color.parseColor("#B4D1E1"));
                 viewPager.setCurrentItem(1);
                 ym2.setTextColor(getResources().getColor(R.color.bbb));
                 ym3.setTextColor(getResources().getColor(R.color.rrr));
-                ym4.setTextColor(getResources().getColor(R.color.bbb));
-                break;
-            case R.id.ym4:
-                // button02.setBackgroundColor(Color.parseColor("#B4D1E1"));
-                viewPager.setCurrentItem(2);
-                ym2.setTextColor(getResources().getColor(R.color.bbb));
-                ym3.setTextColor(getResources().getColor(R.color.bbb));
-                ym4.setTextColor(getResources().getColor(R.color.rrr));
                 break;
         }
-
     }
 
     @Override

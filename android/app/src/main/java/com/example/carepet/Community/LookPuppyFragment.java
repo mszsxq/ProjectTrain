@@ -49,7 +49,7 @@ public class LookPuppyFragment extends Fragment {
             super.handleMessage(msg);
             String object = (String) msg.obj;
             Gson gson = new Gson();
-            List<Communitys> alist = gson.fromJson(object, new TypeToken<List<Community>>() {}.getType());
+            List<Communitys> alist = gson.fromJson(object, new TypeToken<List<Communitys>>() {}.getType());
             newList=alist;
             list.addAll(list.size(),alist);
 //            List<Community> list = new ArrayList<>();
@@ -59,7 +59,7 @@ public class LookPuppyFragment extends Fragment {
 //            community.setPic("OIP");
 //            community.setImgjson("OIP");
 //            list.add(community);
-            myAdapter = new ListAdapter(list,getContext()); //创建适配器，并且导入数据list
+            myAdapter = new ListAdapter(alist,getContext()); //创建适配器，并且导入数据list
             recyclerView.setAdapter(myAdapter);//布局导入适配器
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
 
@@ -71,7 +71,8 @@ public class LookPuppyFragment extends Fragment {
             super.handleMessage(msg);
             String object = (String) msg.obj;
             Gson gson = new Gson();
-            List<Communitys> alist = gson.fromJson(object, new TypeToken<List<Community>>() {}.getType());
+            List<Communitys> alist = gson.fromJson(object, new TypeToken<List<Communitys>>() {}.getType());
+            list.addAll(list.size(),alist);
             newList=alist;
             //list.addAll(list.size(),alist);
 //            List<Community> list = new ArrayList<>();
@@ -126,6 +127,7 @@ public class LookPuppyFragment extends Fragment {
                     Gson gson = new Gson();
                     //192.168.5.7
                     URL url = new URL("http://192.168.43.65:8080/CarePet/community/listall");
+//                    URL url = new URL("http://175.24.16.26:8080/CarePet/community/listall");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
@@ -150,6 +152,7 @@ public class LookPuppyFragment extends Fragment {
                 try {
                     Gson gson = new Gson();
                     URL url = new URL("http://192.168.43.65:8080/CarePet/community/listsome?flag="+flag+"");
+/*                    URL url = new URL("http://175.24.16.26:8080/CarePet/community/listsome?flag="+flag+"");*/
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
@@ -192,7 +195,7 @@ public class LookPuppyFragment extends Fragment {
                 //模拟网络请求到的数据
                 //ArrayList<Community> newList = new ArrayList<Community>();
 
-                //myAdapter.refresh(newList);
+                myAdapter.refresh(list);
                 refreshlayout.finishRefresh(2000/*,false*/);
                 //不传时间则立即停止刷新    传入false表示刷新失败
             }

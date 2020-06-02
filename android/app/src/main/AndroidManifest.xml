@@ -63,6 +63,8 @@
         <activity android:name="com.example.carepet.Forgetpwd"/>
         <activity android:name="com.example.carepet.MainActivity"/>
         <activity android:name=".Daren"/>
+        <activity android:name=".Community.search_find"/>
+        <activity android:name=".Yinsi"/>
     </application>
 
 </manifest>

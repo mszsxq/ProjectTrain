@@ -134,8 +134,9 @@ public class AddExperience extends AppCompatActivity {
             public void run() {
                 try {
                     Gson gson = new Gson();
+                    /*175.24.16.26*/
                     String jsonObject = gson.toJson(community);
-                    URL url = new URL("http://192.168.137.1:8080/CarePet/experience/insertcommunity?community="+jsonObject+"");
+                    URL url = new URL("http://192.168.43.65:8080/CarePet/experience/insertcommunity?community="+jsonObject+"");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

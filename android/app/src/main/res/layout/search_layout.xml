@@ -74,7 +74,7 @@
             />-->
         <Button
             android:layout_centerVertical="true"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="80dp"
             android:layout_alignParentLeft="true"
             android:id="@+id/ym2"
             android:layout_width="50dp"
@@ -86,29 +86,17 @@
             android:textStyle="bold"
             style="?android:attr/borderlessButtonStyle"
             />
-
         <Button
             android:id="@+id/ym3"
+            android:layout_centerVertical="true"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="80dp"
+            android:layout_alignParentRight="true"
             android:layout_toRightOf="@id/ym2"
             android:background="@android:color/white"
             android:text="经验"
-            android:textColor="#B4D1E1"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/ym4"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="80dp"
-            android:layout_toRightOf="@id/ym3"
-            android:background="@android:color/white"
-            android:text="寻找"
             android:textColor="#B4D1E1"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -121,7 +109,9 @@
         android:layout_weight="1"
         android:isScrollContainer="false"
         android:background="@android:color/white"/>
-    <ImageView  android:layout_below="@+id/ymtablayout"
+    <ImageView
+        android:id="@+id/notf_u"
+        android:layout_below="@+id/ymtablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/none"

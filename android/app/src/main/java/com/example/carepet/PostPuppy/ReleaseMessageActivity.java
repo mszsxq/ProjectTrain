@@ -97,7 +97,11 @@ public class ReleaseMessageActivity extends AppCompatActivity {
                 Date date = new Date(System.currentTimeMillis());
                 String time=simpleDateFormat.format(date);
                 Community community = PackCommunity(etMesssage.getText().toString(),1,imgs,time,title.getText().toString());
-                ToServer(community);
+                Gson gson = new Gson();
+                String jsonObject = gson.toJson(community);
+                OssService ossService=new OssService(getApplicationContext());
+                ossService.uploadImage("",listImagePath.get(0),"http://175.24.16.26:8080/CarePet/community/insertcommunity?community="+jsonObject+"");
+//                ToServer(community);
                 finish();
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), MainActivity.class);
@@ -187,7 +191,7 @@ public class ReleaseMessageActivity extends AppCompatActivity {
                 try {
                     Gson gson = new Gson();
                     String jsonObject = gson.toJson(community);
-                    URL url = new URL("http://192.168.137.1:8080/CarePet/community/insertcommunity?community="+jsonObject+"");
+                    URL url = new URL("http://175.24.16.26:8080/CarePet/community/insertcommunity?community="+jsonObject+"");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

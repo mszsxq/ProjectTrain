@@ -13,9 +13,9 @@ import com.etsy.android.grid.StaggeredGridView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-class SwipeRefreshView extends SwipeRefreshLayout {
+public class SwipRefreshView extends SwipeRefreshLayout {
 
-    private static final String TAG = SwipeRefreshView.class.getSimpleName();
+    private static final String TAG = SwipRefreshView.class.getSimpleName();
     private final int mScaledTouchSlop;
     private final View mFooterView;
     private StaggeredGridView mListView;
@@ -28,7 +28,7 @@ class SwipeRefreshView extends SwipeRefreshLayout {
     private RecyclerView mRecyclerView;
     private int mItemCount;
 
-    public SwipeRefreshView(Context context, AttributeSet attrs) {
+    public SwipRefreshView(Context context, AttributeSet attrs) {
         super(context, attrs);
         // 填充底部加载布局
         mFooterView = View.inflate(context, R.layout.pull_up_refresh, null);

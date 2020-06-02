@@ -6,10 +6,6 @@
         android:icon="@drawable/daren"
         android:title="达人" />
     <item
-        android:id="@+id/xiugai"
-        android:icon="@drawable/update"
-        android:title="修改昵称" />
-    <item
         android:id="@+id/yinsi"
         android:icon="@drawable/ccc"
         android:title="隐私设置" />

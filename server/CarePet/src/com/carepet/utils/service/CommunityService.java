@@ -31,7 +31,7 @@ public class CommunityService {
 		}else {
 			urlpath=imgjson;
 		}
-		String type=new AnimalClassify().animal(urlpath);
+		String type=new AnimalClassify().animal("https://picturer.oss-cn-beijing.aliyuncs.com/"+urlpath);
 		community.setImgjson(imgjson);
 		community.setContent("#"+type+community.getContent());
 		this.communityDao.saveCommunity(community);

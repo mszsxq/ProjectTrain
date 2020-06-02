@@ -62,6 +62,7 @@ public class search_look extends Fragment {
                 String object = (String) msg.obj;
                 Gson gson = new Gson();
                 List<Communitys> list = gson.fromJson(object, new TypeToken<List<Communitys>>() {}.getType());
+                Log.e("sss",list.size()+"");
                 if(list.size()==0){
                     notf.setVisibility(View.VISIBLE);
                 }
@@ -72,7 +73,6 @@ public class search_look extends Fragment {
             }
 
         };
-
         return rootView;
     }
 

@@ -137,7 +137,7 @@
 从小跟猫们一起长大，觉得自己像一只猫多过一个人，我的理想就是做一个猫一样的女人。"
         android:textColor="@color/gray"
         android:textStyle="bold"
-        android:textSize="17dp"
+        android:textSize="16dp"
         android:layout_below="@+id/imageView1"/>
 
     <View
