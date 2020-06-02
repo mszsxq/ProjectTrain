@@ -129,9 +129,20 @@ public class LookPicture extends Activity {
             touxiang.setImageBitmap(bitmap);*//*
         }
 */
-        if (currentheadName.isEmpty()){
+        if (currentheadName.isEmpty()&&txname.isEmpty()){
             ivHead.setImageResource(R.drawable.tx);
-        }else{
+        }else if(currentheadName.isEmpty()&&!txname.isEmpty()){
+            FileInputStream fs = null;
+            try {
+                Log.e("111", txname);
+                fs = new FileInputStream("/sdcard/myHead/" + txname);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            Bitmap bitmap1 = BitmapFactory.decodeStream(fs);
+            ivHead.setImageBitmap(bitmap1);
+        }
+        else{
             FileInputStream fs = null;
             try {
                 Log.e("111",currentheadName);

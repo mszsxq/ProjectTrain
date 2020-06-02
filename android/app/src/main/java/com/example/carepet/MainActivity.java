@@ -132,35 +132,6 @@ public class MainActivity extends AppCompatActivity {
                     nick_image.setImageBitmap(bitmap);
                     touxiang.setImageBitmap(bitmap);
                 }
-
-                /*if (txstr==null) {
-                    //默认的头像
-                    nick_image.setImageResource(R.drawable.tx);
-                    touxiang.setImageResource(R.drawable.tx);
-                } else {
-                    File file=new File(getApplicationContext().getFilesDir(),"oss"+txstr);
-                    if(!file.exists()){
-                        OssService ossService = new OssService(getApplicationContext());
-                        ossService.downLoad("",txstr);
-                        Log.e("检测","dd");
-                    }
-                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                    nick_image.setImageBitmap(bitmap);
-                    touxiang.setImageBitmap(bitmap);
-                    *//*avatar.setImageBitmap(bitmap);*//*
-                }*/
-
-
-                   /* FileInputStream fs = null;
-                    try {
-                        Log.e("111", txstr);
-                        fs = new FileInputStream("/sdcard/myHead/" + txstr);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                    Bitmap bitmap = BitmapFactory.decodeStream(fs);
-                    nick_image.setImageBitmap(bitmap);
-                    touxiang.setImageBitmap(bitmap);*/
                 }
 
         };
@@ -215,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
 //        String value = ps.getString("headName","");
 //        headPath=value+"head.jpg";
         /*getHeadFromSD(nick_image);
-
         nick_image.setAdjustViewBounds(true);
         nick_image.setMaxHeight(180);
         nick_image.setMaxWidth(180);*/
