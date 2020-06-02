@@ -154,8 +154,13 @@ public class MapFindAcitvity extends AppCompatActivity {
                     Log.e("检测","dd");
                 }
                 Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                avatar.setImageBitmap(bitmap);
-                textView2.setText(user.getUsername());
+                if(bitmap==null){
+                    avatar.setImageResource(R.drawable.tx);
+                    textView2.setText(user.getUsername());
+                }else{
+                    avatar.setImageBitmap(bitmap);
+                    textView2.setText(user.getUsername());
+                }
             }else if(msg.what == 22){
                 basebitmap = (Bitmap)msg.obj;
                 avatar.setImageBitmap(basebitmap);

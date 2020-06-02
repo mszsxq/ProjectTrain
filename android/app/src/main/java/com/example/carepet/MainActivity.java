@@ -33,14 +33,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.carepet.Community.AddExperience;
+import com.example.carepet.Community.search_look;
 import com.example.carepet.PostPuppy.CommonUtil;
 import com.example.carepet.PostPuppy.ReleaseMessageActivity;
 import com.example.carepet.entity.User;
+import com.example.carepet.oss.OssService;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -72,19 +75,21 @@ public class MainActivity extends AppCompatActivity {
     private String currentheadName;
     private Handler handler;
     private int userId;
-
+    public static MainActivity newInstance() {
+        MainActivity activity=new MainActivity();
+        return activity;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences user = getSharedPreferences("user", Context.MODE_PRIVATE);
-        userId = user.getInt("user_id", 0);
         initView();
         initFragment(0);
         initTabBar();
         initPop();
-        sharedPreferences=getSharedPreferences("user",MODE_PRIVATE);
-/*        sharedPreferences=getContext().getSharedPreferences("user",MODE_PRIVATE);*/
+        SharedPreferences user = getSharedPreferences("user", Context.MODE_PRIVATE);
+        userId = user.getInt("user_id", 0);
+        Log.e("id",userId+"");
         getData();
         handler = new Handler() {
             @Override
@@ -93,20 +98,60 @@ public class MainActivity extends AppCompatActivity {
                 String object = (String) msg.obj;
                 Gson gson = new Gson();
                 User user=gson.fromJson(object,User.class);
-                String txstr=user.getTouxiang();
-                /*Log.e("1",txstr);*/
+                String txstr=user.getTouxiang().toString();
+                Log.e("头像",txstr);
                 nick_phone.setText("carepet，爱宠晒宠。");
                 nick_name.setText(user.getUsername());
-/*              getHeadFromSD(nick_image);*/
                 nick_image.setAdjustViewBounds(true);
                 nick_image.setMaxHeight(180);
                 nick_image.setMaxWidth(180);
-                if (txstr==null) {
+                /*getHeadFromSD(nick_image);*/
+                File file=new File(getApplicationContext().getFilesDir(),"oss/"+txstr);
+                if(!file.exists()){
+                    OssService ossService = new OssService(getApplicationContext());
+                    ossService.downLoad("",txstr);//listData.getPic()
+                    Log.e("检测","dd"+txstr);
+                }
+                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                if (bitmap==null&&txstr==null){
+                    nick_image.setImageResource(R.drawable.tx);
+                    touxiang.setImageResource(R.drawable.tx);
+                }else if(bitmap==null&&txstr!=null){
+                    FileInputStream fs = null;
+                    try {
+                        Log.e("111", txstr);
+                        fs = new FileInputStream("/sdcard/myHead/" + txstr);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    Bitmap bitmap1 = BitmapFactory.decodeStream(fs);
+                    nick_image.setImageBitmap(bitmap1);
+                    touxiang.setImageBitmap(bitmap1);
+                }
+                else {
+                    nick_image.setImageBitmap(bitmap);
+                    touxiang.setImageBitmap(bitmap);
+                }
+
+                /*if (txstr==null) {
                     //默认的头像
                     nick_image.setImageResource(R.drawable.tx);
                     touxiang.setImageResource(R.drawable.tx);
                 } else {
-                    FileInputStream fs = null;
+                    File file=new File(getApplicationContext().getFilesDir(),"oss"+txstr);
+                    if(!file.exists()){
+                        OssService ossService = new OssService(getApplicationContext());
+                        ossService.downLoad("",txstr);
+                        Log.e("检测","dd");
+                    }
+                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    nick_image.setImageBitmap(bitmap);
+                    touxiang.setImageBitmap(bitmap);
+                    *//*avatar.setImageBitmap(bitmap);*//*
+                }*/
+
+
+                   /* FileInputStream fs = null;
                     try {
                         Log.e("111", txstr);
                         fs = new FileInputStream("/sdcard/myHead/" + txstr);
@@ -115,14 +160,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                     Bitmap bitmap = BitmapFactory.decodeStream(fs);
                     nick_image.setImageBitmap(bitmap);
-                    touxiang.setImageBitmap(bitmap);
+                    touxiang.setImageBitmap(bitmap);*/
                 }
-            }
 
         };
-
         Drawer.closeDrawer(GravityCompat.END);
         navigationView.setItemIconTintList(null);
+        MainActivity.newInstance();
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -167,10 +211,6 @@ public class MainActivity extends AppCompatActivity {
         nick_name=(TextView) headerLayout.findViewById(R.id.nick_name);
         nick_image=(ImageView)headerLayout.findViewById(R.id.nick_image);
 
-        /*nick_phone.setText("12345555");
-        nick_name.setText("可乐加冰");*/
-//        nick_image.setImageResource(R.drawable.tx);
-
         //设置图像大小时，必须先有第一句才可以进行设置
 //        String value = ps.getString("headName","");
 //        headPath=value+"head.jpg";
@@ -195,18 +235,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getData() {
-       /* 利用SharedPreferences 获取到userid；*/
-        final int userid=sharedPreferences.getInt("user_id",0);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-<<<<<<< HEAD
                     //192.168.137.1
-                    URL url = new URL("http://192.168.43.65:8080/CarePet/user/getuser?id=" + userid);
-=======
                     URL url = new URL("http://175.24.16.26:8080/CarePet/user/getuser?id=" + userId);
->>>>>>> 64072d3a983f60b5a0328d1e53ba11c1f318b66c
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
@@ -244,6 +278,8 @@ public class MainActivity extends AppCompatActivity {
             }
             Bitmap bitmap = BitmapFactory.decodeStream(fs);
             nick_image.setImageBitmap(bitmap);
+            touxiang.setImageBitmap(bitmap);//新加上的
+
         }
     }
 

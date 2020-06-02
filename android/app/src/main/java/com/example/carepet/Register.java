@@ -219,7 +219,7 @@ public class Register extends AppCompatActivity {
 
                 try {
                     //175.24.16.26
-                    URL url = new URL("http://192.168.43.65:8080/CarePet/user/insertuser?user="+client);
+                    URL url = new URL("http://175.24.16.26:8080/CarePet/user/insertuser?user="+client);
 
                     URLConnection conn = url.openConnection();
 

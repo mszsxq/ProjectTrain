@@ -79,7 +79,7 @@ public class search_experience extends Fragment {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("http://192.168.43.65:8080/CarePet/community/liststre?sousuo=" + sousuo);
+                    URL url = new URL("http://175.24.16.26:8080/CarePet/community/liststre?sousuo=" + sousuo);
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

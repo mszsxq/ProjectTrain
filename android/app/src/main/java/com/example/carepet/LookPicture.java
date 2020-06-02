@@ -112,22 +112,24 @@ public class LookPicture extends Activity {
         currentheadName=sharedPreferences.getString("name","");
         Log.e("qqqqq0000",currentheadName);
 
-        if (txname.isEmpty()){
-            ivHead.setImageResource(R.drawable.tx);
-        }else{
-            FileInputStream fs = null;
-            try {
-                Log.e("111",currentheadName);
-                fs = new FileInputStream("/sdcard/myHead/"+txname);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            Bitmap bitmap  = BitmapFactory.decodeStream(fs);
-            ivHead.setImageBitmap(bitmap);
+       /* File file=new File(getApplicationContext().getFilesDir(),"oss/"+txname);
+        if(!file.exists()){
+            OssService ossService = new OssService(getApplicationContext());
+            ossService.downLoad("",txname);//listData.getPic()
+            Log.e("mm","dd");
         }
-
-
-       /* if (currentheadName.isEmpty()){
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        if (bitmap==null){
+            ivHead.setImageResource(R.drawable.tx);
+            *//*nick_image.setImageResource(R.drawable.tx);
+            touxiang.setImageResource(R.drawable.tx);*//*
+        }else {
+            ivHead.setImageBitmap(bitmap);
+            *//*nick_image.setImageBitmap(bitmap);
+            touxiang.setImageBitmap(bitmap);*//*
+        }
+*/
+        if (currentheadName.isEmpty()){
             ivHead.setImageResource(R.drawable.tx);
         }else{
             FileInputStream fs = null;
@@ -139,10 +141,7 @@ public class LookPicture extends Activity {
             }
             Bitmap bitmap  = BitmapFactory.decodeStream(fs);
             ivHead.setImageBitmap(bitmap);
-        }*/
-
-
-
+        }
         btnTakephoto=findViewById(R.id.btnCamera);
     }
     public class Listener implements View.OnClickListener{
@@ -151,7 +150,11 @@ public class LookPicture extends Activity {
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.btn1:
+                    MainActivity.newInstance();
+                    Intent intent=new Intent(LookPicture.this,MainActivity.class);
+                    startActivity(intent);
                     finish();
+
                     break;
                 case R.id.btnCamera:
                     showPopupWindow();
@@ -244,9 +247,9 @@ public class LookPicture extends Activity {
                             }
                         }).start();
                         sendToServer();
+                        //加载一遍mainacticity
                         saveHeadNameToSharedPreferences(laterheadName+"head.jpg");
 //                        ivHead.setImageBitmap(head);//用ImageView显示出来
-                        touxiang.setImageBitmap(head);
                     }
                 }
                 break;
@@ -263,12 +266,7 @@ public class LookPicture extends Activity {
             public void run() {
                 try {
                     Gson gson = new Gson();
-<<<<<<< HEAD
-
-                    URL url = new URL("http://192.168.43.65:8080/CarePet/changephoto/change?headname="+laterheadName+"head.jpg"+"&userId="+userId);
-=======
                     URL url = new URL("http://175.24.16.26:8080/CarePet/changephoto/change?headname="+laterheadName+"head.jpg"+"&userId="+userId);
->>>>>>> 64072d3a983f60b5a0328d1e53ba11c1f318b66c
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));

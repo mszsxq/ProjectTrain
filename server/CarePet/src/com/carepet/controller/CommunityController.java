@@ -83,6 +83,7 @@ public class CommunityController {
 	
 	@RequestMapping("/liststrp")
 	public String liststrp(@RequestParam String sousuo,HttpServletRequest req,HttpServletResponse rep2) throws IOException {
+		rep2.setCharacterEncoding("UTF-8");
 		List<Communitys> communities=communityService.listWithStrP(sousuo);
 		Gson gson2=new Gson();
 		String communityString=gson2.toJson(communities);
@@ -95,6 +96,7 @@ public class CommunityController {
 	}
 	@RequestMapping("/liststre")
 	public String liststre(@RequestParam String sousuo,HttpServletRequest req,HttpServletResponse rep1) throws IOException {
+		rep1.setCharacterEncoding("UTF-8");
 		List<Communitys> communities=communityService.listWithStrE(sousuo);
 		Gson gson2=new Gson();
 		String communityString=gson2.toJson(communities);
