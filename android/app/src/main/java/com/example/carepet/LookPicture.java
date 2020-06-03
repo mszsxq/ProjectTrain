@@ -107,40 +107,25 @@ public class LookPicture extends Activity {
 
         sharedPreferences=getSharedPreferences("user",MODE_PRIVATE);
         String txname= sharedPreferences.getString("user_tx","");
-
         sharedPreferences=getSharedPreferences("headName", Context.MODE_PRIVATE);
         currentheadName=sharedPreferences.getString("name","");
         Log.e("qqqqq0000",currentheadName);
-
-       /* File file=new File(getApplicationContext().getFilesDir(),"oss/"+txname);
-        if(!file.exists()){
-            OssService ossService = new OssService(getApplicationContext());
-            ossService.downLoad("",txname);//listData.getPic()
-            Log.e("mm","dd");
-        }
-        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-        if (bitmap==null){
-            ivHead.setImageResource(R.drawable.tx);
-            *//*nick_image.setImageResource(R.drawable.tx);
-            touxiang.setImageResource(R.drawable.tx);*//*
-        }else {
-            ivHead.setImageBitmap(bitmap);
-            *//*nick_image.setImageBitmap(bitmap);
-            touxiang.setImageBitmap(bitmap);*//*
-        }
-*/
         if (currentheadName.isEmpty()&&txname.isEmpty()){
             ivHead.setImageResource(R.drawable.tx);
         }else if(currentheadName.isEmpty()&&!txname.isEmpty()){
-            FileInputStream fs = null;
-            try {
-                Log.e("111", txname);
-                fs = new FileInputStream("/sdcard/myHead/" + txname);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+
+            File file=new File(getApplicationContext().getFilesDir(),"oss/"+txname);
+            if(!file.exists()){
+                OssService ossService = new OssService(getApplicationContext());
+                ossService.downLoad("",txname);//listData.getPic()
+                Log.e("检测","dd"+txname);
             }
-            Bitmap bitmap1 = BitmapFactory.decodeStream(fs);
-            ivHead.setImageBitmap(bitmap1);
+            Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+            if (bitmap==null&&txname==null) {
+                ivHead.setImageResource(R.drawable.tx);
+            }else{
+                ivHead.setImageBitmap(bitmap);
+            }
         }
         else{
             FileInputStream fs = null;

@@ -31,7 +31,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.carepet.Community.AddExperience;
 import com.example.carepet.Community.search_look;
 import com.example.carepet.PostPuppy.CommonUtil;
@@ -40,8 +39,6 @@ import com.example.carepet.entity.User;
 import com.example.carepet.oss.OssService;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
-
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,9 +49,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-
 import static com.baidu.mapapi.BMapManager.getContext;
-
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout Drawer;
     private NavigationView navigationView;
@@ -98,39 +93,45 @@ public class MainActivity extends AppCompatActivity {
                 String object = (String) msg.obj;
                 Gson gson = new Gson();
                 User user=gson.fromJson(object,User.class);
-                String txstr=user.getTouxiang().toString();
-                Log.e("头像",txstr);
+               /* String txstr=user.getTouxiang().toString();
+                Log.e("头像",txstr);*/
                 nick_phone.setText("carepet，爱宠晒宠。");
                 nick_name.setText(user.getUsername());
                 nick_image.setAdjustViewBounds(true);
                 nick_image.setMaxHeight(180);
                 nick_image.setMaxWidth(180);
                 /*getHeadFromSD(nick_image);*/
-                File file=new File(getApplicationContext().getFilesDir(),"oss/"+txstr);
-                if(!file.exists()){
-                    OssService ossService = new OssService(getApplicationContext());
-                    ossService.downLoad("",txstr);//listData.getPic()
-                    Log.e("检测","dd"+txstr);
-                }
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                if (bitmap==null&&txstr==null){
+                if(user.getTouxiang()==null){
                     nick_image.setImageResource(R.drawable.tx);
                     touxiang.setImageResource(R.drawable.tx);
-                }else if(bitmap==null&&txstr!=null){
-                    FileInputStream fs = null;
-                    try {
-                        Log.e("111", txstr);
-                        fs = new FileInputStream("/sdcard/myHead/" + txstr);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+                }else{
+                    File file=new File(getApplicationContext().getFilesDir(),"oss/"+user.getTouxiang());
+                    if(!file.exists()){
+                        OssService ossService = new OssService(getApplicationContext());
+                        ossService.downLoad("",user.getTouxiang());//listData.getPic()
+                        Log.e("检测","dd"+user.getTouxiang());
                     }
-                    Bitmap bitmap1 = BitmapFactory.decodeStream(fs);
-                    nick_image.setImageBitmap(bitmap1);
-                    touxiang.setImageBitmap(bitmap1);
-                }
-                else {
-                    nick_image.setImageBitmap(bitmap);
-                    touxiang.setImageBitmap(bitmap);
+                    Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+                    if (bitmap==null&&user.getTouxiang()==null){
+                        nick_image.setImageResource(R.drawable.tx);
+                        touxiang.setImageResource(R.drawable.tx);
+                    }else if(bitmap==null&&user.getTouxiang()!=null){
+                        FileInputStream fs = null;
+                        try {
+                            Log.e("111", user.getTouxiang());
+                            fs = new FileInputStream("/sdcard/myHead/" + user.getTouxiang());
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+                        Bitmap bitmap1 = BitmapFactory.decodeStream(fs);
+                        nick_image.setImageBitmap(bitmap1);
+                        touxiang.setImageBitmap(bitmap1);
+                    }
+                    else {
+                        nick_image.setImageBitmap(bitmap);
+                        touxiang.setImageBitmap(bitmap);
+                    }
+
                 }
                 }
 
