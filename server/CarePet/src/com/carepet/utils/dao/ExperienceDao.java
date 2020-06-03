@@ -61,7 +61,7 @@ public class ExperienceDao {
 		System.out.println("flag=====2");
 		Query query=session.createQuery("from Community where flag=2 order by id desc");
 		query.setMaxResults(4);
-		query.setFirstResult(flag-1);
+		query.setFirstResult(flag);
 		List<Community> list=query.list();
 		List<Communitys> cs=new ArrayList<>();
 		for(int i=0;i<list.size();i++) {
