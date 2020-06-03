@@ -52,6 +52,8 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -146,8 +148,48 @@ public class MapFindAcitvity extends AppCompatActivity {
                 Gson gson=new Gson();
                 User user = gson.fromJson(info,type);
                 purl = user.getTouxiang();
+                Log.e("touxaing_ii",purl);
 //                getPicBitmap2();
-                File file=new File(getApplicationContext().getFilesDir(),"oss"+purl);
+                if(purl==null){
+                    avatar.setImageResource(R.drawable.tx);
+                    textView2.setText(user.getUsername());
+                }else{
+                    FileInputStream fs = null;
+                    try {
+                        Log.e("111", purl);
+                        fs = new FileInputStream("/sdcard/myHead/" + purl);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                    Bitmap bitmap1 = BitmapFactory.decodeStream(fs);
+                    avatar.setImageBitmap(bitmap1);
+                    textView2.setText(user.getUsername());
+                }
+//                if (currentheadName.isEmpty()&&txname.isEmpty()){
+//                    ivHead.setImageResource(R.drawable.tx);
+//                }else if(currentheadName.isEmpty()&&!txname.isEmpty()){
+//                    FileInputStream fs = null;
+//                    try {
+//                        Log.e("111", txname);
+//                        fs = new FileInputStream("/sdcard/myHead/" + txname);
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+//                    Bitmap bitmap1 = BitmapFactory.decodeStream(fs);
+//                    ivHead.setImageBitmap(bitmap1);
+//                }
+//                else{
+//                    FileInputStream fs = null;
+//                    try {
+//                        Log.e("111",currentheadName);
+//                        fs = new FileInputStream("/sdcard/myHead/"+currentheadName);
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                    }
+//                    Bitmap bitmap  = BitmapFactory.decodeStream(fs);
+//                    ivHead.setImageBitmap(bitmap);
+//                }
+               /* File file=new File(getApplicationContext().getFilesDir(),"oss"+purl);
                 if(!file.exists()){
                     OssService ossService = new OssService(getApplicationContext());
                     ossService.downLoad("",purl);//listData.getPic()
@@ -161,6 +203,9 @@ public class MapFindAcitvity extends AppCompatActivity {
                     avatar.setImageBitmap(bitmap);
                     textView2.setText(user.getUsername());
                 }
+*/
+
+
             }else if(msg.what == 22){
                 basebitmap = (Bitmap)msg.obj;
                 avatar.setImageBitmap(basebitmap);
