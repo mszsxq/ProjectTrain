@@ -151,7 +151,7 @@ public class ExperienceFragment extends Fragment {
                 try {
                     Gson gson = new Gson();
                     //192.168.5.7
-                    URL url = new URL("http://192.168.43.65:8080/CarePet/community/listsome?flag="+flag+"");
+                    URL url = new URL("http://175.24.16.26:8080/CarePet/community/listsome?flag="+flag+"");
 /*                    URL url = new URL("http://175.24.16.26:8080/CarePet/experience/listsome?flag="+flag+"");*/
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
