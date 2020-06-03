@@ -126,7 +126,7 @@ public class ExperienceFragment extends Fragment {
                 try {
                     Gson gson = new Gson();
                     //192.168.5.7
-                    URL url = new URL("http://175.24.16.26:8080/CarePet/community/listall");
+                    URL url = new URL("http://175.24.16.26:8080/CarePet/experience/listall");
                     URLConnection conn = url.openConnection();
                     InputStream in = conn.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in, "utf-8"));
