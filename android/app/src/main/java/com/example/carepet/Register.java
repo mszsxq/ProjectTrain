@@ -201,10 +201,10 @@ public class Register extends AppCompatActivity {
     private void RegisterUser(String name, String password) {
 
         User user = new User();
-
+        String txpath = "41590934645599head.jpg";
         user.setPassword(password);
         user.setUsername(name);
-
+        user.setTouxiang(txpath);
         Gson gson = new Gson();
 
         final String client = gson.toJson(user);
