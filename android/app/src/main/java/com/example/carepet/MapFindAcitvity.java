@@ -271,9 +271,9 @@ public class MapFindAcitvity extends AppCompatActivity {
         final FrameLayout mFrameLayout = findViewById(R.id.frameLayout);
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.tabLayout);
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        mTabLayout.addTab(mTabLayout.newTab().setText("费用说明"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("预定须知"));
-        mTabLayout.addTab(mTabLayout.newTab().setText("退款政策"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("相关信息"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("评论"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("回复"));
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
